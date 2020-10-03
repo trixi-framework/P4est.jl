@@ -1,0 +1,7 @@
+*.mem
+**/Manifest.toml
+docs/build
+public/
+coverage/
+coverage_report/
+**/*.jl.*.cov
