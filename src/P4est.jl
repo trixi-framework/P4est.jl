@@ -1,5 +1,5 @@
 module P4est
 
-greet() = print("Hello World!")
+include("libp4est.jl")
 
-end # module
+end
