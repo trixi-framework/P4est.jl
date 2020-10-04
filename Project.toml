@@ -6,3 +6,4 @@ version = "0.1.0"
 [deps]
 CBinding = "d43a6710-96b8-4a2d-833c-c424785e5374"
 P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
+PrettyTables = "08abe8d2-0d0c-5749-adfa-8a2ac140af0d"
