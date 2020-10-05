@@ -52,14 +52,20 @@ p4est_connectivity(num_vertices=4, num_trees=1, num_corners=1, vertices=Ptr{Floa
 As can be seen, the convenience method `ptr2obj` allows to automatically convert
 pointers to `p4est` structs to the corresponding Julia wrapper type.
 
+For more information on how to use `p4est` via P4est.jl, please refer to the
+[documentation for p4est itself](http://www.p4est.org/) or the header files
+(`*.h`) in the
+[p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
+
 ## Authors
 P4est.jl was initiated by
 [Michael Schlottke-Lakemper](https://www.mi.uni-koeln.de/NumSim/schlottke-lakemper)
 and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
-(both University of Cologne, Germany), who are also the principal developers of
-P4est.jl.
+(both University of Cologne, Germany), who are also the principal developers.
 
 
 ## License and contributing
 P4est.jl is licensed under the MIT license (see [LICENSE.md](LICENSE.md)).
+[p4est](https://github.com/cburstedde/p4est) itself is licensed under the GNU
+General Public License, version 2.
