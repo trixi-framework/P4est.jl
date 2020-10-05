@@ -7,6 +7,4 @@ using Reexport: @reexport
 include("libp4est.jl")
 include("main.jl")
 
-export LibP4est
-
 end
