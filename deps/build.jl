@@ -7,13 +7,6 @@ const incdir = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
 # Manually set header files to consider
 const hdrs = ["p4est.h", "p8est.h", "p4est_extended.h", "p8est_extended.h"]
 
-# list of names to ignore
-const ignored_names =
-[
- "sc_extern_c_hack_3",
- "sc_extern_c_hack_4",
-]
-
 # Convert symbols in header
 cvts = convert_headers(hdrs, args = ["-I", incdir]) do cursor
 	header = CodeLocation(cursor).file
@@ -22,8 +15,8 @@ cvts = convert_headers(hdrs, args = ["-I", incdir]) do cursor
 	# only wrap the libp4est headers
 	startswith(header, "$(incdir)/") || return false
 
-  # if name is on ignore list, do not add bindings
-  name in ignored_names && return false
+  # Ignore macro hacks
+  startswith(name, "sc_extern_c_hack_") && return false
 	
 	return true
 end
