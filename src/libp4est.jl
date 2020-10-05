@@ -1,4 +1,4 @@
-baremodule LibP4est
+@reexport baremodule LibP4est
   using CBinding: 𝐣𝐥
   
   const size_t  = 𝐣𝐥.Csize_t
@@ -17,4 +17,6 @@ baremodule LibP4est
   Convert pointer to object reference by wrapping it in `unsafe_wrap`.
   """
   ptr2obj(ptr::Ptr{T}) where T = 𝐣𝐥.unsafe_wrap(T, ptr)
+
+  export ptr2obj
 end

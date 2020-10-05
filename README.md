@@ -23,7 +23,7 @@ the following commands in the Julia REPL:
 ```julia
 julia> import Pkg; Pkg.add("P4est")
 ```
-P4est.jl depends on the binary distribution of the p4est library, which is
+P4est.jl depends on the binary distribution of the `p4est` library, which is
 available in the Julia package `P4est_jll.jl` and which is automatically
 installed as a dependency.
 
@@ -37,8 +37,20 @@ In the Julia REPL, first load the package P4est.jl
 ```julia
 julia> using P4est
 ```
-You can then access the full p4est API under `LibP4est`. For example, to create a
-mesh, call `LibP4est.p4est_new` with the appropriate arguments.
+You can then access the full `p4est` API that is defined by the headers. For example, to create a
+periodic connectivity and check its validity, execute the following lines:
+```julia
+julia> c = p4est_connectivity_new_periodic()
+Ptr{p4est_connectivity} @0x00000000018b6740
+
+julia> p4est_connectivity_is_valid(c)
+1
+
+julia> ptr2obj(c)
+p4est_connectivity(num_vertices=4, num_trees=1, num_corners=1, vertices=Ptr{Float64} @0x0000000000cf00f0, tree_to_vertex=Ptr{Int32} @0x0000000001348010, tree_attr_bytes=0x0000000000000000, tree_to_attr=Ptr{Int8} @0x0000000000000000, tree_to_tree=Ptr{Int32} @0x0000000000dc4980, tree_to_face=Ptr{Int8} @0x0000000000c43000, tree_to_corner=Ptr{Int32} @0x000000000143b290, ctt_offset=Ptr{Int32} @0x0000000000fcda30, corner_to_tree=Ptr{Int32} @0x00000000014160b0, corner_to_corner=Ptr{Int8} @0x000000000125b2c0)
+```
+As can be seen, the convenience method `ptr2obj` allows to automatically convert
+pointers to `p4est` structs to the corresponding Julia wrapper type.
 
 ## Authors
 P4est.jl was initiated by
