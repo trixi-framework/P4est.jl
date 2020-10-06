@@ -10,4 +10,10 @@ using P4est
   @testset "p4est_connectivity_is_valid" begin
     @test p4est_connectivity_is_valid(connectivity) == 1
   end
+
+  @testset "ptr2obj" begin
+    @test_nowarn ptr2obj(connectivity)
+    obj = ptr2obj(connectivity)
+    @test obj.num_vertices == 4
+  end
 end
