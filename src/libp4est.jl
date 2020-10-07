@@ -1,5 +1,6 @@
 @reexport baremodule LibP4est
   using CBinding: 𝐣𝐥
+  using MPI: MPI_Datatype, MPI_Comm, MPI_File
   
   # Introduce standard integer types
   const size_t  = 𝐣𝐥.Csize_t

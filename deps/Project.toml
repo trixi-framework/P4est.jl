@@ -1,3 +1,4 @@
 [deps]
 CBindingGen = "308a6e0c-0495-45e1-b1ab-67fb455a0d77"
+MPICH_jll = "7cb0a576-ebde-5e09-9194-50597f1243b4"
 P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
