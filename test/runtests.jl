@@ -11,9 +11,8 @@ using P4est
     @test p4est_connectivity_is_valid(connectivity) == 1
   end
 
-  @testset "ptr2obj" begin
-    @test_nowarn ptr2obj(connectivity)
-    obj = ptr2obj(connectivity)
+  @testset "unsafe_wrap" begin
+    obj = unsafe_wrap(connectivity)
     @test obj.num_vertices == 4
   end
 end

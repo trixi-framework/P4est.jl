@@ -39,16 +39,16 @@ You can then access the full `p4est` API that is defined by the headers. For exa
 periodic connectivity and check its validity, execute the following lines:
 ```julia
 julia> c = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x00000000018b6740
+Ptr{p4est_connectivity} @0x0000000001ad2080
 
 julia> p4est_connectivity_is_valid(c)
 1
 
-julia> ptr2obj(c)
-p4est_connectivity(num_vertices=4, num_trees=1, num_corners=1, vertices=Ptr{Float64} @0x0000000000cf00f0, tree_to_vertex=Ptr{Int32} @0x0000000001348010, tree_attr_bytes=0x0000000000000000, tree_to_attr=Ptr{Int8} @0x0000000000000000, tree_to_tree=Ptr{Int32} @0x0000000000dc4980, tree_to_face=Ptr{Int8} @0x0000000000c43000, tree_to_corner=Ptr{Int32} @0x000000000143b290, ctt_offset=Ptr{Int32} @0x0000000000fcda30, corner_to_tree=Ptr{Int32} @0x00000000014160b0, corner_to_corner=Ptr{Int8} @0x000000000125b2c0)
+julia> unsafe_wrap(c)
+p4est_connectivity(num_vertices=4, num_trees=1, num_corners=1, vertices=Ptr{Float64} @0x0000000001b3b720, tree_to_vertex=Ptr{Int32} @0x0000000001bb5870, tree_attr_bytes=0x0000000000000000, tree_to_attr=Ptr{Int8} @0x0000000000000000, tree_to_tree=Ptr{Int32} @0x0000000001e17750, tree_to_face=Ptr{Int8} @0x0000000001a36c90, tree_to_corner=Ptr{Int32} @0x0000000001c37dd0, ctt_offset=Ptr{Int32} @0x0000000001fbea60, corner_to_tree=Ptr{Int32} @0x00000000019f6530, corner_to_corner=Ptr{Int8} @0x00000000013ce610)
 ```
-As can be seen, the convenience method `ptr2obj` allows to automatically convert
-pointers to `p4est` structs to the corresponding Julia wrapper type.
+As can be seen, `unsafe_wrap` allows to convert pointers to `p4est` structs to
+the corresponding Julia wrapper type.
 
 For more information on how to use `p4est` via P4est.jl, please refer to the
 [documentation for p4est itself](http://www.p4est.org/) or the header files

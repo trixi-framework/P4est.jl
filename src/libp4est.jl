@@ -14,13 +14,4 @@
   𝐣𝐥.@cstruct va_list
 
   𝐣𝐥.Base.include((𝐣𝐥.@__MODULE__), 𝐣𝐥.joinpath(𝐣𝐥.dirname(𝐣𝐥.@__DIR__), "deps", "libp4est.jl"))
-
-  """
-      ptr2obj(ptr::Ptr{T}) where T
-
-  Convert pointer to object reference by wrapping it in `unsafe_wrap`.
-  """
-  ptr2obj(ptr::Ptr{T}) where T = 𝐣𝐥.unsafe_wrap(T, ptr)
-
-  export ptr2obj
 end
