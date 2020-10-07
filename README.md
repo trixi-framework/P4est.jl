@@ -61,6 +61,8 @@ P4est.jl was initiated by
 and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
 (both University of Cologne, Germany), who are also the principal developers.
+The `p4est` library itself is written by Carsten Burstedde, Lucas C. Wilcox, and
+Tobin Isaac.
 
 
 ## License and contributing
