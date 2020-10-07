@@ -1,3 +1,6 @@
 [deps]
 CBindingGen = "308a6e0c-0495-45e1-b1ab-67fb455a0d77"
 P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
+
+[compat]
+CBindingGen = "0.4"
