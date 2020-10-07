@@ -24,15 +24,5 @@ end
 # Write generated C bindings to file
 const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
 open(bindings_filename, "w+") do io
-	generate(io, P4est_jll.libp4est_path => cvts, comments=false)
+	generate(io, P4est_jll.libp4est_path => cvts)
 end
-
-# The following lines are only necessary if `comments=true` (default if omitted) in the call to
-# `generate` above:
-# # Replace '$' by '`'
-# const content = open(bindings_filename, "r") do f
-#   read(f, String)
-# end
-# open(bindings_filename, "w+") do f
-#   write(f, replace(content, '$' => '`'))
-# end
