@@ -17,4 +17,6 @@ if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   cd test_tmp
   $P4EST_TMP/prefix/bin/p4est_step1
   popd
+  export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so"
+  export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include"
 fi
