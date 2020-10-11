@@ -52,11 +52,11 @@ branches:
 #     packages:
 #       - gfortran
 
-# script:
-# default build script along the lines of
-#   using Pkg
-#   Pkg.build() # Pkg.build(; verbose = true) for Julia 1.1 and up
-#   Pkg.test(coverage=true)
+before_script:
+  - ./.travis_install_p4est.sh
+
+script:
+  - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 
 # submit coverage reports (enabled already above) and/or deploy docs
 # after_success:
