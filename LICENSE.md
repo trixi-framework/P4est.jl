@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020-present Michael Schlottke-Lakemper and Alexander Astanin
+Copyright (c) 2020-present Michael Schlottke-Lakemper, Hendrik Ranocha, and Alexander Astanin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy  
 of this software and associated documentation files (the "Software"), to deal  
