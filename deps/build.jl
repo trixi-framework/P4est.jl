@@ -95,7 +95,9 @@ push!(include_directories, p4est_include)
 # Step 4: Generate binding using the include path according to the settings
 
 # Manually set header files to consider
-hdrs = ["p4est.h", "p4est_extended.h", "p8est.h", "p8est_extended.h"]
+hdrs = ["p4est.h", "p4est_extended.h",
+				"p6est.h", "p6est_extended.h",
+				"p8est.h", "p8est_extended.h"]
 
 # Convert symbols in header
 include_args = String[]
