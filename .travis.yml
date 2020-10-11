@@ -26,32 +26,52 @@ jobs:
     #     - julia --project=docs/ docs/make.jl
     #   after_success: skip
 
-codecov: true
+# coveralls with merging of multiple builds, cf. https://docs.coveralls.io/parallel-build-webhook
 coveralls: true
+env:
+  global:
+    - COVERALLS_PARALLEL=true
+  jobs:
+    - P4EST_TEST=P4EST_JLL_NON_MPI
+    - P4EST_TEST=P4EST_CUSTOM_NON_MPI
+notifications:
+  webhooks: https://coveralls.io/webhook
+  email: false
+
+# codecov merges multiple reports automatically, cf. https://docs.codecov.io/docs/merging-reports
+codecov: true
 
 # avoid duplicate tests in PRs
 branches:
   only:
     - master
 
-notifications:
-  email: false
-
-# we could use groups to trigger multiple builds in parallel to speed-up running expensive tests
-# env:
-#   - GROUP=SomeGroupName
-
 # we could install binary dependencies if necessary
-# addons:
-#   apt:
-#     packages:
-#       - gfortran
+addons:
+  apt:
+    packages:
+      - gfortran
+      - liblapack-dev
+      - libblas-dev
 
-# script:
-# default build script along the lines of
-#   using Pkg
-#   Pkg.build() # Pkg.build(; verbose = true) for Julia 1.1 and up
-#   Pkg.test(coverage=true)
+before_script:
+  - ./.travis_install_p4est.sh
+
+script:
+  # nothing to do; equivalent to
+  # export JULIA_P4EST_LIBRARY="";
+  # export JULIA_P4EST_INCLUDE="";
+  - if [[ "${P4EST_TEST}" == "P4EST_JLL_NON_MPI" ]]; then
+      echo "P4EST_JLL_NON_MPI does not require special settings";
+    fi
+  # set library and include paths according to custom build in .travis_install_p4est.sh
+  - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_NON_MPI" ]]; then
+      export P4EST_TMP=`pwd`/libp4est_tmp;
+      export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
+      export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
+      echo "P4EST_CUSTOM_NON_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE";
+    fi
+  - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 
 # submit coverage reports (enabled already above) and/or deploy docs
 # after_success:
