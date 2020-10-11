@@ -116,10 +116,11 @@ please refer to the [documentation for p4est itself](http://www.p4est.org/) or t
 ## Authors
 P4est.jl was initiated by
 [Michael Schlottke-Lakemper](https://www.mi.uni-koeln.de/NumSim/schlottke-lakemper)
-and
+(University of Cologne, Germany),
+[Hendrik Ranocha](https://ranocha.de)  (KAUST, Saudi Arabia), and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
-(both University of Cologne, Germany). Together with [Hendrik Ranocha](https://ranocha.de)
-(KAUST, Saudi Arabia), they are the principal developers of P4est.jl.
+(University of Cologne, Germany).
+Together, they are the principal developers of P4est.jl.
 The [p4est](https://github.com/cburstedde/p4est) library itself is written by
 Carsten Burstedde, Lucas C. Wilcox, and Tobin Isaac.
 
