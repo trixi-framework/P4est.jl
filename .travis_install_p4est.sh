@@ -2,7 +2,7 @@
 
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   pushd `pwd`
-  P4EST_TMP=`pwd`/libp4est_tmp
+  export P4EST_TMP=`pwd`/libp4est_tmp
   mkdir -p $P4EST_TMP
   cd $P4EST_TMP/
   wget https://p4est.github.io/release/p4est-2.2.tar.gz

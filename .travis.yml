@@ -47,15 +47,25 @@ branches:
     - master
 
 # we could install binary dependencies if necessary
-# addons:
-#   apt:
-#     packages:
-#       - gfortran
+addons:
+  apt:
+    packages:
+      - gfortran
 
 before_script:
   - ./.travis_install_p4est.sh
 
 script:
+  # - if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
+  #     # nothing to do; equivalent to
+  #     # export JULIA_P4EST_LIBRARY=""
+  #     # export JULIA_P4EST_INCLUDE=""
+  #   fi
+  # - if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
+  #     # set library and include paths according to custom build in .travis_install_p4est.sh
+  #     export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so"
+  #     export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include"
+  #   fi
   - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 
 # submit coverage reports (enabled already above) and/or deploy docs
