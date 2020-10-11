@@ -51,13 +51,27 @@ addons:
   apt:
     packages:
       - gfortran
+      - liblapack-dev
+      - libblas-dev
 
 before_script:
   - ./.travis_install_p4est.sh
 
-# default build script
-# script:
-#   - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
+script:
+  # nothing to do; equivalent to
+  # export JULIA_P4EST_LIBRARY="";
+  # export JULIA_P4EST_INCLUDE="";
+  - if [[ "${P4EST_TEST}" == "P4EST_JLL_NON_MPI" ]]; then
+      echo "P4EST_JLL_NON_MPI does not require special settings";
+    fi
+  # set library and include paths according to custom build in .travis_install_p4est.sh
+  - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_NON_MPI" ]]; then
+      export P4EST_TMP=`pwd`/libp4est_tmp;
+      export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
+      export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
+      echo "P4EST_CUSTOM_NON_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE";
+    fi
+  - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 
 # submit coverage reports (enabled already above) and/or deploy docs
 # after_success:
