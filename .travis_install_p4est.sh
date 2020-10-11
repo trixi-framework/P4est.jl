@@ -1,5 +1,8 @@
 #!/bin/bash
 
+if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
+  echo "Nothing to do for P4EST_TEST=P4EST_JLL_NON_MPI"
+fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   pushd `pwd`
   export P4EST_TMP=`pwd`/libp4est_tmp

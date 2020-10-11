@@ -14,12 +14,19 @@ end
 
 config = TOML.parsefile(config_toml)
 
-# P4est.toml has 2 keys
+# P4est.toml has 3 keys
+#  path     = "" (default) | path to p4est containing subdirectories lib and include
 #  library  = "" (default) | library name/path
 #  include  = "" (default) | include name/path
 
 
 # Step 1: Check environment variables and update preferences accordingly
+if haskey(ENV, "JULIA_P4EST_PATH")
+	config["path"] = ENV["JULIA_P4EST_PATH"]
+else
+	config["path"] = ""
+end
+
 if haskey(ENV, "JULIA_P4EST_LIBRARY")
 	config["library"] = ENV["JULIA_P4EST_LIBRARY"]
 else
@@ -40,26 +47,48 @@ end
 
 
 # Step 2: Choose the library according to the settings
-if isempty(config["library"])
-	println("Use p4est library provided by P4est_jll")
-	p4est_library = P4est_jll.libp4est_path
-else
-	println("Use custom p4est library $(config["library"])")
+p4est_library = ""
+if !isempty(config["library"])
 	p4est_library = config["library"]
+	println("Use custom p4est library $p4est_library")
+elseif !isempty(config["path"])
+	# TODO: Linux only
+	p4est_library = joinpath(config["path"], "lib", "libp4est.so")
+	if isfile(p4est_library)
+		println("Use custom p4est library $p4est_library")
+	else
+		p4est_library = ""
+	end
+end
+
+if isempty(p4est_library)
+	p4est_library = P4est_jll.libp4est_path
+	println("Use p4est library provided by P4est_jll")
 end
 
 
 
 # Step 3: Choose the include path according to the settings
 include_directories = String[]
-if isempty(config["include"])
-	println("Use p4est include path provided by P4est_jll")
-	push!(include_directories,
-				joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include"))
-else
-	println("Use custom p4est include path $(config["include"])")
-	push!(include_directories, config["include"])
+p4est_include = ""
+if !isempty(config["include"])
+	p4est_include = config["include"]
+	println("Use custom p4est include path $p4est_include")
+elseif !isempty(config["path"])
+	p4est_include = joinpath(config["path"], "include")
+	if isdir(p4est_include)
+		println("Use custom p4est include path $p4est_include")
+	else
+		p4est_include = ""
+	end
 end
+
+if isempty(p4est_include)
+	p4est_include = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
+	println("Use p4est include path provided by P4est_jll")
+end
+
+push!(include_directories, p4est_include)
 
 
 
