@@ -21,13 +21,22 @@ the following commands in the Julia REPL:
 ```julia
 julia> import Pkg; Pkg.add("P4est")
 ```
-P4est.jl depends on the binary distribution of the `p4est` library, which is
-available in the Julia package `P4est_jll.jl` and which is automatically
+P4est.jl depends on the binary distribution of the [p4est](https://github.com/cburstedde/p4est)
+library, which is available in the Julia package `P4est_jll.jl` and which is automatically
 installed as a dependency.
 
-*Note: Currently, P4est_jll.jl is not available under Windows and provides only
+*Note: Currently, `P4est_jll.jl` is not available under Windows and provides only
 serial binaries without MPI support. Both limitations are planned to be lifted
 in the future.*
+
+You can configure P4est.jl to use a custom build of [p4est](https://github.com/cburstedde/p4est)
+by setting the following environment variables and building P4est.jl again afterwards.
+1. You can set `JULIA_P4EST_PATH`.
+   We will assume to find the corresponding library as
+   `joinpath(ENV["JULIA_P4EST_PATH"], "lib", "libp4est.so")`
+   and the include files in
+   `joinpath(ENV["JULIA_P4EST_PATH"], "include")`.
+2. You can set `JULIA_P4EST_LIBRARY` and `JULIA_P4EST_INCLUDE`.
 
 
 ## Usage
@@ -35,8 +44,9 @@ In the Julia REPL, first load the package P4est.jl
 ```julia
 julia> using P4est
 ```
-You can then access the full `p4est` API that is defined by the headers. For example, to create a
-periodic connectivity and check its validity, execute the following lines:
+You can then access the full [p4est](https://github.com/cburstedde/p4est) API that is defined
+by the headers. For example, to create a periodic connectivity and check its validity, execute
+the following lines:
 ```julia
 julia> conn_ptr = p4est_connectivity_new_periodic()
 Ptr{p4est_connectivity} @0x0000000001ad2080
@@ -60,16 +70,17 @@ true
 julia> p4est_.connectivity.num_trees
 1
 ```
-As can be seen, `unsafe_wrap` allows to convert pointers to `p4est` C structs to
-the corresponding Julia wrapper type provided by
+As can be seen, `unsafe_wrap` allows to convert pointers to [p4est](https://github.com/cburstedde/p4est)
+C structs to the corresponding Julia wrapper type provided by
 [CBinding.jl](https://github.com/analytech-solutions/CBinding.jl). Once
-converted, `CBinding.jl` will automatically wrap pointers nested structures (such as
+converted, [CBinding.jl](https://github.com/analytech-solutions/CBinding.jl)
+will automatically wrap pointers nested structures (such as
 `Ptr{p4est_connectivity}` in `p4est_` in the example above) with the
 corresponding Julia type.
 
-Many functions and types in `p4est` have been documented with comments by the
-`p4est` authors; you can access this documentation as you would for any
-Julia-native entity through `?`:
+Many functions and types in [p4est](https://github.com/cburstedde/p4est) have been documented
+with comments by the [p4est](https://github.com/cburstedde/p4est) authors; you can access this
+documentation as you would for any Julia-native entity through `?`:
 ```
 help?> p4est_memory_used
 search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_connectivity_memory_used P4EST_HAVE_MEMORY_H @P4EST_HAVE_MEMORY_H
@@ -98,19 +109,19 @@ search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_c
 
 ```
 
-For more information on how to use `p4est` via P4est.jl, please refer to the
-[documentation for p4est itself](http://www.p4est.org/) or to the header files
-(`*.h`) in the
-[p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
+For more information on how to use [p4est](https://github.com/cburstedde/p4est) via P4est.jl,
+please refer to the [documentation for p4est itself](http://www.p4est.org/) or to the header files
+(`*.h`) in the [p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
 
 ## Authors
 P4est.jl was initiated by
 [Michael Schlottke-Lakemper](https://www.mi.uni-koeln.de/NumSim/schlottke-lakemper)
 and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
-(both University of Cologne, Germany), who are also the principal developers.
-The `p4est` library itself is written by Carsten Burstedde, Lucas C. Wilcox, and
-Tobin Isaac.
+(both University of Cologne, Germany). Together with [Hendrik Ranocha](https://ranocha.de)
+(KAUST, Saudi Arabia), they are the principal developers of P4est.jl.
+The [p4est](https://github.com/cburstedde/p4est) library itself is written by
+Carsten Burstedde, Lucas C. Wilcox, and Tobin Isaac.
 
 
 ## License and contributing
