@@ -88,7 +88,6 @@ cvts = convert_headers(hdrs, args=include_args) do cursor
 			 filename == "sc.h" )
 		return false
 	end
-	@show filename
 
   # Ignore macro hacks
   startswith(name, "sc_extern_c_hack_") && return false
