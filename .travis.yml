@@ -16,6 +16,9 @@ jobs:
     - if: type = push AND branch = master
       julia: 1
       os: osx
+  exclude:
+    - os: osx
+      env: P4EST_TEST=P4EST_CUSTOM_NON_MPI
     # - stage: "Documentation"
     #   julia: 1
     #   os: linux
