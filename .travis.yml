@@ -85,8 +85,8 @@ script:
       export P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi;
       export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
       export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
-      export JULIA_P4EST_USES_MPI=yes
-      export JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich
+      export JULIA_P4EST_USES_MPI=yes;
+      export JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich;
       echo "P4EST_CUSTOM_USES_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE and JULIA_P4EST_USES_MPI=$JULIA_P4EST_USES_MPI and JULIA_P4EST_MPI_INCLUDE=$JULIA_P4EST_MPI_INCLUDE";
     fi
   - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
