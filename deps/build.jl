@@ -1,5 +1,6 @@
 using CBindingGen
 using Libdl
+using MPI
 import Pkg.TOML
 import P4est_jll
 
@@ -14,29 +15,50 @@ end
 
 config = TOML.parsefile(config_toml)
 
-# P4est.toml has 3 keys
-#  path     = "" (default) | path to p4est containing subdirectories lib and include
-#  library  = "" (default) | library name/path
-#  include  = "" (default) | include name/path
+# P4est.toml has 6 keys
+#  p4est_path      = "" (default) | path to p4est containing subdirectories lib and include
+#  p4est_library   = "" (default) | library name/path
+#  p4est_include   = "" (default) | include name/path
+#  p4est_uses_mpi  = "" (default) | "yes" indicates that we need the MPI headers
+#  mpi_path        = "" (default) | path to MPI containing subdirectories lib and include
+#  mpi_include     = "" (default) | include name/path
 
 
 # Step 1: Check environment variables and update preferences accordingly
 if haskey(ENV, "JULIA_P4EST_PATH")
-	config["path"] = ENV["JULIA_P4EST_PATH"]
+	config["p4est_path"] = ENV["JULIA_P4EST_PATH"]
 else
-	config["path"] = ""
+	config["p4est_path"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_LIBRARY")
-	config["library"] = ENV["JULIA_P4EST_LIBRARY"]
+	config["p4est_library"] = ENV["JULIA_P4EST_LIBRARY"]
 else
-	config["library"] = ""
+	config["p4est_library"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_INCLUDE")
-	config["include"] = ENV["JULIA_P4EST_INCLUDE"]
+	config["p4est_include"] = ENV["JULIA_P4EST_INCLUDE"]
 else
-	config["include"] = ""
+	config["p4est_include"] = ""
+end
+
+if haskey(ENV, "JULIA_P4EST_USES_MPI")
+	config["p4est_uses_mpi"] = ENV["JULIA_P4EST_USES_MPI"]
+else
+	config["p4est_uses_mpi"] = ""
+end
+
+if haskey(ENV, "JULIA_P4EST_MPI_PATH")
+	config["mpi_path"] = ENV["JULIA_P4EST_MPI_PATH"]
+else
+	config["mpi_path"] = ""
+end
+
+if haskey(ENV, "JULIA_P4EST_MPI_INCLUDE")
+	config["mpi_include"] = ENV["JULIA_P4EST_MPI_INCLUDE"]
+else
+	config["mpi_include"] = ""
 end
 
 
@@ -45,15 +67,14 @@ open(config_toml, "w") do io
 end
 
 
-
-# Step 2: Choose the library according to the settings
+# Step 2: Choose p4est library according to the settings
 p4est_library = ""
-if !isempty(config["library"])
-	p4est_library = config["library"]
+if !isempty(config["p4est_library"])
+	p4est_library = config["p4est_library"]
 	println("Use custom p4est library $p4est_library")
-elseif !isempty(config["path"])
+elseif !isempty(config["p4est_path"])
 	# TODO: Linux only
-	p4est_library = joinpath(config["path"], "lib", "libp4est.so")
+	p4est_library = joinpath(config["p4est_path"], "lib", "libp4est.so")
 	if isfile(p4est_library)
 		println("Use custom p4est library $p4est_library")
 	else
@@ -67,15 +88,14 @@ if isempty(p4est_library)
 end
 
 
-
-# Step 3: Choose the include path according to the settings
+# Step 3a: Choose the p4est include path according to the settings
 include_directories = String[]
 p4est_include = ""
-if !isempty(config["include"])
-	p4est_include = config["include"]
+if !isempty(config["p4est_include"])
+	p4est_include = config["p4est_include"]
 	println("Use custom p4est include path $p4est_include")
-elseif !isempty(config["path"])
-	p4est_include = joinpath(config["path"], "include")
+elseif !isempty(config["p4est_path"])
+	p4est_include = joinpath(config["p4est_path"], "include")
 	if isdir(p4est_include)
 		println("Use custom p4est include path $p4est_include")
 	else
@@ -90,6 +110,33 @@ end
 
 push!(include_directories, p4est_include)
 
+
+# Step 3b: Choose the MPI include path according to the settings
+if config["p4est_uses_mpi"] == "yes"
+  mpi_include = ""
+  if !isempty(config["mpi_include"])
+    mpi_include = config["mpi_include"]
+    println("Use custom MPI include path $mpi_include")
+  elseif !isempty(config["mpi_path"])
+    mpi_include = joinpath(config["mpi_path"], "include")
+    if isdir(mpi_include)
+      println("Use custom MPI include path $mpi_include")
+    else
+      mpi_include = ""
+    end
+  end
+
+  if isempty(mpi_include)
+    mpi_include = joinpath(dirname(dirname(normpath(dlpath(MPI.libmpi)))), "include")
+    println("Use MPI include path based on path to `MPI.jl`'s `libmpi`")
+  end
+
+  if !isfile(joinpath(mpi_include, "mpi.h"))
+    error("could not find `mpi.h` in ", mpi_include)
+  end
+
+  push!(include_directories, mpi_include)
+end
 
 
 # Step 4: Generate binding using the include path according to the settings
