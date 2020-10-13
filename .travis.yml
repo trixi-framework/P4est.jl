@@ -19,6 +19,8 @@ jobs:
   exclude:
     - os: osx
       env: P4EST_TEST=P4EST_CUSTOM_NON_MPI
+    - os: osx
+      env: P4EST_TEST=P4EST_CUSTOM_USES_MPI
     # - stage: "Documentation"
     #   julia: 1
     #   os: linux
@@ -37,6 +39,7 @@ env:
   jobs:
     - P4EST_TEST=P4EST_JLL_NON_MPI
     - P4EST_TEST=P4EST_CUSTOM_NON_MPI
+    - P4EST_TEST=P4EST_CUSTOM_USES_MPI
 notifications:
   webhooks: https://coveralls.io/webhook
   email: false
@@ -56,6 +59,8 @@ addons:
       - gfortran
       - liblapack-dev
       - libblas-dev
+      - mpich
+      - libmpich-dev
 
 before_script:
   - ./.travis_install_p4est.sh
@@ -64,15 +69,25 @@ script:
   # nothing to do; equivalent to
   # export JULIA_P4EST_LIBRARY="";
   # export JULIA_P4EST_INCLUDE="";
+  # export JULIA_P4EST_USES_MPI="";
+  # export JULIA_P4EST_MPI_INCLUDE="";
   - if [[ "${P4EST_TEST}" == "P4EST_JLL_NON_MPI" ]]; then
       echo "P4EST_JLL_NON_MPI does not require special settings";
     fi
   # set library and include paths according to custom build in .travis_install_p4est.sh
   - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_NON_MPI" ]]; then
-      export P4EST_TMP=`pwd`/libp4est_tmp;
+      export P4EST_TMP=`pwd`/libp4est_tmp_non_mpi;
       export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
       export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
       echo "P4EST_CUSTOM_NON_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE";
+    fi
+  - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_USES_MPI" ]]; then
+      export P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi;
+      export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
+      export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
+      export JULIA_P4EST_USES_MPI=yes
+      export JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich
+      echo "P4EST_CUSTOM_USES_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE and JULIA_P4EST_USES_MPI=$JULIA_P4EST_USES_MPI and JULIA_P4EST_MPI_INCLUDE=$JULIA_P4EST_MPI_INCLUDE";
     fi
   - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 
