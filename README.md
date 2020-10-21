@@ -29,15 +29,64 @@ installed as a dependency.
 serial binaries without MPI support. Both limitations are planned to be lifted
 in the future.*
 
-You can configure P4est.jl to use a custom build of [p4est](https://github.com/cburstedde/p4est)
-by setting the following environment variables and building P4est.jl again afterwards.
-1. You can set `JULIA_P4EST_PATH`.
-   We will assume to find the corresponding library as
-   `joinpath(ENV["JULIA_P4EST_PATH"], "lib", "libp4est.so")`
+You can configure P4est.jl to use a custom build of p4est by setting the
+following environment variables and building P4est.jl again afterwards:
+1. **Set `JULIA_P4EST_PATH`.**
+
+   You can set the environment variable `JULIA_P4EST_PATH` to the install
+   prefix of your p4est library.
+   P4est.jl will then assume to find the corresponding library as
+   `joinpath(ENV["JULIA_P4EST_PATH"], "lib", "libp4est.{so,dylib,dll}")`
    and the include files in
    `joinpath(ENV["JULIA_P4EST_PATH"], "include")`.
-2. You can set `JULIA_P4EST_LIBRARY` and `JULIA_P4EST_INCLUDE`.
+2. **Set `JULIA_P4EST_LIBRARY` and `JULIA_P4EST_INCLUDE`.**
 
+   Alternatively, you can specify the p4est library and the include
+   directory directly. Note that `JULIA_P4EST_LIBRARY` expects the full path to
+   the p4est library, while `JULIA_P4EST_INCLUDE` must be the full path to the
+   directory with the p4est header files.
+
+For example, if your custom p4est build is installed to `/opt/p4est`, you can
+use it from P4est.jl by executing
+```bash
+julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est"; using Pkg; Pkg.build("P4est"; verbose=true)'
+```
+
+P4est.jl supports [p4est](https://github.com/cburstedde/p4est) both with and
+without MPI enabled. By default, it uses the p4est library from the binary
+Julia package `P4est_jll`, which currently is not compiled with MPI support.
+However, you may specify a custom p4est build with MPI enabled using the
+environment variables desribed above. In this case, you need to set a few
+additional variables to make sure that P4est.jl can create the correct C
+bindings:
+1. **Set `JULIA_P4EST_USES_MPI` to `yes`.**
+
+   This is always required, since it tells P4est.jl to use the MPI include directory
+   while generating the C bindings.
+2. **Set `JULIA_P4EST_MPI_PATH`.**
+
+   You can set the environment variable `JULIA_P4EST_MPI_PATH` to the install
+   prefix of your MPI library.
+   P4est.jl will then assume to find the corresponding include files in
+   `joinpath(ENV["JULIA_P4EST_MPI_PATH"], "include")`.
+3. **Set `JULIA_P4EST_MPI_INCLUDE`.**
+
+   Alternatively, you can specify the MPI include directory directly. Note that
+   `JULIA_P4EST_MPI_INCLUDE` must be the full path to the directory with the
+   `mpi.h` header file.
+Please note that you should specify the path to the MPI version with which you
+also built the parallel version of p4est, in order to avoid errors from
+mismatching definitions.
+
+For example, if your custom p4est build is installed to `/opt/p4est` and was
+built using the MPI library installed to `/opt/mpich`, you can use it from
+P4est.jl by executing
+```bash
+julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
+                    ENV["JULIA_P4EST_USES_MPI"] = "yes";
+                    ENV["JULIA_P4EST_MPI_PATH"] = "/opt/mpich";
+                    using Pkg; Pkg.build("P4est"; verbose=true)'
+```
 
 ## Usage
 In the Julia REPL, first load the package P4est.jl
