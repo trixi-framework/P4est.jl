@@ -73,8 +73,7 @@ if !isempty(config["p4est_library"])
   p4est_library = config["p4est_library"]
   println("Use custom p4est library $p4est_library")
 elseif !isempty(config["p4est_path"])
-  # TODO: Linux only
-  p4est_library = joinpath(config["p4est_path"], "lib", "libp4est.so")
+  p4est_library = joinpath(config["p4est_path"], "lib", "libp4est." * Libdl.dlext)
   if isfile(p4est_library)
     println("Use custom p4est library $p4est_library")
   else
