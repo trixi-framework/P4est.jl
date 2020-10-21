@@ -26,65 +26,65 @@ config = TOML.parsefile(config_toml)
 
 # Step 1: Check environment variables and update preferences accordingly
 if haskey(ENV, "JULIA_P4EST_PATH")
-	config["p4est_path"] = ENV["JULIA_P4EST_PATH"]
+  config["p4est_path"] = ENV["JULIA_P4EST_PATH"]
 else
-	config["p4est_path"] = ""
+  config["p4est_path"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_LIBRARY")
-	config["p4est_library"] = ENV["JULIA_P4EST_LIBRARY"]
+  config["p4est_library"] = ENV["JULIA_P4EST_LIBRARY"]
 else
-	config["p4est_library"] = ""
+  config["p4est_library"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_INCLUDE")
-	config["p4est_include"] = ENV["JULIA_P4EST_INCLUDE"]
+  config["p4est_include"] = ENV["JULIA_P4EST_INCLUDE"]
 else
-	config["p4est_include"] = ""
+  config["p4est_include"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_USES_MPI")
-	config["p4est_uses_mpi"] = ENV["JULIA_P4EST_USES_MPI"]
+  config["p4est_uses_mpi"] = ENV["JULIA_P4EST_USES_MPI"]
 else
-	config["p4est_uses_mpi"] = ""
+  config["p4est_uses_mpi"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_MPI_PATH")
-	config["mpi_path"] = ENV["JULIA_P4EST_MPI_PATH"]
+  config["mpi_path"] = ENV["JULIA_P4EST_MPI_PATH"]
 else
-	config["mpi_path"] = ""
+  config["mpi_path"] = ""
 end
 
 if haskey(ENV, "JULIA_P4EST_MPI_INCLUDE")
-	config["mpi_include"] = ENV["JULIA_P4EST_MPI_INCLUDE"]
+  config["mpi_include"] = ENV["JULIA_P4EST_MPI_INCLUDE"]
 else
-	config["mpi_include"] = ""
+  config["mpi_include"] = ""
 end
 
 
 open(config_toml, "w") do io
-	TOML.print(io, config)
+  TOML.print(io, config)
 end
 
 
 # Step 2: Choose p4est library according to the settings
 p4est_library = ""
 if !isempty(config["p4est_library"])
-	p4est_library = config["p4est_library"]
-	println("Use custom p4est library $p4est_library")
+  p4est_library = config["p4est_library"]
+  println("Use custom p4est library $p4est_library")
 elseif !isempty(config["p4est_path"])
-	# TODO: Linux only
-	p4est_library = joinpath(config["p4est_path"], "lib", "libp4est.so")
-	if isfile(p4est_library)
-		println("Use custom p4est library $p4est_library")
-	else
-		p4est_library = ""
-	end
+  # TODO: Linux only
+  p4est_library = joinpath(config["p4est_path"], "lib", "libp4est.so")
+  if isfile(p4est_library)
+    println("Use custom p4est library $p4est_library")
+  else
+    p4est_library = ""
+  end
 end
 
 if isempty(p4est_library)
-	p4est_library = P4est_jll.libp4est_path
-	println("Use p4est library provided by P4est_jll")
+  p4est_library = P4est_jll.libp4est_path
+  println("Use p4est library provided by P4est_jll")
 end
 
 
@@ -92,20 +92,20 @@ end
 include_directories = String[]
 p4est_include = ""
 if !isempty(config["p4est_include"])
-	p4est_include = config["p4est_include"]
-	println("Use custom p4est include path $p4est_include")
+  p4est_include = config["p4est_include"]
+  println("Use custom p4est include path $p4est_include")
 elseif !isempty(config["p4est_path"])
-	p4est_include = joinpath(config["p4est_path"], "include")
-	if isdir(p4est_include)
-		println("Use custom p4est include path $p4est_include")
-	else
-		p4est_include = ""
-	end
+  p4est_include = joinpath(config["p4est_path"], "include")
+  if isdir(p4est_include)
+    println("Use custom p4est include path $p4est_include")
+  else
+    p4est_include = ""
+  end
 end
 
 if isempty(p4est_include)
-	p4est_include = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
-	println("Use p4est include path provided by P4est_jll")
+  p4est_include = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
+  println("Use p4est include path provided by P4est_jll")
 end
 
 push!(include_directories, p4est_include)
@@ -143,38 +143,38 @@ end
 
 # Manually set header files to consider
 hdrs = ["p4est.h", "p4est_extended.h",
-				"p6est.h", "p6est_extended.h",
-				"p8est.h", "p8est_extended.h"]
+        "p6est.h", "p6est_extended.h",
+        "p8est.h", "p8est_extended.h"]
 
 # Convert symbols in header
 include_args = String[]
 @show include_directories
 for dir in include_directories
-	append!(include_args, ("-I", dir))
+  append!(include_args, ("-I", dir))
 end
 cvts = convert_headers(hdrs, args=include_args) do cursor
-	header = CodeLocation(cursor).file
-	name   = string(cursor)
+  header = CodeLocation(cursor).file
+  name   = string(cursor)
 
-	# only wrap the libp4est and libsc headers
-	dirname, filename = splitdir(header)
-	if !(filename in hdrs ||
-		   startswith(filename, "p4est_") ||
-		   startswith(filename, "p6est_") ||
-		   startswith(filename, "p8est_") ||
-			 startswith(filename, "sc_") ||
-			 filename == "sc.h" )
-		return false
-	end
+  # only wrap the libp4est and libsc headers
+  dirname, filename = splitdir(header)
+  if !(filename in hdrs ||
+       startswith(filename, "p4est_") ||
+       startswith(filename, "p6est_") ||
+       startswith(filename, "p8est_") ||
+       startswith(filename, "sc_") ||
+       filename == "sc.h" )
+    return false
+  end
 
   # Ignore macro hacks
   startswith(name, "sc_extern_c_hack_") && return false
 
-	return true
+  return true
 end
 
 # Write generated C bindings to file
 const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
 open(bindings_filename, "w+") do io
-	generate(io, p4est_library => cvts)
+  generate(io, p4est_library => cvts)
 end
