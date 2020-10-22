@@ -5,7 +5,8 @@ import Pkg.TOML
 import P4est_jll
 
 # Only required on MacOS systems
-const xcode_include_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+const xcode_include_path_cli = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+const xcode_include_path_gui = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
 
 # setup configuration using ideas from MPI.jl
 const config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
@@ -157,10 +158,10 @@ end
 # Workaround for MacOS: The some headers required by p4est (such as `math.h`) are only available via
 # Xcode
 if Sys.isapple()
-  if !isdir(xcode_include_path)
-    error("MacOS SDK include path '$xcode_include_path' does not exist. Have you installed Xcode?")
+  if !isdir(xcode_include_path_cli) && !isdir(xcode_include_path_gui)
+    error("MacOS SDK include paths ('$xcode_include_path_cli' or '$xcode_include_path_gui') do not exist. Have you installed Xcode?")
   end
-  append!(include_args, ("-idirafter", xcode_include_path))
+  append!(include_args, ("-idirafter", xcode_include_path_cli, "-idirafter", xcode_include_path_gui))
 end
 
 # Convert symbols in header
