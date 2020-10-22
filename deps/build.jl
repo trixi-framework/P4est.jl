@@ -4,9 +4,11 @@ using MPI
 import Pkg.TOML
 import P4est_jll
 
+# Only required on MacOS systems
+const xcode_include_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
 
 # setup configuration using ideas from MPI.jl
-config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
+const config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
 mkpath(dirname(config_toml))
 
 if !isfile(config_toml)
@@ -145,12 +147,23 @@ hdrs = ["p4est.h", "p4est_extended.h",
         "p6est.h", "p6est_extended.h",
         "p8est.h", "p8est_extended.h"]
 
-# Convert symbols in header
+# Build list of arguments for Clang
 include_args = String[]
 @show include_directories
 for dir in include_directories
   append!(include_args, ("-I", dir))
 end
+
+# Workaround for MacOS: The some headers required by p4est (such as `math.h`) are only available via
+# Xcode
+if Sys.isapple()
+  if !isdir(xcode_include_path)
+    error("MacOS SDK include path '$xcode_include_path' does not exist. Have you installed Xcode?")
+  end
+  append!(include_args, ("-idirafter", xcode_include_path))
+end
+
+# Convert symbols in header
 cvts = convert_headers(hdrs, args=include_args) do cursor
   header = CodeLocation(cursor).file
   name   = string(cursor)
