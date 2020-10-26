@@ -4,9 +4,8 @@ using MPI
 import Pkg.TOML
 import P4est_jll
 
-
 # setup configuration using ideas from MPI.jl
-config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
+const config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
 mkpath(dirname(config_toml))
 
 if !isfile(config_toml)
@@ -145,12 +144,26 @@ hdrs = ["p4est.h", "p4est_extended.h",
         "p6est.h", "p6est_extended.h",
         "p8est.h", "p8est_extended.h"]
 
-# Convert symbols in header
+# Build list of arguments for Clang
 include_args = String[]
 @show include_directories
 for dir in include_directories
   append!(include_args, ("-I", dir))
 end
+
+# Workaround for MacOS: The some headers required by p4est (such as `math.h`) are only available via
+# Xcode
+if Sys.isapple()
+  # These two paths *should* - on any reasonably current MacOS system - contain the relevant headers
+  const xcode_include_path_cli = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+  const xcode_include_path_gui = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+  if !isdir(xcode_include_path_cli) && !isdir(xcode_include_path_gui)
+    error("MacOS SDK include paths ('$xcode_include_path_cli' or '$xcode_include_path_gui') do not exist. Have you installed Xcode?")
+  end
+  append!(include_args, ("-idirafter", xcode_include_path_cli, "-idirafter", xcode_include_path_gui))
+end
+
+# Convert symbols in header
 cvts = convert_headers(hdrs, args=include_args) do cursor
   header = CodeLocation(cursor).file
   name   = string(cursor)

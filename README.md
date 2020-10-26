@@ -29,6 +29,8 @@ installed as a dependency.
 serial binaries without MPI support. Both limitations are planned to be lifted
 in the future.*
 
+*Note: On MacOS, you need to have Xcode installed to be able to use this package.*
+
 You can configure P4est.jl to use a custom build of p4est by setting the
 following environment variables and building P4est.jl again afterwards:
 1. **Set `JULIA_P4EST_PATH`.**
