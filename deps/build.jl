@@ -4,10 +4,6 @@ using MPI
 import Pkg.TOML
 import P4est_jll
 
-# Only required on MacOS systems
-const xcode_include_path_cli = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
-const xcode_include_path_gui = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
-
 # setup configuration using ideas from MPI.jl
 const config_toml = joinpath(first(DEPOT_PATH), "prefs", "P4est.toml")
 mkpath(dirname(config_toml))
@@ -158,6 +154,9 @@ end
 # Workaround for MacOS: The some headers required by p4est (such as `math.h`) are only available via
 # Xcode
 if Sys.isapple()
+  # These two paths *should* - on any reasonably current MacOS system - contain the relevant headers
+  const xcode_include_path_cli = "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/"
+  const xcode_include_path_gui = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
   if !isdir(xcode_include_path_cli) && !isdir(xcode_include_path_gui)
     error("MacOS SDK include paths ('$xcode_include_path_cli' or '$xcode_include_path_gui') do not exist. Have you installed Xcode?")
   end
