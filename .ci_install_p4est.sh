@@ -1,18 +1,21 @@
 #!/bin/bash
 
+$P4EST_RELEASE="2.2"
+
 if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
-  echo "Nothing to do for P4EST_TEST=P4EST_JLL_NON_MPI"
+  echo "Found 'P4EST_TEST=P4EST_JLL_NON_MPI'. Nothing to do here."
 fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
+  echo "Found 'P4EST_TEST=P4EST_CUSTOM_NON_MPI'. Installing custom p4est *without* MPI support..."
   pushd `pwd`
   export P4EST_TMP=`pwd`/libp4est_tmp_non_mpi
   mkdir -p $P4EST_TMP
   cd $P4EST_TMP/
-  wget https://p4est.github.io/release/p4est-2.2.tar.gz
-  tar xf p4est-2.2.tar.gz
+  wget https://p4est.github.io/release/p4est-${P4EST_RELEASE}.tar.gz
+  tar xf p4est-${P4EST_RELEASE}.tar.gz
   mkdir build
   cd build/
-  $P4EST_TMP/p4est-2.2/configure --prefix=$P4EST_TMP/prefix
+  $P4EST_TMP/p4est-${P4EST_RELEASE}/configure --prefix=$P4EST_TMP/prefix
   make -j 2
   make install
   ls -l $P4EST_TMP/prefix/lib/libp4est.so
@@ -22,19 +25,20 @@ if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   popd
 fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_USES_MPI" ]; then
+  echo "Found 'P4EST_TEST=P4EST_CUSTOM_USES_MPI'. Installing custom p4est *with* MPI support..."
   pushd `pwd`
   export P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi
   mkdir -p $P4EST_TMP
   cd $P4EST_TMP/
-  wget https://p4est.github.io/release/p4est-2.2.tar.gz
-  tar xf p4est-2.2.tar.gz
+  wget https://p4est.github.io/release/p4est-${P4EST_RELEASE}.tar.gz
+  tar xf p4est-${P4EST_RELEASE}.tar.gz
   mkdir build
   cd build/
   export CC=mpicc
   export CXX=mpicxx
   export FC=mpif90
   export F77=mpif77
-  $P4EST_TMP/p4est-2.2/configure --prefix=$P4EST_TMP/prefix --enable-mpi
+  $P4EST_TMP/p4est-${P4EST_RELEASE}/configure --prefix=$P4EST_TMP/prefix --enable-mpi
   make -j 2
   make install
   ls -l $P4EST_TMP/prefix/lib/libp4est.so

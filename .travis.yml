@@ -63,7 +63,7 @@ addons:
       - libmpich-dev
 
 before_script:
-  - ./.travis_install_p4est.sh
+  - ./.ci_install_p4est.sh
 
 script:
   # nothing to do; equivalent to
