@@ -37,6 +37,7 @@ env:
   global:
     - COVERALLS_PARALLEL=true
   jobs:
+    - P4EST_TEST=P4EST_JLL_PRE_GENERATED_BINDINGS
     - P4EST_TEST=P4EST_JLL_NON_MPI
     - P4EST_TEST=P4EST_CUSTOM_NON_MPI
     - P4EST_TEST=P4EST_CUSTOM_USES_MPI
@@ -66,28 +67,35 @@ before_script:
   - ./.travis_install_p4est.sh
 
 script:
+  # Default option re-uses pre-generated bindings
+  - if [[ "${P4EST_TEST}" == "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS" ]]; then
+      echo "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS does not require special settings";
+    fi
   # nothing to do; equivalent to
   # export JULIA_P4EST_LIBRARY="";
   # export JULIA_P4EST_INCLUDE="";
   # export JULIA_P4EST_USES_MPI="";
   # export JULIA_P4EST_MPI_INCLUDE="";
   - if [[ "${P4EST_TEST}" == "P4EST_JLL_NON_MPI" ]]; then
-      echo "P4EST_JLL_NON_MPI does not require special settings";
+      export JULIA_P4EST_GENERATE_BINDINGS="yes";
+      echo "P4EST_JLL_NON_MPI requires setting JULIA_P4EST_GENERATE_BINDINGS='yes'";
     fi
   # set library and include paths according to custom build in .travis_install_p4est.sh
   - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_NON_MPI" ]]; then
+      export JULIA_P4EST_GENERATE_BINDINGS="yes";
       export P4EST_TMP=`pwd`/libp4est_tmp_non_mpi;
       export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
       export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
-      echo "P4EST_CUSTOM_NON_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE";
+      echo "P4EST_CUSTOM_NON_MPI requires setting JULIA_P4EST_GENERATE_BINDINGS='yes' and JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE";
     fi
   - if [[ "${P4EST_TEST}" == "P4EST_CUSTOM_USES_MPI" ]]; then
+      export JULIA_P4EST_GENERATE_BINDINGS="yes";
       export P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi;
       export JULIA_P4EST_LIBRARY="$P4EST_TMP/prefix/lib/libp4est-2.2.so";
       export JULIA_P4EST_INCLUDE="$P4EST_TMP/prefix/include";
       export JULIA_P4EST_USES_MPI=yes;
       export JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich;
-      echo "P4EST_CUSTOM_USES_MPI requires setting JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE and JULIA_P4EST_USES_MPI=$JULIA_P4EST_USES_MPI and JULIA_P4EST_MPI_INCLUDE=$JULIA_P4EST_MPI_INCLUDE";
+      echo "P4EST_CUSTOM_USES_MPI requires setting JULIA_P4EST_GENERATE_BINDINGS='yes' and JULIA_P4EST_LIBRARY=$JULIA_P4EST_LIBRARY and JULIA_P4EST_INCLUDE=$JULIA_P4EST_INCLUDE and JULIA_P4EST_USES_MPI=$JULIA_P4EST_USES_MPI and JULIA_P4EST_MPI_INCLUDE=$JULIA_P4EST_MPI_INCLUDE";
     fi
   - julia --color=yes --check-bounds=yes -e 'using Pkg; Pkg.build(; verbose=true); Pkg.test(coverage=true)'
 

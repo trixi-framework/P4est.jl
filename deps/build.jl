@@ -16,13 +16,14 @@ end
 
 config = TOML.parsefile(config_toml)
 
-# P4est.toml has 6 keys
-#  p4est_path      = "" (default) | path to p4est containing subdirectories lib and include
-#  p4est_library   = "" (default) | library name/path
-#  p4est_include   = "" (default) | include name/path
-#  p4est_uses_mpi  = "" (default) | "yes" indicates that we need the MPI headers
-#  mpi_path        = "" (default) | path to MPI containing subdirectories lib and include
-#  mpi_include     = "" (default) | include name/path
+# P4est.toml has the following keys:
+#  p4est_generate_bindings = "" (default) | if non-empty, re-generate bindings during build stage
+#  p4est_path              = "" (default) | path to p4est containing subdirectories lib and include
+#  p4est_library           = "" (default) | library name/path
+#  p4est_include           = "" (default) | include name/path
+#  p4est_uses_mpi          = "" (default) | "yes" indicates that we need the MPI headers
+#  mpi_path                = "" (default) | path to MPI containing subdirectories lib and include
+#  mpi_include             = "" (default) | include name/path
 
 
 # Step 1: Check environment variables and update preferences accordingly

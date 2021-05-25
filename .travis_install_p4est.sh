@@ -1,7 +1,10 @@
 #!/bin/bash
 
+if [ "${P4EST_TEST}" = "P4EST_JL_NON_MPIL_PRE_GENERATED_BINDINGS" ]; then
+  echo "Nothing to do for P4EST_TEST=${P4EST_TEST}"
+fi
 if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
-  echo "Nothing to do for P4EST_TEST=P4EST_JLL_NON_MPI"
+  echo "Nothing to do for P4EST_TEST=${P4EST_TEST}"
 fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   pushd `pwd`
