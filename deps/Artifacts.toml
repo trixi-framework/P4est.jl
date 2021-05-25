@@ -1,6 +1,0 @@
-[libp4est]
-git-tree-sha1 = "3c1ac4a08985f991e7caa11533a52371406ea662"
-
-[[libp4est.download]]
-url = "https://gist.github.com/sloede/0446f683e500f253fd6630257086d833/raw/3f8b48d4458b1217bffb7272e839048443409c32/libp4est-2.3.1.tar.gz"
-sha256 = "0602f82e5c477c7c9f6ef1a77217736981927ea0d01f5b5c7a73dcef71c35737"
