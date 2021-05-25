@@ -3,7 +3,7 @@
 language: julia
 
 julia:
-  - 1 # latest 1.x.y
+  - 1.6 # latest 1.x.y
   # - nightly
 
 os:
@@ -14,7 +14,7 @@ jobs:
     - julia: nightly
   include:
     - if: type = push AND branch = master
-      julia: 1
+      julia: 1.6
       os: osx
   exclude:
     - os: osx
