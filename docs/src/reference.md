@@ -5,5 +5,5 @@ CurrentModule = P4est
 ```
 
 ```@autodocs
-Modules = [P4est]
+Modules = [P4est, P4est.LibP4est]
 ```
