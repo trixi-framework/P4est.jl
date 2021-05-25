@@ -8,3 +8,4 @@ Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 [compat]
 CBindingGen = "0.4"
 MPI = "0.15, 0.16"
+P4est_jll = "~2.3.1"
