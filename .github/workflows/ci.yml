@@ -93,7 +93,12 @@ jobs:
           echo "Done."
         shell: bash
       - name: Install custom p4est libraries for testing
-        run: ./.ci_install_p4est.sh
+        run: |
+          if [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
+            sudo apt-get -y mpich libmpich-dev
+          fi
+          ./.ci_install_p4est.sh
+        shell: bash
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
