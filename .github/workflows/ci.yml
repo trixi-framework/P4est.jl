@@ -20,7 +20,7 @@ on:
 jobs:
   test:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    name: ${{ matrix.os }} - Julia ${{ matrix.version }} - ${{ matrix.arch }} - ${{ github.event_name }}
+    name: ${{ matrix.p4est_test }} - ${{ matrix.os }} - Julia ${{ github.version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
