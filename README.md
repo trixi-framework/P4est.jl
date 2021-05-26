@@ -26,11 +26,8 @@ P4est.jl depends on the binary distribution of the [p4est](https://github.com/cb
 library, which is available in the Julia package `P4est_jll.jl` and which is automatically
 installed as a dependency.
 
-*Note: Currently, `P4est_jll.jl` is not available under Windows and provides only
-serial binaries without MPI support. Both limitations are planned to be lifted
-in the future.*
-
-*Note: On MacOS, you need to have Xcode installed to be able to use this package.*
+*Note: Currently, `P4est_jll.jl` only provides serial binaries without MPI
+support. This limitation is planned to be lifted in the future.*
 
 By default, P4est.jl provides pre-generated Julia bindings to all exported C
 functions of the underlying p4est library. You can force the build script to

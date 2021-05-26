@@ -8,7 +8,7 @@ connected adaptive quadtrees or octrees in parallel.
 ## Installation
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/). P4est.jl works
-with Julia v1.5.
+with Julia v1.6.
 
 P4est.jl is a registered Julia package. Hence, you can install it by executing
 the following commands in the Julia REPL:
@@ -19,14 +19,17 @@ P4est.jl depends on the binary distribution of the [p4est](https://github.com/cb
 library, which is available in the Julia package `P4est_jll.jl` and which is automatically
 installed as a dependency.
 
-*Note: Currently, `P4est_jll.jl` is not available under Windows and provides only
-serial binaries without MPI support. Both limitations are planned to be lifted
-in the future.*
+*Note: Currently, `P4est_jll.jl` only provides serial binaries without MPI
+support. This limitation is planned to be lifted in the future.*
 
-*Note: On MacOS, you need to have Xcode installed to be able to use this package.*
+By default, P4est.jl provides pre-generated Julia bindings to all exported C
+functions of the underlying p4est library. You can force the build script to
+re-generate the bindings by setting the environment variable
+`JULIA_P4EST_GENERATE_BINDINGS` to a non-empty string.
 
-You can configure P4est.jl to use a custom build of p4est by setting the
-following environment variables and building P4est.jl again afterwards:
+In addition, when `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
+configure P4est.jl to use a custom build of p4est. For this, set the following
+environment variables and build P4est.jl again afterwards:
 1. **Set `JULIA_P4EST_PATH`.**
 
    You can set the environment variable `JULIA_P4EST_PATH` to the install
@@ -45,7 +48,9 @@ following environment variables and building P4est.jl again afterwards:
 For example, if your custom p4est build is installed to `/opt/p4est`, you can
 use it from P4est.jl by executing
 ```bash
-julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est"; using Pkg; Pkg.build("P4est"; verbose=true)'
+julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
+                    ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
+                    using Pkg; Pkg.build("P4est"; verbose=true)'
 ```
 
 P4est.jl supports [p4est](https://github.com/cburstedde/p4est) both with and
@@ -78,7 +83,8 @@ For example, if your custom p4est build is installed to `/opt/p4est` and was
 built using the MPI library installed to `/opt/mpich`, you can use it from
 P4est.jl by executing
 ```bash
-julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
+julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
+                    ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
                     ENV["JULIA_P4EST_USES_MPI"] = "yes";
                     ENV["JULIA_P4EST_MPI_PATH"] = "/opt/mpich";
                     using Pkg; Pkg.build("P4est"; verbose=true)'
