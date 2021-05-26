@@ -84,8 +84,8 @@ jobs:
             echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
             echo "JULIA_P4EST_USES_MPI=yes" >> $GITHUB_ENV
             echo "JULIA_P4EST_USES_MPI=yes"
-            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich" >> $GITHUB_ENV
-            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich"
+            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich" >> $GITHUB_ENV
+            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich"
           else
             echo "ERROR: unknown test type ${{ matrix.p4est_test }}" >&2
             exit 1
