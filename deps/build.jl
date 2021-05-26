@@ -77,7 +77,7 @@ end
 if isempty(config["p4est_generate_bindings"])
   println("Use pre-generated bindings for p4est")
   const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
-  const pre_generated_bindings_filename = joinpath(artifact"libp4est", "libp4est-2.3.1.jl")
+  const pre_generated_bindings_filename = joinpath(artifact"libp4est", "libp4est.jl")
   cp(pre_generated_bindings_filename, bindings_filename, force=true)
 else
   # Step 2: Choose p4est library according to the settings
