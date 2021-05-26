@@ -5,7 +5,7 @@
 [![Codecov](https://codecov.io/gh/trixi-framework/P4est.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/trixi-framework/P4est.jl)
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/P4est.jl/badge.svg?branch=master)](https://coveralls.io/github/trixi-framework/P4est.jl?branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
-[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/trixi-framework/P4est.jl/v0.1.5.svg?style=social&logo=github)](https://github.com/trixi-framework/P4est.jl)
+[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/trixi-framework/P4est.jl/v0.1.6.svg?style=social&logo=github)](https://github.com/trixi-framework/P4est.jl)
 
 **P4est.jl** is a Julia package that wraps
 [p4est](https://github.com/cburstedde/p4est), a C library to manage multiple
@@ -15,7 +15,7 @@ connected adaptive quadtrees or octrees in parallel.
 ## Installation
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/). P4est.jl works
-with Julia v1.5.
+with Julia v1.6.
 
 P4est.jl is a registered Julia package. Hence, you can install it by executing
 the following commands in the Julia REPL:
@@ -32,8 +32,14 @@ in the future.*
 
 *Note: On MacOS, you need to have Xcode installed to be able to use this package.*
 
-You can configure P4est.jl to use a custom build of p4est by setting the
-following environment variables and building P4est.jl again afterwards:
+By default, P4est.jl provides pre-generated Julia bindings to all exported C
+functions of the underlying p4est library. You can force the build script to
+re-generate the bindings by setting the environment variable
+`JULIA_P4EST_GENERATE_BINDINGS` to a non-empty string.
+
+In addition, when `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
+configure P4est.jl to use a custom build of p4est. For this, set the following
+environment variables and build P4est.jl again afterwards:
 1. **Set `JULIA_P4EST_PATH`.**
 
    You can set the environment variable `JULIA_P4EST_PATH` to the install
@@ -52,7 +58,9 @@ following environment variables and building P4est.jl again afterwards:
 For example, if your custom p4est build is installed to `/opt/p4est`, you can
 use it from P4est.jl by executing
 ```bash
-julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est"; using Pkg; Pkg.build("P4est"; verbose=true)'
+julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
+                    ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
+                    using Pkg; Pkg.build("P4est"; verbose=true)'
 ```
 
 P4est.jl supports [p4est](https://github.com/cburstedde/p4est) both with and
@@ -85,7 +93,8 @@ For example, if your custom p4est build is installed to `/opt/p4est` and was
 built using the MPI library installed to `/opt/mpich`, you can use it from
 P4est.jl by executing
 ```bash
-julia --project -e 'ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
+julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
+                    ENV["JULIA_P4EST_PATH"] = "/opt/p4est";
                     ENV["JULIA_P4EST_USES_MPI"] = "yes";
                     ENV["JULIA_P4EST_MPI_PATH"] = "/opt/mpich";
                     using Pkg; Pkg.build("P4est"; verbose=true)'
@@ -169,7 +178,7 @@ please refer to the [documentation for p4est itself](http://www.p4est.org/) or t
 P4est.jl was initiated by
 [Michael Schlottke-Lakemper](https://www.mi.uni-koeln.de/NumSim/schlottke-lakemper)
 (University of Cologne, Germany),
-[Hendrik Ranocha](https://ranocha.de)  (KAUST, Saudi Arabia), and
+[Hendrik Ranocha](https://ranocha.de)  (University of Münster, Germany), and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
 (University of Cologne, Germany).
 Together, they are the principal developers of P4est.jl.
