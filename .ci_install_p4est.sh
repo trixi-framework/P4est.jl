@@ -2,8 +2,11 @@
 
 $P4EST_RELEASE="2.2"
 
+if [ "${P4EST_TEST}" = "P4EST_JL_NON_MPIL_PRE_GENERATED_BINDINGS" ]; then
+  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
+fi
 if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
-  echo "Found 'P4EST_TEST=P4EST_JLL_NON_MPI'. Nothing to do here."
+  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
 fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then
   echo "Found 'P4EST_TEST=P4EST_CUSTOM_NON_MPI'. Installing custom p4est *without* MPI support..."
