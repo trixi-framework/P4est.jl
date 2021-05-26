@@ -32,5 +32,5 @@ makedocs(
 deploydocs(
     repo = "github.com/trixi-framework/P4est.jl",
     devbranch = "master",
-    # push_preview = true
+    push_preview = true
 )
