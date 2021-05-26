@@ -95,7 +95,7 @@ jobs:
       - name: Install custom p4est libraries for testing
         run: |
           if [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
-            sudo apt-get -y mpich libmpich-dev
+            sudo apt-get install -y mpich libmpich-dev
           fi
           ./.ci_install_p4est.sh
         shell: bash
