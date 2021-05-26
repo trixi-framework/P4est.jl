@@ -35,7 +35,7 @@ jobs:
         arch:
           - x64
         p4est_test:
-          - P4EST_JLL_PRE_GENERATED_BINDINGS
+          - P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
           - P4EST_JLL_NON_MPI
           - P4EST_CUSTOM_NON_MPI
           - P4EST_CUSTOM_USES_MPI
@@ -45,17 +45,55 @@ jobs:
           - version: '1.6'
             os: macos-latest
             arch: x86
-            p4est_test: P4EST_JLL_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
           - version: '1.6'
             os: windows-latest
             arch: x86
-            p4est_test: P4EST_JLL_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
     steps:
       - uses: actions/checkout@v2
+      - name: Set environment variables
+        run: |
+          echo "Setting variables for '${{ matrix.p4est_test }}'..."
+          echo "P4EST_TEST=${{ matrix.p4est_test }}" >> $GITHUB_ENV
+          echo "P4EST_TEST=${{ matrix.p4est_test }}"
+          if [[ ${{ matrix.p4est_test }} == "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS" ]]; then
+            echo "(no additional environment variables required)"
+          elif [[ ${{ matrix.p4est_test }} == "P4EST_JLL_NON_MPI" ]]; then
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
+          elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_NON_MPI" ]]; then
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
+            P4EST_TMP=`pwd`/libp4est_tmp_non_mpi
+            echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
+            echo "P4EST_TMP=$P4EST_TMP"
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-2.2.so" >> $GITHUB_ENV
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-2.2.so"
+            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
+            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
+          elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
+            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
+            P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi
+            echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
+            echo "P4EST_TMP=$P4EST_TMP"
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-2.2.so" >> $GITHUB_ENV
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-2.2.so"
+            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
+            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
+            echo "JULIA_P4EST_USES_MPI=yes" >> $GITHUB_ENV
+            echo "JULIA_P4EST_USES_MPI=yes"
+            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich" >> $GITHUB_ENV
+            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/mpich"
+          else
+            echo "ERROR: unknown test type ${{ matrix.p4est_test }}" >&2
+            exit 1
+          fi
+          echo "Done."
+        shell: bash
       - name: Install custom p4est libraries for testing
         run: ./.ci_install_p4est.sh
-        env:
-          P4EST_TEST: ${{ matrix.p4est_test }}
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
@@ -74,11 +112,9 @@ jobs:
       - uses: julia-actions/julia-buildpkg@v1
         env:
           PYTHON: ""
-          P4EST_TEST: ${{ matrix.p4est_test }}
       - uses: julia-actions/julia-runtest@v1
         env:
           PYTHON: ""
-          P4EST_TEST: ${{ matrix.p4est_test }}
       - uses: julia-actions/julia-processcoverage@v1
       - uses: coverallsapp/github-action@master
         with:
