@@ -35,6 +35,7 @@ jobs:
         arch:
           - x64
         p4est_test:
+          - P4EST_JLL_PRE_GENERATED_BINDINGS
           - P4EST_JLL_NON_MPI
           - P4EST_CUSTOM_NON_MPI
           - P4EST_CUSTOM_USES_MPI
@@ -44,11 +45,11 @@ jobs:
           - version: '1.6'
             os: macos-latest
             arch: x86
-            p4est_test: P4EST_JLL_NON_MPI
+            p4est_test: P4EST_JLL_PRE_GENERATED_BINDINGS
           - version: '1.6'
             os: windows-latest
             arch: x86
-            p4est_test: P4EST_JLL_NON_MPI
+            p4est_test: P4EST_JLL_PRE_GENERATED_BINDINGS
     steps:
       - uses: actions/checkout@v2
       - name: Install custom p4est libraries for testing
