@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set p4est release to run tests against
         run: |
-          P4EST_RELEASE=2.2
+          P4EST_RELEASE=2.3.1
           echo "P4EST_RELEASE=$P4EST_RELEASE" >> $GITHUB_ENV
           echo "P4EST_RELEASE=$P4EST_RELEASE"
         shell: bash
