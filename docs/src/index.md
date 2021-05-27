@@ -99,6 +99,7 @@ You can then access the full [p4est](https://github.com/cburstedde/p4est) API th
 by the headers. For example, to create a periodic connectivity and check its validity, execute
 the following lines:
 ```@repl
+using P4est
 conn_ptr = p4est_connectivity_new_periodic()
 p4est_connectivity_is_valid(conn_ptr)
 p4est_ptr = p4est_new_ext(sc_MPI_Comm(0), conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
