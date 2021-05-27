@@ -79,8 +79,8 @@ jobs:
             P4EST_TMP=`pwd`/libp4est_tmp_non_mpi
             echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
             echo "P4EST_TMP=$P4EST_TMP"
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-$P4EST_RELEASE.so" >> $GITHUB_ENV
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-$P4EST_RELEASE.so"
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so"
             echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
             echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
           elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
@@ -89,8 +89,8 @@ jobs:
             P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi
             echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
             echo "P4EST_TMP=$P4EST_TMP"
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-$P4EST_RELEASE.so" >> $GITHUB_ENV
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est-$P4EST_RELEASE.so"
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
+            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so"
             echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
             echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
             echo "JULIA_P4EST_USES_MPI=yes" >> $GITHUB_ENV
