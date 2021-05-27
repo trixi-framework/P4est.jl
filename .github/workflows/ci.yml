@@ -39,8 +39,7 @@ jobs:
           - P4EST_JLL_NON_MPI
           - P4EST_CUSTOM_NON_MPI
           - P4EST_CUSTOM_USES_MPI
-        # Only one additional test on macOS and Windows, since custom p4est installations
-        # do not yet work under other OSes
+        # Only selected tests on macOS and Windows, since not everything works everywhere yet
         include:
           - version: '1.6'
             os: macOS-latest
@@ -50,6 +49,10 @@ jobs:
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI
+          - version: '1.6'
+            os: macOS-latest
+            arch: x64
+            p4est_test: P4EST_CUSTOM_NON_MPI
           - version: '1.6'
             os: windows-latest
             arch: x64
