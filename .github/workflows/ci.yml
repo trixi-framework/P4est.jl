@@ -47,6 +47,10 @@ jobs:
             arch: x86
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
           - version: '1.6'
+            os: macos-latest
+            arch: x86
+            p4est_test: P4EST_JLL_NON_MPI
+          - version: '1.6'
             os: windows-latest
             arch: x86
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
