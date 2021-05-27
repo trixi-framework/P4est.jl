@@ -1,6 +1,8 @@
 #!/bin/bash
 
-P4EST_RELEASE="2.2"
+if [ -z "$P4EST_RELEASE" ]; then
+  P4EST_RELEASE="2.2"
+fi
 
 if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS" ]; then
   echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
