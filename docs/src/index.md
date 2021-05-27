@@ -98,28 +98,13 @@ julia> using P4est
 You can then access the full [p4est](https://github.com/cburstedde/p4est) API that is defined
 by the headers. For example, to create a periodic connectivity and check its validity, execute
 the following lines:
-```julia
-julia> conn_ptr = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x0000000001ad2080
-
-julia> p4est_connectivity_is_valid(conn_ptr)
-1
-
-julia> p4est_ptr = p4est_new_ext(sc_MPI_Comm(0), conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
-Into p4est_new with min quadrants 0 level 2 uniform 0
-New p4est with 1 trees on 1 processors
-Initial level 2 potential global quadrants 16 per tree 16
-Done p4est_new with 10 total quadrants
-Ptr{p4est} @0x00000000029e9fc0
-
-julia> p4est_ = unsafe_wrap(p4est_ptr)
-p4est(mpicomm=0, mpisize=1, mpirank=0, mpicomm_owned=0, data_size=0x0000000000000000, user_pointer=Ptr{Nothing} @0x0000000000000000, revision=0, first_local_tree=0, last_local_tree=0, local_num_quadrants=10, global_num_quadrants=10, global_first_quadrant=Ptr{Int64} @0x00000000025b2880, global_first_position=Ptr{p4est_quadrant} @0x0000000001ee1390, connectivity=Ptr{p4est_connectivity} @0x000000000256de60, trees=Ptr{sc_array} @0x0000000002210e20, user_data_pool=Ptr{sc_mempool} @0x0000000000000000, quadrant_pool=Ptr{sc_mempool} @0x00000000020a5820, inspect=Ptr{p4est_inspect} @0x0000000000000000)
-
-julia> p4est_.connectivity == conn_ptr
-true
-
-julia> p4est_.connectivity.num_trees
-1
+```@repl
+conn_ptr = p4est_connectivity_new_periodic()
+p4est_connectivity_is_valid(conn_ptr)
+p4est_ptr = p4est_new_ext(sc_MPI_Comm(0), conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
+p4est_ = unsafe_wrap(p4est_ptr)
+p4est_.connectivity == conn_ptr
+p4est_.connectivity.num_trees
 ```
 As can be seen, `unsafe_wrap` allows to convert pointers to [p4est](https://github.com/cburstedde/p4est)
 C structs to the corresponding Julia wrapper type provided by
