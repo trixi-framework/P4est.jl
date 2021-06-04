@@ -15,5 +15,6 @@
   𝐣𝐥.@cstruct FILE
   𝐣𝐥.@cstruct va_list
 
+  𝐣𝐥.Base.include((𝐣𝐥.@__MODULE__), 𝐣𝐥.joinpath(𝐣𝐥.dirname(𝐣𝐥.@__DIR__), "deps", "libsc.jl"))
   𝐣𝐥.Base.include((𝐣𝐥.@__MODULE__), 𝐣𝐥.joinpath(𝐣𝐥.dirname(𝐣𝐥.@__DIR__), "deps", "libp4est.jl"))
 end
