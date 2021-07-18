@@ -10,6 +10,7 @@ julia> Pkg.instantiate()
 before the first example.
 
 ## MWE 1
+File: [`mwe1.jl`](mwe1.jl)
 ```julia
 julia> include("mwe1.jl")
 ┌ Warning: Failed to find `sc_extern_c_hack_3` in:
@@ -71,4 +72,51 @@ true
 
 julia> p4est_.connectivity[].num_trees
 1
+```
+
+## MWE 2
+
+### MWE 2a
+File: [`mwe2a.jl`](mwe2a.jl)
+```julia
+julia> include("mwe2a.jl")
+┌ Warning: Failed to find `sc_extern_c_hack_3` in:
+│   /home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/lib/libp4est
+│   or the Julia process
+└ @ CBinding ~/.julia/packages/CBinding/aDSSa/src/context.jl:48
+┌ Warning: Failed to find `sc_extern_c_hack_4` in:
+│   /home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/lib/libp4est
+│   or the Julia process
+└ @ CBinding ~/.julia/packages/CBinding/aDSSa/src/context.jl:48
+┌ Warning: Failed to find `P2EST_DATA_UNINITIALIZED` in:
+│   /home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/lib/libp4est
+│   or the Julia process
+└ @ CBinding ~/.julia/packages/CBinding/aDSSa/src/context.jl:48
+┌ Warning: Failed to find `p8est_ghost_tree_contains` in:
+│   /home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/lib/libp4est
+│   or the Julia process
+└ @ CBinding ~/.julia/packages/CBinding/aDSSa/src/context.jl:48
+961786
+```
+
+### MWE 2b
+File: [`mwe2b.jl`](mwe2b.jl)
+```julia
+julia> include("mwe2b.jl")
+ERROR: LoadError: LoadError: syntax: "$" expression outside quote around /mnt/ssd/home/mschlott/hackathon/P4est.jl/libp4est-mwe2.jl:10087
+Stacktrace:
+ [1] top-level scope
+   @ /mnt/ssd/home/mschlott/hackathon/P4est.jl/libp4est-mwe2.jl:1
+ [2] include(mod::Module, _path::String)
+   @ Base ./Base.jl:386
+ [3] include(x::String)
+   @ Main.LibP4est /mnt/ssd/home/mschlott/hackathon/P4est.jl/mwe2b.jl:1
+ [4] top-level scope
+   @ /mnt/ssd/home/mschlott/hackathon/P4est.jl/mwe2b.jl:10
+ [5] include(fname::String)
+   @ Base.MainInclude ./client.jl:444
+ [6] top-level scope
+   @ REPL[2]:1
+in expression starting at /mnt/ssd/home/mschlott/hackathon/P4est.jl/libp4est-mwe2.jl:1
+in expression starting at /mnt/ssd/home/mschlott/hackathon/P4est.jl/mwe2b.jl:1
 ```
