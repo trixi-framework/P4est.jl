@@ -1,4 +1,5 @@
-using CBindingGen
+# using CBindingGen
+using CBinding
 using Libdl
 using MPI
 import Pkg.TOML
@@ -178,6 +179,7 @@ else
   end
 
   # Convert symbols in header
+  if false
   cvts = convert_headers(hdrs, args=include_args) do cursor
     header = CodeLocation(cursor).file
     name   = string(cursor)
@@ -203,5 +205,27 @@ else
   const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
   open(bindings_filename, "w+") do io
     generate(io, p4est_library => cvts)
+  end
+  end # if false
+
+  println("Set up compiler context with $include_args")
+  # c`$include_args $p4est_library`
+  println(p4est_library)
+  c`-I/home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/include -L/home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/lib -lp4est`
+  println("done")
+
+  println("Store bindings in libp4est.jl")
+  libp4est = quote
+    $(@eval @macroexpand c"""
+      #include "p4est.h"
+      #include "p4est_extended.h"
+      #include "p6est.h"
+      #include "p6est_extended.h"
+      #include "p8est.h"
+      #include "p8est_extended.h"
+      """jiu)
+  end
+  open(joinpath(@__DIR__, "libp4est.jl"), "w+") do io
+    println(io, libp4est)
   end
 end
