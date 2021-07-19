@@ -137,7 +137,7 @@ julia> using Pkg; Pkg.activate(temp=true);
 
 julia> Pkg.add(PackageSpec(name="Clang", rev="julia-1.7"))
 
-julia> Pkg.add("CEnum")
+julia> Pkg.add(["CEnum", "P4est_jll"])
 ```
 
 Then generate the bindings by starting Julia with `julia --project` and
