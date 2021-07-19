@@ -31,10 +31,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      continue-on-error: ${{ matrix.experimental }}
       matrix:
         version:
           - '1.6'
-          - '^1.7.0-0'
           # - 'nightly'
         os:
           - ubuntu-latest
@@ -47,32 +47,63 @@ jobs:
           - P4EST_JLL_NON_MPI
           - P4EST_CUSTOM_NON_MPI
           - P4EST_CUSTOM_USES_MPI
+        experimental: # Ugly workaround, see below and https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idcontinue-on-error
+          - false
         # Only selected tests on macOS and Windows, since not everything works everywhere yet
         include:
           - version: '1.6'
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
-          - version: '^1.7.0-0'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            experimental: false
           - version: '1.6'
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI
-          - version: '^1.7.0-0'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_NON_MPI
+            experimental: false
           - version: '1.6'
             os: windows-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            experimental: false
+          # Additional jobs using Julia v1.7. Set `experimental` to `true` for
+          # jobs that will fail due to upstream issues, see
+          # https://github.com/trixi-framework/P4est.jl/pull/37
+          - version: '^1.7.0-0'
+            os: ubuntu-latest
+            arch: x64
+            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            experimental: false
+          - version: '^1.7.0-0'
+            os: ubuntu-latest
+            arch: x64
+            p4est_test: P4EST_JLL_NON_MPI
+            experimental: true
+          - version: '^1.7.0-0'
+            os: ubuntu-latest
+            arch: x64
+            p4est_test: P4EST_CUSTOM_NON_MPI
+            experimental: true
+          - version: '^1.7.0-0'
+            os: ubuntu-latest
+            arch: x64
+            p4est_test: P4EST_CUSTOM_USES_MPI
+            experimental: true
           - version: '^1.7.0-0'
             os: windows-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            experimental: false
+          - version: '^1.7.0-0'
+            os: macOS-latest
+            arch: x64
+            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            experimental: false
+          - version: '^1.7.0-0'
+            os: macOS-latest
+            arch: x64
+            p4est_test: P4EST_JLL_NON_MPI
+            experimental: true
     steps:
       - uses: actions/checkout@v2
       - name: Set p4est release to run tests against
