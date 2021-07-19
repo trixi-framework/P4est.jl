@@ -34,6 +34,10 @@ functions of the underlying p4est library. You can force the build script to
 re-generate the bindings by setting the environment variable
 `JULIA_P4EST_GENERATE_BINDINGS` to a non-empty string.
 
+*Note: Currently, `P4est.jl` can only be used with pre-generated bindings on
+Julia v1.7. See [issue #39](https://github.com/trixi-framework/P4est.jl/issues/39)
+for further discussions.*
+
 In addition, when `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
 configure P4est.jl to use a custom build of p4est. For this, set the following
 environment variables and build P4est.jl again afterwards:
