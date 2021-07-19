@@ -121,7 +121,7 @@ in expression starting at /mnt/ssd/home/mschlott/hackathon/P4est.jl/libp4est-mwe
 in expression starting at /mnt/ssd/home/mschlott/hackathon/P4est.jl/mwe2b.jl:1
 ```
 
-## MWE3
+## MWE 3
 This MWE is based on directly using [Clang.jl](https://github.com/JuliaInterop/Clang.jl).
 Note that you need the latest version from `master`, i.e., first install
 `Clang.jl` by running
