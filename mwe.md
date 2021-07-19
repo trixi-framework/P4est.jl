@@ -131,6 +131,15 @@ julia -e 'import Pkg; Pkg.develop("Clang"); Pkg.add("CEnum")'
 This will also install [`CEnum.jl`](https://github.com/JuliaInterop/CEnum.jl) to
 support C-style enums with duplicated values.
 
+If you use Julia v1.7.0-beta3, you can also use
+```julia
+julia> using Pkg; Pkg.activate(temp=true);
+
+julia> Pkg.add(PackageSpec(name="Clang", rev="julia-1.7"))
+
+julia> Pkg.add("CEnum")
+```
+
 Then generate the bindings by starting Julia with `julia --project` and
 loading [`mwe3.jl`](mwe3.jl):
 ```julia
