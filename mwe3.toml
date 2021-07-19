@@ -30,12 +30,12 @@ jll_pkg_name = "P4est_jll"
 jll_pkg_extra = []
 
 # identifiers that starts with the string listed in this entry will be exported.
-export_symbol_prefixes = ["p4est_", "p6est_", "p8est_", "sc_"]
+export_symbol_prefixes = ["p4est_", "p6est_", "p8est_", "sc_", "P4EST_", "P6EST_", "P8EST_"]
 
 # the code in the following file will be copy-pasted to `output_file_path` before the generated code.
 # this is often used for applying custom patches, e.g. adding missing definitions.
 # prologue_file_path = "./prologue.jl"
-prologue_file_path = ""
+prologue_file_path = "./mwe3-prologue.jl"
 
 # the code in the following file will be copy-pasted to `output_file_path` after the generated code.
 # this is often used for applying custom patches.
@@ -53,18 +53,34 @@ printer_blacklist = [
     # "LLVM_CLANG_C_STRICT_PROTOTYPES_END",
     # "LLVM_CLANG_C_EXTERN_C_BEGIN",
     # "LLVM_CLANG_C_EXTERN_C_END"
+  "_sc_restrict",
+  "_sc_const",
+  "SC_GCC_VERSION",
+  "_p4est_const",
+  "sc_extern_c_hack_3",
+  "sc_extern_c_hack_4",
+  "P4EST_F90_LOCIDX",
+  "P4EST_F90_QCOORD",
+  "P4EST_F90_TOPIDX",
+  "P4EST_F90_GLOIDX",
+  "P4EST_GLOBAL_NOTICE",
+  "P4EST_GLOBAL_NOTICEF",
+  "P4EST_NOTICE",
+  "P4EST_NOTICEF",
+  "SC_EXTERN_C_BEGIN",
+  "SC_EXTERN_C_END",
+  "SC_MEMALIGN_BYTES",
+  "P4EST_MEMALIGN_BYTES",
 ]
 
 # Julia's `@enum` do not allow duplicated values, so by default, C enums are translated to 
 # CEnum.jl's `@cenum`. 
 # if this entry is true, `@enum` is used and those duplicated enum constants are just commented. 
-# use_julia_native_enum_type = false
-use_julia_native_enum_type = true
+use_julia_native_enum_type = false
 
 # use `@cenum` but do not print `using CEnum`.
 # this is useful in the case of using `CEnum` directly in the source tree instead of using `CEnum` as a dependency
-# print_using_CEnum = true
-print_using_CEnum = false
+print_using_CEnum = true
 
 # use deterministic symbol instead of `gensym`-generated `var"##XXX"`
 use_deterministic_symbol = true
@@ -137,7 +153,59 @@ opaque_as_mutable_struct = true
 use_ccall_macro = true
 
 # generate getproperty/setproperty! methods for the types in the following list
-field_access_method_list = []
+field_access_method_list = [
+  "p4est",
+  "p6est",
+  "p8est",
+  "p4est_connectivity",
+  "p4est_corner_transform_t",
+  "p4est_corner_info_t",
+  "p4est_quadrant_data",
+  "p4est_quadrant",
+  "p4est_tree",
+  "p4est_inspect",
+  "p4est_ghost_t",
+  "p4est_ghost_exchange",
+  "p4est_mesh_t",
+  "p4est_mesh_face_neighbor_t",
+  "p4est_iter_volume_info",
+  "p4est_iter_face_side_data",
+  "p4est_iter_face_side",
+  "p4est_iter_face_info",
+  "p4est_iter_corner_side",
+  "p4est_iter_corner_info",
+  "p4est_lnodes",
+  "p4est_lnodes_rank",
+  "p4est_lnodes_buffer",
+  "p8est_connectivity",
+  "p8est_edge_transform_t",
+  "p8est_edge_info_t",
+  "p8est_corner_transform_t",
+  "p8est_corner_info_t",
+  "p6est_connectivity",
+  "p6est_quadrant_data",
+  "p2est_quadrant",
+  "p8est_quadrant_data",
+  "p8est_quadrant",
+  "p8est_tree",
+  "p8est_inspect",
+  "p8est_ghost_t",
+  "p8est_ghost_exchange",
+  "p8est_mesh_t",
+  "p8est_mesh_face_neighbor_t",
+  "p8est_iter_volume_info",
+  "p8est_iter_face_side_data",
+  "p8est_iter_face_side",
+  "p8est_iter_face_info",
+  "p8est_iter_edge_side_data",
+  "p8est_iter_edge_side",
+  "p8est_iter_edge_info",
+  "p8est_iter_corner_side",
+  "p8est_iter_corner_info",
+  "p8est_lnodes",
+  "p8est_lnodes_rank",
+  "p8est_lnodes_buffer",
+]
 
 # the generator will prefix the function argument names in the following list with a "_" to 
 # prevent the generated symbols from conflicting with the symbols defined and exported in Base.

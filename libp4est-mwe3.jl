@@ -3,9 +3,20 @@ module LibP4est
 using P4est_jll
 export P4est_jll
 
-@enum sc_tag_t::UInt32 begin
+using CEnum
+
+const INT32_MIN = typemin(Int32)
+
+const INT32_MAX = typemax(Int32)
+
+const INT64_MIN = typemin(Int64)
+
+const INT64_MAX = typemax(Int64)
+
+
+@cenum sc_tag_t::UInt32 begin
     SC_TAG_FIRST = 214
-    # SC_TAG_AG_ALLTOALL = 214
+    SC_TAG_AG_ALLTOALL = 214
     SC_TAG_AG_RECURSIVE_A = 215
     SC_TAG_AG_RECURSIVE_B = 216
     SC_TAG_AG_RECURSIVE_C = 217
@@ -888,24 +899,24 @@ function sc_recycle_array_remove(rec_array, position)
     @ccall libp4est.sc_recycle_array_remove(rec_array::Ptr{sc_recycle_array_t}, position::Csize_t)::Ptr{Cvoid}
 end
 
-@enum sc_io_error_t::Int32 begin
+@cenum sc_io_error_t::Int32 begin
     SC_IO_ERROR_NONE = 0
     SC_IO_ERROR_FATAL = -1
     SC_IO_ERROR_AGAIN = -2
 end
 
-@enum sc_io_mode_t::UInt32 begin
+@cenum sc_io_mode_t::UInt32 begin
     SC_IO_MODE_WRITE = 0
     SC_IO_MODE_APPEND = 1
     SC_IO_MODE_LAST = 2
 end
 
-@enum sc_io_encode_t::UInt32 begin
+@cenum sc_io_encode_t::UInt32 begin
     SC_IO_ENCODE_NONE = 0
     SC_IO_ENCODE_LAST = 1
 end
 
-@enum sc_io_type_t::UInt32 begin
+@cenum sc_io_type_t::UInt32 begin
     SC_IO_TYPE_BUFFER = 0
     SC_IO_TYPE_FILENAME = 1
     SC_IO_TYPE_FILEFILE = 2
@@ -1008,7 +1019,7 @@ const p4est_locidx_t = Int32
 
 const p4est_gloidx_t = Int64
 
-@enum p4est_comm_tag::UInt32 begin
+@cenum p4est_comm_tag::UInt32 begin
     P4EST_COMM_TAG_FIRST = 214
     P4EST_COMM_COUNT_PERTREE = 295
     P4EST_COMM_BALANCE_FIRST_COUNT = 296
@@ -1093,13 +1104,13 @@ function p4est_version_minor()
     @ccall libp4est.p4est_version_minor()::Cint
 end
 
-@enum p4est_connect_type_t::UInt32 begin
+@cenum p4est_connect_type_t::UInt32 begin
     P4EST_CONNECT_FACE = 21
     P4EST_CONNECT_CORNER = 22
-    # P4EST_CONNECT_FULL = 22
+    P4EST_CONNECT_FULL = 22
 end
 
-@enum p4est_connectivity_encode_t::UInt32 begin
+@cenum p4est_connectivity_encode_t::UInt32 begin
     P4EST_CONN_ENCODE_NONE = 0
     P4EST_CONN_ENCODE_LAST = 1
 end
@@ -1128,6 +1139,27 @@ struct p4est_connectivity
     corner_to_corner::Ptr{Int8}
 end
 
+function Base.getproperty(x::Ptr{p4est_connectivity}, f::Symbol)
+    f === :num_vertices && return Ptr{p4est_topidx_t}(x + 0)
+    f === :num_trees && return Ptr{p4est_topidx_t}(x + 4)
+    f === :num_corners && return Ptr{p4est_topidx_t}(x + 8)
+    f === :vertices && return Ptr{Ptr{Cdouble}}(x + 16)
+    f === :tree_to_vertex && return Ptr{Ptr{p4est_topidx_t}}(x + 24)
+    f === :tree_attr_bytes && return Ptr{Csize_t}(x + 32)
+    f === :tree_to_attr && return Ptr{Cstring}(x + 40)
+    f === :tree_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 48)
+    f === :tree_to_face && return Ptr{Ptr{Int8}}(x + 56)
+    f === :tree_to_corner && return Ptr{Ptr{p4est_topidx_t}}(x + 64)
+    f === :ctt_offset && return Ptr{Ptr{p4est_topidx_t}}(x + 72)
+    f === :corner_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 80)
+    f === :corner_to_corner && return Ptr{Ptr{Int8}}(x + 88)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_connectivity}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_connectivity_t = p4est_connectivity
 
 function p4est_connectivity_memory_used(conn)
@@ -1140,10 +1172,30 @@ mutable struct p4est_corner_transform_t
     p4est_corner_transform_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_corner_transform_t}, f::Symbol)
+    f === :ntree && return Ptr{p4est_topidx_t}(x + 0)
+    f === :ncorner && return Ptr{Int8}(x + 4)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_corner_transform_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 mutable struct p4est_corner_info_t
     icorner::p4est_topidx_t
     corner_transforms::sc_array_t
     p4est_corner_info_t() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_corner_info_t}, f::Symbol)
+    f === :icorner && return Ptr{p4est_topidx_t}(x + 0)
+    f === :corner_transforms && return Ptr{sc_array_t}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_corner_info_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 function p4est_connectivity_face_neighbor_face_corner(fc, f, nf, o)
@@ -1354,6 +1406,20 @@ struct p4est_quadrant
     p::p4est_quadrant_data
 end
 
+function Base.getproperty(x::Ptr{p4est_quadrant}, f::Symbol)
+    f === :x && return Ptr{p4est_qcoord_t}(x + 0)
+    f === :y && return Ptr{p4est_qcoord_t}(x + 4)
+    f === :level && return Ptr{Int8}(x + 8)
+    f === :pad8 && return Ptr{Int8}(x + 9)
+    f === :pad16 && return Ptr{Int16}(x + 10)
+    f === :p && return Ptr{p4est_quadrant_data}(x + 16)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_quadrant}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_quadrant_t = p4est_quadrant
 
 mutable struct p4est_tree
@@ -1364,6 +1430,20 @@ mutable struct p4est_tree
     quadrants_per_level::NTuple{31, p4est_locidx_t}
     maxlevel::Int8
     p4est_tree() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_tree}, f::Symbol)
+    f === :quadrants && return Ptr{sc_array_t}(x + 0)
+    f === :first_desc && return Ptr{p4est_quadrant_t}(x + 32)
+    f === :last_desc && return Ptr{p4est_quadrant_t}(x + 56)
+    f === :quadrants_offset && return Ptr{p4est_locidx_t}(x + 80)
+    f === :quadrants_per_level && return Ptr{NTuple{31, p4est_locidx_t}}(x + 84)
+    f === :maxlevel && return Ptr{Int8}(x + 208)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_tree}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_tree_t = p4est_tree
@@ -1390,6 +1470,33 @@ struct p4est_inspect
     use_B::Cint
 end
 
+function Base.getproperty(x::Ptr{p4est_inspect}, f::Symbol)
+    f === :use_balance_ranges && return Ptr{Cint}(x + 0)
+    f === :use_balance_ranges_notify && return Ptr{Cint}(x + 4)
+    f === :use_balance_verify && return Ptr{Cint}(x + 8)
+    f === :balance_max_ranges && return Ptr{Cint}(x + 12)
+    f === :balance_A_count_in && return Ptr{Csize_t}(x + 16)
+    f === :balance_A_count_out && return Ptr{Csize_t}(x + 24)
+    f === :balance_comm_sent && return Ptr{Csize_t}(x + 32)
+    f === :balance_comm_nzpeers && return Ptr{Csize_t}(x + 40)
+    f === :balance_B_count_in && return Ptr{Csize_t}(x + 48)
+    f === :balance_B_count_out && return Ptr{Csize_t}(x + 56)
+    f === :balance_zero_sends && return Ptr{NTuple{2, Csize_t}}(x + 64)
+    f === :balance_zero_receives && return Ptr{NTuple{2, Csize_t}}(x + 80)
+    f === :balance_A && return Ptr{Cdouble}(x + 96)
+    f === :balance_comm && return Ptr{Cdouble}(x + 104)
+    f === :balance_B && return Ptr{Cdouble}(x + 112)
+    f === :balance_ranges && return Ptr{Cdouble}(x + 120)
+    f === :balance_notify && return Ptr{Cdouble}(x + 128)
+    f === :balance_notify_allgather && return Ptr{Cdouble}(x + 136)
+    f === :use_B && return Ptr{Cint}(x + 144)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_inspect}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_inspect_t = p4est_inspect
 
 struct p4est
@@ -1411,6 +1518,32 @@ struct p4est
     user_data_pool::Ptr{sc_mempool_t}
     quadrant_pool::Ptr{sc_mempool_t}
     inspect::Ptr{p4est_inspect_t}
+end
+
+function Base.getproperty(x::Ptr{p4est}, f::Symbol)
+    f === :mpicomm && return Ptr{sc_MPI_Comm}(x + 0)
+    f === :mpisize && return Ptr{Cint}(x + 4)
+    f === :mpirank && return Ptr{Cint}(x + 8)
+    f === :mpicomm_owned && return Ptr{Cint}(x + 12)
+    f === :data_size && return Ptr{Csize_t}(x + 16)
+    f === :user_pointer && return Ptr{Ptr{Cvoid}}(x + 24)
+    f === :revision && return Ptr{Clong}(x + 32)
+    f === :first_local_tree && return Ptr{p4est_topidx_t}(x + 40)
+    f === :last_local_tree && return Ptr{p4est_topidx_t}(x + 44)
+    f === :local_num_quadrants && return Ptr{p4est_locidx_t}(x + 48)
+    f === :global_num_quadrants && return Ptr{p4est_gloidx_t}(x + 56)
+    f === :global_first_quadrant && return Ptr{Ptr{p4est_gloidx_t}}(x + 64)
+    f === :global_first_position && return Ptr{Ptr{p4est_quadrant_t}}(x + 72)
+    f === :connectivity && return Ptr{Ptr{p4est_connectivity_t}}(x + 80)
+    f === :trees && return Ptr{Ptr{sc_array_t}}(x + 88)
+    f === :user_data_pool && return Ptr{Ptr{sc_mempool_t}}(x + 96)
+    f === :quadrant_pool && return Ptr{Ptr{sc_mempool_t}}(x + 104)
+    f === :inspect && return Ptr{Ptr{p4est_inspect_t}}(x + 112)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_t = p4est
@@ -1523,6 +1656,26 @@ mutable struct p4est_ghost_t
     p4est_ghost_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_ghost_t}, f::Symbol)
+    f === :mpisize && return Ptr{Cint}(x + 0)
+    f === :num_trees && return Ptr{p4est_topidx_t}(x + 4)
+    f === :btype && return Ptr{p4est_connect_type_t}(x + 8)
+    f === :ghosts && return Ptr{sc_array_t}(x + 16)
+    f === :tree_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 48)
+    f === :proc_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 56)
+    f === :mirrors && return Ptr{sc_array_t}(x + 64)
+    f === :mirror_tree_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 96)
+    f === :mirror_proc_mirrors && return Ptr{Ptr{p4est_locidx_t}}(x + 104)
+    f === :mirror_proc_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 112)
+    f === :mirror_proc_fronts && return Ptr{Ptr{p4est_locidx_t}}(x + 120)
+    f === :mirror_proc_front_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 128)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_ghost_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 function p4est_ghost_is_valid(p4est_, ghost)
     @ccall libp4est.p4est_ghost_is_valid(p4est_::Ptr{p4est_t}, ghost::Ptr{p4est_ghost_t})::Cint
 end
@@ -1589,6 +1742,28 @@ mutable struct p4est_ghost_exchange
     p4est_ghost_exchange() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_ghost_exchange}, f::Symbol)
+    f === :is_custom && return Ptr{Cint}(x + 0)
+    f === :is_levels && return Ptr{Cint}(x + 4)
+    f === :p4est && return Ptr{Ptr{p4est_t}}(x + 8)
+    f === :ghost && return Ptr{Ptr{p4est_ghost_t}}(x + 16)
+    f === :minlevel && return Ptr{Cint}(x + 24)
+    f === :maxlevel && return Ptr{Cint}(x + 28)
+    f === :data_size && return Ptr{Csize_t}(x + 32)
+    f === :ghost_data && return Ptr{Ptr{Cvoid}}(x + 40)
+    f === :qactive && return Ptr{Ptr{Cint}}(x + 48)
+    f === :qbuffer && return Ptr{Ptr{Cint}}(x + 56)
+    f === :requests && return Ptr{sc_array_t}(x + 64)
+    f === :sbuffers && return Ptr{sc_array_t}(x + 96)
+    f === :rrequests && return Ptr{sc_array_t}(x + 128)
+    f === :rbuffers && return Ptr{sc_array_t}(x + 160)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_ghost_exchange}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_ghost_exchange_t = p4est_ghost_exchange
 
 function p4est_ghost_exchange_data_begin(p4est_, ghost, ghost_data)
@@ -1644,6 +1819,27 @@ mutable struct p4est_mesh_t
     p4est_mesh_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_mesh_t}, f::Symbol)
+    f === :local_num_quadrants && return Ptr{p4est_locidx_t}(x + 0)
+    f === :ghost_num_quadrants && return Ptr{p4est_locidx_t}(x + 4)
+    f === :quad_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 8)
+    f === :ghost_to_proc && return Ptr{Ptr{Cint}}(x + 16)
+    f === :quad_to_quad && return Ptr{Ptr{p4est_locidx_t}}(x + 24)
+    f === :quad_to_face && return Ptr{Ptr{Int8}}(x + 32)
+    f === :quad_to_half && return Ptr{Ptr{sc_array_t}}(x + 40)
+    f === :quad_level && return Ptr{Ptr{sc_array_t}}(x + 48)
+    f === :local_num_corners && return Ptr{p4est_locidx_t}(x + 56)
+    f === :quad_to_corner && return Ptr{Ptr{p4est_locidx_t}}(x + 64)
+    f === :corner_offset && return Ptr{Ptr{sc_array_t}}(x + 72)
+    f === :corner_quad && return Ptr{Ptr{sc_array_t}}(x + 80)
+    f === :corner_corner && return Ptr{Ptr{sc_array_t}}(x + 88)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_mesh_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 mutable struct p4est_mesh_face_neighbor_t
     p4est::Ptr{p4est_t}
     ghost::Ptr{p4est_ghost_t}
@@ -1655,6 +1851,23 @@ mutable struct p4est_mesh_face_neighbor_t
     subface::Cint
     current_qtq::p4est_locidx_t
     p4est_mesh_face_neighbor_t() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_mesh_face_neighbor_t}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p4est_t}}(x + 0)
+    f === :ghost && return Ptr{Ptr{p4est_ghost_t}}(x + 8)
+    f === :mesh && return Ptr{Ptr{p4est_mesh_t}}(x + 16)
+    f === :which_tree && return Ptr{p4est_topidx_t}(x + 24)
+    f === :quadrant_id && return Ptr{p4est_locidx_t}(x + 28)
+    f === :quadrant_code && return Ptr{p4est_locidx_t}(x + 32)
+    f === :face && return Ptr{Cint}(x + 36)
+    f === :subface && return Ptr{Cint}(x + 40)
+    f === :current_qtq && return Ptr{p4est_locidx_t}(x + 44)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_mesh_face_neighbor_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 function p4est_mesh_memory_used(mesh)
@@ -1706,6 +1919,19 @@ mutable struct p4est_iter_volume_info
     p4est_iter_volume_info() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_iter_volume_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p4est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p4est_ghost_t}}(x + 8)
+    f === :quad && return Ptr{Ptr{p4est_quadrant_t}}(x + 16)
+    f === :quadid && return Ptr{p4est_locidx_t}(x + 24)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 28)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_iter_volume_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_iter_volume_info_t = p4est_iter_volume_info
 
 # typedef void ( * p4est_iter_volume_t ) ( p4est_iter_volume_info_t * info , void * user_data )
@@ -1740,6 +1966,18 @@ mutable struct p4est_iter_face_side
     p4est_iter_face_side() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_iter_face_side}, f::Symbol)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 0)
+    f === :face && return Ptr{Int8}(x + 4)
+    f === :is_hanging && return Ptr{Int8}(x + 5)
+    f === :is && return Ptr{p4est_iter_face_side_data}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_iter_face_side}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_iter_face_side_t = p4est_iter_face_side
 
 mutable struct p4est_iter_face_info
@@ -1749,6 +1987,19 @@ mutable struct p4est_iter_face_info
     tree_boundary::Int8
     sides::sc_array_t
     p4est_iter_face_info() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_iter_face_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p4est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p4est_ghost_t}}(x + 8)
+    f === :orientation && return Ptr{Int8}(x + 16)
+    f === :tree_boundary && return Ptr{Int8}(x + 17)
+    f === :sides && return Ptr{sc_array_t}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_iter_face_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_iter_face_info_t = p4est_iter_face_info
@@ -1766,6 +2017,20 @@ mutable struct p4est_iter_corner_side
     p4est_iter_corner_side() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_iter_corner_side}, f::Symbol)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 0)
+    f === :corner && return Ptr{Int8}(x + 4)
+    f === :is_ghost && return Ptr{Int8}(x + 5)
+    f === :quad && return Ptr{Ptr{p4est_quadrant_t}}(x + 8)
+    f === :quadid && return Ptr{p4est_locidx_t}(x + 16)
+    f === :faces && return Ptr{NTuple{2, Int8}}(x + 20)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_iter_corner_side}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_iter_corner_side_t = p4est_iter_corner_side
 
 mutable struct p4est_iter_corner_info
@@ -1774,6 +2039,18 @@ mutable struct p4est_iter_corner_info
     tree_boundary::Int8
     sides::sc_array_t
     p4est_iter_corner_info() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_iter_corner_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p4est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p4est_ghost_t}}(x + 8)
+    f === :tree_boundary && return Ptr{Int8}(x + 16)
+    f === :sides && return Ptr{sc_array_t}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_iter_corner_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_iter_corner_info_t = p4est_iter_corner_info
@@ -1819,6 +2096,26 @@ mutable struct p4est_lnodes
     p4est_lnodes() = new()
 end
 
+function Base.getproperty(x::Ptr{p4est_lnodes}, f::Symbol)
+    f === :mpicomm && return Ptr{sc_MPI_Comm}(x + 0)
+    f === :num_local_nodes && return Ptr{p4est_locidx_t}(x + 4)
+    f === :owned_count && return Ptr{p4est_locidx_t}(x + 8)
+    f === :global_offset && return Ptr{p4est_gloidx_t}(x + 16)
+    f === :nonlocal_nodes && return Ptr{Ptr{p4est_gloidx_t}}(x + 24)
+    f === :sharers && return Ptr{Ptr{sc_array_t}}(x + 32)
+    f === :global_owned_count && return Ptr{Ptr{p4est_locidx_t}}(x + 40)
+    f === :degree && return Ptr{Cint}(x + 48)
+    f === :vnodes && return Ptr{Cint}(x + 52)
+    f === :num_local_elements && return Ptr{p4est_locidx_t}(x + 56)
+    f === :face_code && return Ptr{Ptr{p4est_lnodes_code_t}}(x + 64)
+    f === :element_nodes && return Ptr{Ptr{p4est_locidx_t}}(x + 72)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_lnodes}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p4est_lnodes_t = p4est_lnodes
 
 mutable struct p4est_lnodes_rank
@@ -1829,6 +2126,20 @@ mutable struct p4est_lnodes_rank
     owned_offset::p4est_locidx_t
     owned_count::p4est_locidx_t
     p4est_lnodes_rank() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_lnodes_rank}, f::Symbol)
+    f === :rank && return Ptr{Cint}(x + 0)
+    f === :shared_nodes && return Ptr{sc_array_t}(x + 8)
+    f === :shared_mine_offset && return Ptr{p4est_locidx_t}(x + 40)
+    f === :shared_mine_count && return Ptr{p4est_locidx_t}(x + 44)
+    f === :owned_offset && return Ptr{p4est_locidx_t}(x + 48)
+    f === :owned_count && return Ptr{p4est_locidx_t}(x + 52)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_lnodes_rank}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_lnodes_rank_t = p4est_lnodes_rank
@@ -1866,6 +2177,17 @@ mutable struct p4est_lnodes_buffer
     send_buffers::Ptr{sc_array_t}
     recv_buffers::Ptr{sc_array_t}
     p4est_lnodes_buffer() = new()
+end
+
+function Base.getproperty(x::Ptr{p4est_lnodes_buffer}, f::Symbol)
+    f === :requests && return Ptr{Ptr{sc_array_t}}(x + 0)
+    f === :send_buffers && return Ptr{Ptr{sc_array_t}}(x + 8)
+    f === :recv_buffers && return Ptr{Ptr{sc_array_t}}(x + 16)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p4est_lnodes_buffer}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p4est_lnodes_buffer_t = p4est_lnodes_buffer
@@ -2059,14 +2381,14 @@ function p4est_get_plex_data_ext(p4est_, ghost, lnodes, ctype, overlap, first_lo
     @ccall libp4est.p4est_get_plex_data_ext(p4est_::Ptr{p4est_t}, ghost::Ptr{Ptr{p4est_ghost_t}}, lnodes::Ptr{Ptr{p4est_lnodes_t}}, ctype::p4est_connect_type_t, overlap::Cint, first_local_quad::Ptr{p4est_locidx_t}, out_points_per_dim::Ptr{sc_array_t}, out_cone_sizes::Ptr{sc_array_t}, out_cones::Ptr{sc_array_t}, out_cone_orientations::Ptr{sc_array_t}, out_vertex_coords::Ptr{sc_array_t}, out_children::Ptr{sc_array_t}, out_parents::Ptr{sc_array_t}, out_childids::Ptr{sc_array_t}, out_leaves::Ptr{sc_array_t}, out_remotes::Ptr{sc_array_t}, custom_numbering::Cint)::Cvoid
 end
 
-@enum p8est_connect_type_t::UInt32 begin
+@cenum p8est_connect_type_t::UInt32 begin
     P8EST_CONNECT_FACE = 31
     P8EST_CONNECT_EDGE = 32
     P8EST_CONNECT_CORNER = 33
-    # P8EST_CONNECT_FULL = 33
+    P8EST_CONNECT_FULL = 33
 end
 
-@enum p8est_connectivity_encode_t::UInt32 begin
+@cenum p8est_connectivity_encode_t::UInt32 begin
     P8EST_CONN_ENCODE_NONE = 0
     P8EST_CONN_ENCODE_LAST = 1
 end
@@ -2100,6 +2422,32 @@ struct p8est_connectivity
     corner_to_corner::Ptr{Int8}
 end
 
+function Base.getproperty(x::Ptr{p8est_connectivity}, f::Symbol)
+    f === :num_vertices && return Ptr{p4est_topidx_t}(x + 0)
+    f === :num_trees && return Ptr{p4est_topidx_t}(x + 4)
+    f === :num_edges && return Ptr{p4est_topidx_t}(x + 8)
+    f === :num_corners && return Ptr{p4est_topidx_t}(x + 12)
+    f === :vertices && return Ptr{Ptr{Cdouble}}(x + 16)
+    f === :tree_to_vertex && return Ptr{Ptr{p4est_topidx_t}}(x + 24)
+    f === :tree_attr_bytes && return Ptr{Csize_t}(x + 32)
+    f === :tree_to_attr && return Ptr{Cstring}(x + 40)
+    f === :tree_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 48)
+    f === :tree_to_face && return Ptr{Ptr{Int8}}(x + 56)
+    f === :tree_to_edge && return Ptr{Ptr{p4est_topidx_t}}(x + 64)
+    f === :ett_offset && return Ptr{Ptr{p4est_topidx_t}}(x + 72)
+    f === :edge_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 80)
+    f === :edge_to_edge && return Ptr{Ptr{Int8}}(x + 88)
+    f === :tree_to_corner && return Ptr{Ptr{p4est_topidx_t}}(x + 96)
+    f === :ctt_offset && return Ptr{Ptr{p4est_topidx_t}}(x + 104)
+    f === :corner_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 112)
+    f === :corner_to_corner && return Ptr{Ptr{Int8}}(x + 120)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_connectivity}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_connectivity_t = p8est_connectivity
 
 function p8est_connectivity_memory_used(conn)
@@ -2115,10 +2463,33 @@ mutable struct p8est_edge_transform_t
     p8est_edge_transform_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_edge_transform_t}, f::Symbol)
+    f === :ntree && return Ptr{p4est_topidx_t}(x + 0)
+    f === :nedge && return Ptr{Int8}(x + 4)
+    f === :naxis && return Ptr{NTuple{3, Int8}}(x + 5)
+    f === :nflip && return Ptr{Int8}(x + 8)
+    f === :corners && return Ptr{Int8}(x + 9)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_edge_transform_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 mutable struct p8est_edge_info_t
     iedge::Int8
     edge_transforms::sc_array_t
     p8est_edge_info_t() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_edge_info_t}, f::Symbol)
+    f === :iedge && return Ptr{Int8}(x + 0)
+    f === :edge_transforms && return Ptr{sc_array_t}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_edge_info_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 mutable struct p8est_corner_transform_t
@@ -2127,10 +2498,30 @@ mutable struct p8est_corner_transform_t
     p8est_corner_transform_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_corner_transform_t}, f::Symbol)
+    f === :ntree && return Ptr{p4est_topidx_t}(x + 0)
+    f === :ncorner && return Ptr{Int8}(x + 4)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_corner_transform_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 mutable struct p8est_corner_info_t
     icorner::p4est_topidx_t
     corner_transforms::sc_array_t
     p8est_corner_info_t() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_corner_info_t}, f::Symbol)
+    f === :icorner && return Ptr{p4est_topidx_t}(x + 0)
+    f === :corner_transforms && return Ptr{sc_array_t}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_corner_info_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 function p8est_connectivity_face_neighbor_corner_set(c, f, nf, set)
@@ -2323,6 +2714,17 @@ struct p6est_connectivity
     height::NTuple{3, Cdouble}
 end
 
+function Base.getproperty(x::Ptr{p6est_connectivity}, f::Symbol)
+    f === :conn4 && return Ptr{Ptr{p4est_connectivity_t}}(x + 0)
+    f === :top_vertices && return Ptr{Ptr{Cdouble}}(x + 8)
+    f === :height && return Ptr{NTuple{3, Cdouble}}(x + 16)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p6est_connectivity}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p6est_connectivity_t = p6est_connectivity
 
 function p6est_connectivity_new(conn4, top_vertices, height)
@@ -2376,6 +2778,19 @@ mutable struct p2est_quadrant
     p2est_quadrant() = new()
 end
 
+function Base.getproperty(x::Ptr{p2est_quadrant}, f::Symbol)
+    f === :z && return Ptr{p4est_qcoord_t}(x + 0)
+    f === :level && return Ptr{Int8}(x + 4)
+    f === :pad8 && return Ptr{Int8}(x + 5)
+    f === :pad16 && return Ptr{Int16}(x + 6)
+    f === :p && return Ptr{p6est_quadrant_data}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p2est_quadrant}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p2est_quadrant_t = p2est_quadrant
 
 mutable struct p6est
@@ -2393,6 +2808,27 @@ mutable struct p6est
     global_first_layer::Ptr{p4est_gloidx_t}
     root_len::p4est_qcoord_t
     p6est() = new()
+end
+
+function Base.getproperty(x::Ptr{p6est}, f::Symbol)
+    f === :mpicomm && return Ptr{sc_MPI_Comm}(x + 0)
+    f === :mpisize && return Ptr{Cint}(x + 4)
+    f === :mpirank && return Ptr{Cint}(x + 8)
+    f === :mpicomm_owned && return Ptr{Cint}(x + 12)
+    f === :data_size && return Ptr{Csize_t}(x + 16)
+    f === :user_pointer && return Ptr{Ptr{Cvoid}}(x + 24)
+    f === :connectivity && return Ptr{Ptr{p6est_connectivity_t}}(x + 32)
+    f === :columns && return Ptr{Ptr{p4est_t}}(x + 40)
+    f === :layers && return Ptr{Ptr{sc_array_t}}(x + 48)
+    f === :user_data_pool && return Ptr{Ptr{sc_mempool_t}}(x + 56)
+    f === :layer_pool && return Ptr{Ptr{sc_mempool_t}}(x + 64)
+    f === :global_first_layer && return Ptr{Ptr{p4est_gloidx_t}}(x + 72)
+    f === :root_len && return Ptr{p4est_qcoord_t}(x + 80)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p6est}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p6est_t = p6est
@@ -2458,7 +2894,7 @@ function p6est_balance(p6est_, btype, init_fn)
     @ccall libp4est.p6est_balance(p6est_::Ptr{p6est_t}, btype::p8est_connect_type_t, init_fn::p6est_init_t)::Cvoid
 end
 
-@enum p6est_comm_tag_t::UInt32 begin
+@cenum p6est_comm_tag_t::UInt32 begin
     P6EST_COMM_PARTITION = 1
     P6EST_COMM_GHOST = 2
     P6EST_COMM_BALANCE = 3
@@ -2608,6 +3044,21 @@ struct p8est_quadrant
     p::p8est_quadrant_data
 end
 
+function Base.getproperty(x::Ptr{p8est_quadrant}, f::Symbol)
+    f === :x && return Ptr{p4est_qcoord_t}(x + 0)
+    f === :y && return Ptr{p4est_qcoord_t}(x + 4)
+    f === :z && return Ptr{p4est_qcoord_t}(x + 8)
+    f === :level && return Ptr{Int8}(x + 12)
+    f === :pad8 && return Ptr{Int8}(x + 13)
+    f === :pad16 && return Ptr{Int16}(x + 14)
+    f === :p && return Ptr{p8est_quadrant_data}(x + 16)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_quadrant}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_quadrant_t = p8est_quadrant
 
 mutable struct p8est_tree
@@ -2618,6 +3069,20 @@ mutable struct p8est_tree
     quadrants_per_level::NTuple{31, p4est_locidx_t}
     maxlevel::Int8
     p8est_tree() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_tree}, f::Symbol)
+    f === :quadrants && return Ptr{sc_array_t}(x + 0)
+    f === :first_desc && return Ptr{p8est_quadrant_t}(x + 32)
+    f === :last_desc && return Ptr{p8est_quadrant_t}(x + 56)
+    f === :quadrants_offset && return Ptr{p4est_locidx_t}(x + 80)
+    f === :quadrants_per_level && return Ptr{NTuple{31, p4est_locidx_t}}(x + 84)
+    f === :maxlevel && return Ptr{Int8}(x + 208)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_tree}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_tree_t = p8est_tree
@@ -2644,6 +3109,33 @@ struct p8est_inspect
     use_B::Cint
 end
 
+function Base.getproperty(x::Ptr{p8est_inspect}, f::Symbol)
+    f === :use_balance_ranges && return Ptr{Cint}(x + 0)
+    f === :use_balance_ranges_notify && return Ptr{Cint}(x + 4)
+    f === :use_balance_verify && return Ptr{Cint}(x + 8)
+    f === :balance_max_ranges && return Ptr{Cint}(x + 12)
+    f === :balance_A_count_in && return Ptr{Csize_t}(x + 16)
+    f === :balance_A_count_out && return Ptr{Csize_t}(x + 24)
+    f === :balance_comm_sent && return Ptr{Csize_t}(x + 32)
+    f === :balance_comm_nzpeers && return Ptr{Csize_t}(x + 40)
+    f === :balance_B_count_in && return Ptr{Csize_t}(x + 48)
+    f === :balance_B_count_out && return Ptr{Csize_t}(x + 56)
+    f === :balance_zero_sends && return Ptr{NTuple{2, Csize_t}}(x + 64)
+    f === :balance_zero_receives && return Ptr{NTuple{2, Csize_t}}(x + 80)
+    f === :balance_A && return Ptr{Cdouble}(x + 96)
+    f === :balance_comm && return Ptr{Cdouble}(x + 104)
+    f === :balance_B && return Ptr{Cdouble}(x + 112)
+    f === :balance_ranges && return Ptr{Cdouble}(x + 120)
+    f === :balance_notify && return Ptr{Cdouble}(x + 128)
+    f === :balance_notify_allgather && return Ptr{Cdouble}(x + 136)
+    f === :use_B && return Ptr{Cint}(x + 144)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_inspect}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_inspect_t = p8est_inspect
 
 struct p8est
@@ -2665,6 +3157,32 @@ struct p8est
     user_data_pool::Ptr{sc_mempool_t}
     quadrant_pool::Ptr{sc_mempool_t}
     inspect::Ptr{p8est_inspect_t}
+end
+
+function Base.getproperty(x::Ptr{p8est}, f::Symbol)
+    f === :mpicomm && return Ptr{sc_MPI_Comm}(x + 0)
+    f === :mpisize && return Ptr{Cint}(x + 4)
+    f === :mpirank && return Ptr{Cint}(x + 8)
+    f === :mpicomm_owned && return Ptr{Cint}(x + 12)
+    f === :data_size && return Ptr{Csize_t}(x + 16)
+    f === :user_pointer && return Ptr{Ptr{Cvoid}}(x + 24)
+    f === :revision && return Ptr{Clong}(x + 32)
+    f === :first_local_tree && return Ptr{p4est_topidx_t}(x + 40)
+    f === :last_local_tree && return Ptr{p4est_topidx_t}(x + 44)
+    f === :local_num_quadrants && return Ptr{p4est_locidx_t}(x + 48)
+    f === :global_num_quadrants && return Ptr{p4est_gloidx_t}(x + 56)
+    f === :global_first_quadrant && return Ptr{Ptr{p4est_gloidx_t}}(x + 64)
+    f === :global_first_position && return Ptr{Ptr{p8est_quadrant_t}}(x + 72)
+    f === :connectivity && return Ptr{Ptr{p8est_connectivity_t}}(x + 80)
+    f === :trees && return Ptr{Ptr{sc_array_t}}(x + 88)
+    f === :user_data_pool && return Ptr{Ptr{sc_mempool_t}}(x + 96)
+    f === :quadrant_pool && return Ptr{Ptr{sc_mempool_t}}(x + 104)
+    f === :inspect && return Ptr{Ptr{p8est_inspect_t}}(x + 112)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_t = p8est
@@ -2777,6 +3295,26 @@ mutable struct p8est_ghost_t
     p8est_ghost_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_ghost_t}, f::Symbol)
+    f === :mpisize && return Ptr{Cint}(x + 0)
+    f === :num_trees && return Ptr{p4est_topidx_t}(x + 4)
+    f === :btype && return Ptr{p8est_connect_type_t}(x + 8)
+    f === :ghosts && return Ptr{sc_array_t}(x + 16)
+    f === :tree_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 48)
+    f === :proc_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 56)
+    f === :mirrors && return Ptr{sc_array_t}(x + 64)
+    f === :mirror_tree_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 96)
+    f === :mirror_proc_mirrors && return Ptr{Ptr{p4est_locidx_t}}(x + 104)
+    f === :mirror_proc_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 112)
+    f === :mirror_proc_fronts && return Ptr{Ptr{p4est_locidx_t}}(x + 120)
+    f === :mirror_proc_front_offsets && return Ptr{Ptr{p4est_locidx_t}}(x + 128)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_ghost_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 function p8est_ghost_is_valid(p8est_, ghost)
     @ccall libp4est.p8est_ghost_is_valid(p8est_::Ptr{p8est_t}, ghost::Ptr{p8est_ghost_t})::Cint
 end
@@ -2843,6 +3381,28 @@ mutable struct p8est_ghost_exchange
     p8est_ghost_exchange() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_ghost_exchange}, f::Symbol)
+    f === :is_custom && return Ptr{Cint}(x + 0)
+    f === :is_levels && return Ptr{Cint}(x + 4)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 8)
+    f === :ghost && return Ptr{Ptr{p8est_ghost_t}}(x + 16)
+    f === :minlevel && return Ptr{Cint}(x + 24)
+    f === :maxlevel && return Ptr{Cint}(x + 28)
+    f === :data_size && return Ptr{Csize_t}(x + 32)
+    f === :ghost_data && return Ptr{Ptr{Cvoid}}(x + 40)
+    f === :qactive && return Ptr{Ptr{Cint}}(x + 48)
+    f === :qbuffer && return Ptr{Ptr{Cint}}(x + 56)
+    f === :requests && return Ptr{sc_array_t}(x + 64)
+    f === :sbuffers && return Ptr{sc_array_t}(x + 96)
+    f === :rrequests && return Ptr{sc_array_t}(x + 128)
+    f === :rbuffers && return Ptr{sc_array_t}(x + 160)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_ghost_exchange}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_ghost_exchange_t = p8est_ghost_exchange
 
 function p8est_ghost_exchange_data_begin(p8est_, ghost, ghost_data)
@@ -2903,6 +3463,32 @@ mutable struct p8est_mesh_t
     p8est_mesh_t() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_mesh_t}, f::Symbol)
+    f === :local_num_quadrants && return Ptr{p4est_locidx_t}(x + 0)
+    f === :ghost_num_quadrants && return Ptr{p4est_locidx_t}(x + 4)
+    f === :quad_to_tree && return Ptr{Ptr{p4est_topidx_t}}(x + 8)
+    f === :ghost_to_proc && return Ptr{Ptr{Cint}}(x + 16)
+    f === :quad_to_quad && return Ptr{Ptr{p4est_locidx_t}}(x + 24)
+    f === :quad_to_face && return Ptr{Ptr{Int8}}(x + 32)
+    f === :quad_to_half && return Ptr{Ptr{sc_array_t}}(x + 40)
+    f === :quad_level && return Ptr{Ptr{sc_array_t}}(x + 48)
+    f === :local_num_edges && return Ptr{p4est_locidx_t}(x + 56)
+    f === :quad_to_edge && return Ptr{Ptr{p4est_locidx_t}}(x + 64)
+    f === :edge_offset && return Ptr{Ptr{sc_array_t}}(x + 72)
+    f === :edge_quad && return Ptr{Ptr{sc_array_t}}(x + 80)
+    f === :edge_edge && return Ptr{Ptr{sc_array_t}}(x + 88)
+    f === :local_num_corners && return Ptr{p4est_locidx_t}(x + 96)
+    f === :quad_to_corner && return Ptr{Ptr{p4est_locidx_t}}(x + 104)
+    f === :corner_offset && return Ptr{Ptr{sc_array_t}}(x + 112)
+    f === :corner_quad && return Ptr{Ptr{sc_array_t}}(x + 120)
+    f === :corner_corner && return Ptr{Ptr{sc_array_t}}(x + 128)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_mesh_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 mutable struct p8est_mesh_face_neighbor_t
     p4est::Ptr{p8est_t}
     ghost::Ptr{p8est_ghost_t}
@@ -2914,6 +3500,23 @@ mutable struct p8est_mesh_face_neighbor_t
     subface::Cint
     current_qtq::p4est_locidx_t
     p8est_mesh_face_neighbor_t() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_mesh_face_neighbor_t}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 0)
+    f === :ghost && return Ptr{Ptr{p8est_ghost_t}}(x + 8)
+    f === :mesh && return Ptr{Ptr{p8est_mesh_t}}(x + 16)
+    f === :which_tree && return Ptr{p4est_topidx_t}(x + 24)
+    f === :quadrant_id && return Ptr{p4est_locidx_t}(x + 28)
+    f === :quadrant_code && return Ptr{p4est_locidx_t}(x + 32)
+    f === :face && return Ptr{Cint}(x + 36)
+    f === :subface && return Ptr{Cint}(x + 40)
+    f === :current_qtq && return Ptr{p4est_locidx_t}(x + 44)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_mesh_face_neighbor_t}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 function p8est_mesh_memory_used(mesh)
@@ -2965,6 +3568,19 @@ mutable struct p8est_iter_volume_info
     p8est_iter_volume_info() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_iter_volume_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p8est_ghost_t}}(x + 8)
+    f === :quad && return Ptr{Ptr{p8est_quadrant_t}}(x + 16)
+    f === :quadid && return Ptr{p4est_locidx_t}(x + 24)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 28)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_volume_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_iter_volume_info_t = p8est_iter_volume_info
 
 # typedef void ( * p8est_iter_volume_t ) ( p8est_iter_volume_info_t * info , void * user_data )
@@ -2999,6 +3615,18 @@ mutable struct p8est_iter_face_side
     p8est_iter_face_side() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_iter_face_side}, f::Symbol)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 0)
+    f === :face && return Ptr{Int8}(x + 4)
+    f === :is_hanging && return Ptr{Int8}(x + 5)
+    f === :is && return Ptr{p8est_iter_face_side_data}(x + 8)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_face_side}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_iter_face_side_t = p8est_iter_face_side
 
 mutable struct p8est_iter_face_info
@@ -3008,6 +3636,19 @@ mutable struct p8est_iter_face_info
     tree_boundary::Int8
     sides::sc_array_t
     p8est_iter_face_info() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_iter_face_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p8est_ghost_t}}(x + 8)
+    f === :orientation && return Ptr{Int8}(x + 16)
+    f === :tree_boundary && return Ptr{Int8}(x + 17)
+    f === :sides && return Ptr{sc_array_t}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_face_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_iter_face_info_t = p8est_iter_face_info
@@ -3046,6 +3687,20 @@ mutable struct p8est_iter_edge_side
     p8est_iter_edge_side() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_iter_edge_side}, f::Symbol)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 0)
+    f === :edge && return Ptr{Int8}(x + 4)
+    f === :orientation && return Ptr{Int8}(x + 5)
+    f === :is_hanging && return Ptr{Int8}(x + 6)
+    f === :is && return Ptr{p8est_iter_edge_side_data}(x + 8)
+    f === :faces && return Ptr{NTuple{2, Int8}}(x + 40)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_edge_side}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_iter_edge_side_t = p8est_iter_edge_side
 
 mutable struct p8est_iter_edge_info
@@ -3054,6 +3709,18 @@ mutable struct p8est_iter_edge_info
     tree_boundary::Int8
     sides::sc_array_t
     p8est_iter_edge_info() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_iter_edge_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p8est_ghost_t}}(x + 8)
+    f === :tree_boundary && return Ptr{Int8}(x + 16)
+    f === :sides && return Ptr{sc_array_t}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_edge_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_iter_edge_info_t = p8est_iter_edge_info
@@ -3072,6 +3739,21 @@ mutable struct p8est_iter_corner_side
     p8est_iter_corner_side() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_iter_corner_side}, f::Symbol)
+    f === :treeid && return Ptr{p4est_topidx_t}(x + 0)
+    f === :corner && return Ptr{Int8}(x + 4)
+    f === :is_ghost && return Ptr{Int8}(x + 5)
+    f === :quad && return Ptr{Ptr{p8est_quadrant_t}}(x + 8)
+    f === :quadid && return Ptr{p4est_locidx_t}(x + 16)
+    f === :faces && return Ptr{NTuple{3, Int8}}(x + 20)
+    f === :edges && return Ptr{NTuple{3, Int8}}(x + 23)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_corner_side}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_iter_corner_side_t = p8est_iter_corner_side
 
 mutable struct p8est_iter_corner_info
@@ -3080,6 +3762,18 @@ mutable struct p8est_iter_corner_info
     tree_boundary::Int8
     sides::sc_array_t
     p8est_iter_corner_info() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_iter_corner_info}, f::Symbol)
+    f === :p4est && return Ptr{Ptr{p8est_t}}(x + 0)
+    f === :ghost_layer && return Ptr{Ptr{p8est_ghost_t}}(x + 8)
+    f === :tree_boundary && return Ptr{Int8}(x + 16)
+    f === :sides && return Ptr{sc_array_t}(x + 24)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_iter_corner_info}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_iter_corner_info_t = p8est_iter_corner_info
@@ -3133,6 +3827,26 @@ mutable struct p8est_lnodes
     p8est_lnodes() = new()
 end
 
+function Base.getproperty(x::Ptr{p8est_lnodes}, f::Symbol)
+    f === :mpicomm && return Ptr{sc_MPI_Comm}(x + 0)
+    f === :num_local_nodes && return Ptr{p4est_locidx_t}(x + 4)
+    f === :owned_count && return Ptr{p4est_locidx_t}(x + 8)
+    f === :global_offset && return Ptr{p4est_gloidx_t}(x + 16)
+    f === :nonlocal_nodes && return Ptr{Ptr{p4est_gloidx_t}}(x + 24)
+    f === :sharers && return Ptr{Ptr{sc_array_t}}(x + 32)
+    f === :global_owned_count && return Ptr{Ptr{p4est_locidx_t}}(x + 40)
+    f === :degree && return Ptr{Cint}(x + 48)
+    f === :vnodes && return Ptr{Cint}(x + 52)
+    f === :num_local_elements && return Ptr{p4est_locidx_t}(x + 56)
+    f === :face_code && return Ptr{Ptr{p8est_lnodes_code_t}}(x + 64)
+    f === :element_nodes && return Ptr{Ptr{p4est_locidx_t}}(x + 72)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_lnodes}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
+end
+
 const p8est_lnodes_t = p8est_lnodes
 
 mutable struct p8est_lnodes_rank
@@ -3143,6 +3857,20 @@ mutable struct p8est_lnodes_rank
     owned_offset::p4est_locidx_t
     owned_count::p4est_locidx_t
     p8est_lnodes_rank() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_lnodes_rank}, f::Symbol)
+    f === :rank && return Ptr{Cint}(x + 0)
+    f === :shared_nodes && return Ptr{sc_array_t}(x + 8)
+    f === :shared_mine_offset && return Ptr{p4est_locidx_t}(x + 40)
+    f === :shared_mine_count && return Ptr{p4est_locidx_t}(x + 44)
+    f === :owned_offset && return Ptr{p4est_locidx_t}(x + 48)
+    f === :owned_count && return Ptr{p4est_locidx_t}(x + 52)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_lnodes_rank}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_lnodes_rank_t = p8est_lnodes_rank
@@ -3180,6 +3908,17 @@ mutable struct p8est_lnodes_buffer
     send_buffers::Ptr{sc_array_t}
     recv_buffers::Ptr{sc_array_t}
     p8est_lnodes_buffer() = new()
+end
+
+function Base.getproperty(x::Ptr{p8est_lnodes_buffer}, f::Symbol)
+    f === :requests && return Ptr{Ptr{sc_array_t}}(x + 0)
+    f === :send_buffers && return Ptr{Ptr{sc_array_t}}(x + 8)
+    f === :recv_buffers && return Ptr{Ptr{sc_array_t}}(x + 16)
+    return getfield(x, f)
+end
+
+function Base.setproperty!(x::Ptr{p8est_lnodes_buffer}, f::Symbol, v)
+    unsafe_store!(getproperty(x, f), v)
 end
 
 const p8est_lnodes_buffer_t = p8est_lnodes_buffer
@@ -3856,10 +4595,6 @@ const SC_LT_OBJDIR = ".libs/"
 
 const SC_MEMALIGN = 1
 
-const SC_SIZEOF_VOID_P = 8
-
-const SC_MEMALIGN_BYTES = SC_SIZEOF_VOID_P
-
 const SC_PACKAGE = "libsc"
 
 const SC_PACKAGE_BUGREPORT = "p4est@ins.uni-bonn.de"
@@ -3883,6 +4618,8 @@ const SC_SIZEOF_LONG_LONG = 8
 const SC_SIZEOF_UNSIGNED_LONG = 8
 
 const SC_SIZEOF_UNSIGNED_LONG_LONG = 8
+
+const SC_SIZEOF_VOID_P = 8
 
 const SC_STDC_HEADERS = 1
 
@@ -4068,10 +4805,6 @@ const P4EST_LT_OBJDIR = ".libs/"
 
 const P4EST_MEMALIGN = 1
 
-const P4EST_SIZEOF_VOID_P = 8
-
-const P4EST_MEMALIGN_BYTES = P4EST_SIZEOF_VOID_P
-
 const P4EST_PACKAGE = "p4est"
 
 const P4EST_PACKAGE_BUGREPORT = "p4est@ins.uni-bonn.de"
@@ -4085,6 +4818,8 @@ const P4EST_PACKAGE_TARNAME = "p4est"
 const P4EST_PACKAGE_URL = ""
 
 const P4EST_PACKAGE_VERSION = "2.3.2"
+
+const P4EST_SIZEOF_VOID_P = 8
 
 const P4EST_STDC_HEADERS = 1
 
@@ -4108,10 +4843,9 @@ const P4EST_MPI_QCOORD = sc_MPI_INT
 
 const P4EST_VTK_QCOORD = "Int32"
 
-# const P4EST_QCOORD_MIN = INT32_MIN
-const P4EST_QCOORD_MIN = typemin(Int32)
+const P4EST_QCOORD_MIN = INT32_MIN
 
-const P4EST_QCOORD_MAX = typemax(Int32)
+const P4EST_QCOORD_MAX = INT32_MAX
 
 const P4EST_QCOORD_1 = p4est_qcoord_t(1)
 
@@ -4123,11 +4857,9 @@ const P4EST_MPI_TOPIDX = sc_MPI_INT
 
 const P4EST_VTK_TOPIDX = "Int32"
 
-# const P4EST_TOPIDX_MIN = INT32_MIN
-const P4EST_TOPIDX_MIN = typemin(Int32)
+const P4EST_TOPIDX_MIN = INT32_MIN
 
-# const P4EST_TOPIDX_MAX = INT32_MAX
-const P4EST_TOPIDX_MAX = typemax(Int32)
+const P4EST_TOPIDX_MAX = INT32_MAX
 
 const P4EST_TOPIDX_FITS_32 = 1
 
@@ -4141,11 +4873,9 @@ const P4EST_MPI_LOCIDX = sc_MPI_INT
 
 const P4EST_VTK_LOCIDX = "Int32"
 
-# const P4EST_LOCIDX_MIN = INT32_MIN
-const P4EST_LOCIDX_MIN = typemin(Int32)
+const P4EST_LOCIDX_MIN = INT32_MIN
 
-# const P4EST_LOCIDX_MAX = INT32_MAX
-const P4EST_LOCIDX_MAX = typemax(Int32)
+const P4EST_LOCIDX_MAX = INT32_MAX
 
 const P4EST_LOCIDX_1 = p4est_locidx_t(1)
 
@@ -4157,9 +4887,9 @@ const P4EST_MPI_GLOIDX = sc_MPI_LONG_LONG_INT
 
 const P4EST_VTK_GLOIDX = "Int64"
 
-const P4EST_GLOIDX_MIN = typemin(Int64)
+const P4EST_GLOIDX_MIN = INT64_MIN
 
-const P4EST_GLOIDX_MAX = typemax(Int64)
+const P4EST_GLOIDX_MAX = INT64_MAX
 
 const P4EST_GLOIDX_1 = p4est_gloidx_t(1)
 
@@ -4218,7 +4948,7 @@ const P8EST_QMAXLEVEL = 29
 const P8EST_ROOT_LEN = p4est_qcoord_t(1) << P8EST_MAXLEVEL
 
 # exports
-const PREFIXES = ["p4est_", "p6est_", "p8est_", "sc_"]
+const PREFIXES = ["p4est_", "p6est_", "p8est_", "sc_", "P4EST_", "P6EST_", "P8EST_"]
 for name in names(@__MODULE__; all=true), prefix in PREFIXES
     if startswith(string(name), prefix)
         @eval export $name
