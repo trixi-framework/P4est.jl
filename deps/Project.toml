@@ -1,11 +1,13 @@
 [deps]
-CBindingGen = "308a6e0c-0495-45e1-b1ab-67fb455a0d77"
+# CBindingGen = "308a6e0c-0495-45e1-b1ab-67fb455a0d77"
+CBinding = "d43a6710-96b8-4a2d-833c-c424785e5374"
 Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
 MPI = "da04e1cc-30fd-572f-bb4f-1f8673147195"
 P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
 Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
 
 [compat]
-CBindingGen = "0.4"
+# CBindingGen = "0.4"
+CBinding = "1.0"
 MPI = "0.15, 0.16"
 P4est_jll = "~2.3.1"
