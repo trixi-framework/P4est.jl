@@ -132,7 +132,7 @@ This will also install [`CEnum.jl`](https://github.com/JuliaInterop/CEnum.jl) to
 support C-style enums with duplicated values.
 
 Then generate the bindings by starting Julia with `julia --project` and
-executing
+loading [`mwe3.jl`](mwe3.jl):
 ```julia
 julia> include("mwe3.jl")
 [ Info: Found dependent header: /home/mschlott/.julia/artifacts/93e47e83c32f82f4f1f2c6b99a38aaee8db33090/include/p4est_connectivity.h
