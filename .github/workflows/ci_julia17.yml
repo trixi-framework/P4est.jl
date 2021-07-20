@@ -156,12 +156,13 @@ jobs:
           fail_ci_if_error: true # optional (default = false)
           # verbose: true # optional (default = false)
 
-  finish:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true
+  # Remove this step since this CI on Julia v1.7 is not required right now
+  # finish:
+  #   needs: test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Coveralls Finished
+  #     uses: coverallsapp/github-action@master
+  #     with:
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
+  #       parallel-finished: true
