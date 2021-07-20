@@ -5,7 +5,7 @@
 [![Codecov](https://codecov.io/gh/trixi-framework/P4est.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/trixi-framework/P4est.jl)
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/P4est.jl/badge.svg?branch=main)](https://coveralls.io/github/trixi-framework/P4est.jl?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
-[![GitHub commits since tagged version](https://img.shields.io/github/commits-since/trixi-framework/P4est.jl/v0.2.1.svg?style=social&logo=github)](https://github.com/trixi-framework/P4est.jl)
+<!-- [![GitHub commits since tagged version](https://img.shields.io/github/commits-since/trixi-framework/P4est.jl/v0.2.1.svg?style=social&logo=github)](https://github.com/trixi-framework/P4est.jl) -->
 
 **P4est.jl** is a Julia package that wraps
 [p4est](https://github.com/cburstedde/p4est), a C library to manage multiple
