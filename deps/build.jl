@@ -1,4 +1,3 @@
-using CBindingGen
 using Libdl
 using MPI
 import Pkg.TOML
@@ -80,6 +79,17 @@ if isempty(config["p4est_generate_bindings"])
   const pre_generated_bindings_filename = joinpath(artifact"libp4est", "libp4est.jl")
   cp(pre_generated_bindings_filename, bindings_filename, force=true)
 else
+  # Install CBindingGen locally and undo the modifications of Project.toml afterwards.
+  # This allows us to work around limitations of CBindingGen.jl on Julia v1.7
+  # while still being able to use the pre-generated bindings (but only them).
+  using Pkg
+  project_file   = joinpath(@__DIR__, "Project.toml")
+  project_backup = joinpath(@__DIR__, "Project.toml.backup")
+  cp(project_file, project_backup)
+  Pkg.add(PackageSpec("CBindingGen", Base.UUID("308a6e0c-0495-45e1-b1ab-67fb455a0d77"), v"0.4.5"))
+  using CBindingGen
+  mv(project_backup, project_file, force=true)
+
   # Step 2: Choose p4est library according to the settings
   p4est_library = ""
   if !isempty(config["p4est_library"])
