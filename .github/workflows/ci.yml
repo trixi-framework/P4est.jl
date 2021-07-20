@@ -52,14 +52,14 @@ jobs:
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
-          - version: '^1.7.0-0'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
           - version: '1.6'
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_NON_MPI
+          - version: '1.6'
+            os: windows-latest
+            arch: x64
+            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
     steps:
       - uses: actions/checkout@v2
       - name: Set p4est release to run tests against
