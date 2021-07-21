@@ -6,6 +6,27 @@ module P4est
 		using CBinding
 		import P4est_jll
 		
+		let
+			flags = [
+				"-I", joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include"),
+				"-L", joinpath(dirname(dirname(P4est_jll.libp4est_path)), "lib"),
+				
+				# workaround to get these non-existent API items to go away
+				"-D", "sc_extern_c_hack_3(...)=",
+				"-D", "sc_extern_c_hack_4(...)=",
+				"-D", "P2EST_DATA_UNINITIALIZED=",
+				"-D", "p8est_ghost_tree_contains(...)=",
+			]
+			
+			# These two paths *should* - on any reasonably current MacOS system - contain the relevant headers
+			Sys.isapple() && append!(flags, [
+				"-idirafter", "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include",
+				"-idirafter", "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
+			])
+			
+			c`$(flags) -lp4est`
+		end
+		
 		const c"int8_t" = Int8
 		const c"int16_t" = Int16
 		const c"int32_t" = Int32
@@ -21,6 +42,13 @@ module P4est
 		const c"FILE"    = Cvoid
 		const c"va_list" = Cvoid
 		
-		include(joinpath(dirname(@__DIR__), "deps", "libp4est.jl"))
+		c"""
+			#include <p4est.h>
+			#include <p4est_extended.h>
+			#include <p6est.h>
+			#include <p6est_extended.h>
+			#include <p8est.h>
+			#include <p8est_extended.h>
+		"""ji
 	end
 end
