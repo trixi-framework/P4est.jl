@@ -50,5 +50,9 @@ module P4est
 			#include <p8est.h>
 			#include <p8est_extended.h>
 		"""ji
+
+    # Commit type piracy to add support array-to-pointer conversion for AbstractArray
+    # Source: Keith Rutkowski, https://github.com/trixi-framework/Trixi.jl/pull/835#issuecomment-910256496
+    Base.unsafe_convert(::Type{Cptr{T}}, x::AbstractArray) where {T} = Core.Intrinsics.bitcast(Cptr{T}, Base.unsafe_convert(Ptr{eltype(x)}, x))
 	end
 end
