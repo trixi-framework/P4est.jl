@@ -128,13 +128,14 @@ else
   if isempty(p4est_include)
     p4est_include = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
     println("Use p4est include path provided by P4est_jll")
+    use_p4est_jll = true
   end
 
   push!(include_directories, p4est_include)
 
 
   # Step 3b: Choose the MPI include path according to the settings
-  if config["p4est_uses_mpi"] == "yes"
+  if config["p4est_uses_mpi"] == "yes" || use_p4est_jll # P4est_jll uses MPI
     mpi_include = ""
     if !isempty(config["mpi_include"])
       mpi_include = config["mpi_include"]
