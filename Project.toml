@@ -1,7 +1,7 @@
 name = "P4est"
 uuid = "7d669430-f675-4ae7-b43e-fab78ec5a902"
 authors = ["Michael Schlottke-Lakemper <michael@sloede.com>"]
-version = "0.3.0-prev"
+version = "0.3.0-pre"
 
 [deps]
 CBinding = "d43a6710-96b8-4a2d-833c-c424785e5374"
