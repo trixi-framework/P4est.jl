@@ -129,6 +129,8 @@ else
     p4est_include = joinpath(dirname(dirname(P4est_jll.libp4est_path)), "include")
     println("Use p4est include path provided by P4est_jll")
     use_p4est_jll = true
+  else
+    use_p4est_jll = false
   end
 
   push!(include_directories, p4est_include)
