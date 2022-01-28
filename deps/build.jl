@@ -109,6 +109,12 @@ else
     println("Use p4est library provided by P4est_jll")
   end
 
+  sc_library = ""
+  if isempty(sc_library)
+    sc_library = P4est_jll.libsc_path
+    println("Use sc library provided by P4est_jll")
+  end
+
 
   # Step 3a: Choose the p4est include path according to the settings
   include_directories = String[]
@@ -163,11 +169,6 @@ else
 
   # Step 4: Generate binding using the include path according to the settings
 
-  # Manually set header files to consider
-  hdrs = ["p4est.h", "p4est_extended.h",
-          "p6est.h", "p6est_extended.h",
-          "p8est.h", "p8est_extended.h"]
-
   # Build list of arguments for Clang
   include_args = String[]
   @show include_directories
@@ -187,21 +188,56 @@ else
     append!(include_args, ("-idirafter", xcode_include_path_cli, "-idirafter", xcode_include_path_gui))
   end
 
+  # Manually set header files to consider
+  hdrs = ["p4est.h", "p4est_extended.h",
+          "p6est.h", "p6est_extended.h",
+          "p8est.h", "p8est_extended.h"]
+
+
+  # Step 4a: p4est bindings
   # Convert symbols in header
   cvts = convert_headers(hdrs, args=include_args) do cursor
     header = CodeLocation(cursor).file
     name   = string(cursor)
 
-    # only wrap the libp4est and libsc headers
+    # only wrap the libp4est headers
     dirname, filename = splitdir(header)
     if !(filename in hdrs ||
         startswith(filename, "p4est_") ||
         startswith(filename, "p6est_") ||
-        startswith(filename, "p8est_") ||
-        startswith(filename, "sc_") ||
+        startswith(filename, "p8est_"))
+      return false
+    end
+
+    # Ignore macro hacks
+    startswith(name, "sc_") && return false
+
+    return true
+  end
+
+  # Write generated C bindings to file
+  const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
+  rm(bindings_filename, force=true)
+  open(bindings_filename, "w+") do io
+    generate(io, p4est_library => cvts)
+  end
+
+
+  # Step 4a: p4est bindings
+  # Convert symbols in header
+  cvts = convert_headers(hdrs, args=include_args) do cursor
+    header = CodeLocation(cursor).file
+    name   = string(cursor)
+
+    # only wrap the libsc headers
+    dirname, filename = splitdir(header)
+    if !(startswith(filename, "sc_") ||
         filename == "sc.h" )
       return false
     end
+    startswith(name, "p4est_") && return false
+    startswith(name, "p6est_") && return false
+    startswith(name, "p8est_") && return false
 
     # Ignore macro hacks
     startswith(name, "sc_extern_c_hack_") && return false
@@ -210,8 +246,9 @@ else
   end
 
   # Write generated C bindings to file
-  const bindings_filename = joinpath(@__DIR__, "libp4est.jl")
+  const bindings_filename = joinpath(@__DIR__, "libsc.jl")
+  rm(bindings_filename, force=true)
   open(bindings_filename, "w+") do io
-    generate(io, p4est_library => cvts)
+    generate(io, sc_library => cvts)
   end
 end
