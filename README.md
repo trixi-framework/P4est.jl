@@ -15,7 +15,7 @@ connected adaptive quadtrees or octrees in parallel.
 ## Installation
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/). P4est.jl works
-with Julia v1.6.
+with Julia v1.6 and up.
 
 P4est.jl is a registered Julia package. Hence, you can install it by executing
 the following commands in the Julia REPL:
@@ -23,17 +23,18 @@ the following commands in the Julia REPL:
 julia> import Pkg; Pkg.add("P4est")
 ```
 P4est.jl depends on the binary distribution of the [p4est](https://github.com/cburstedde/p4est)
-library, which is available in the Julia package `P4est_jll.jl` and which is automatically
-installed as a dependency. The binaries provided by `P4est_jll.jl` support MPI and are compiled
-against the MPI binaries provided by `MicrosoftMPI_jll.jl` on Windows and `MPICH_jll.jl` on all
-other platforms. Note that `MPI.jl` should be configured to use the same MPI binaries. 
+library, which is available in the Julia package P4est\_jll.jl and which is automatically
+installed as a dependency. The binaries provided by P4est\_jll.jl support MPI and are compiled
+against the MPI binaries provided by MicrosoftMPI\_jll.jl on Windows and MPICH\_jll.jl on all
+other platforms. Note that [MPI.jl](https://github.com/JuliaParallel/MPI.jl)
+should be configured to use the same MPI binaries. 
 
 By default, P4est.jl provides pre-generated Julia bindings to all exported C
 functions of the underlying p4est library. You can force the build script to
 re-generate the bindings by setting the environment variable
 `JULIA_P4EST_GENERATE_BINDINGS` to a non-empty string.
 
-*Note: Currently, `P4est.jl` can only be used with pre-generated bindings on
+*Note: Currently, P4est.jl can only be used with pre-generated bindings on
 Julia v1.7. New bindings can only be generated with Julia v1.6.
 See [issue #39](https://github.com/trixi-framework/P4est.jl/issues/39) for further discussions.*
 
@@ -99,13 +100,10 @@ julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
 ```
 
 ## Usage
-In the Julia REPL, first load the package P4est.jl
+In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and initialize MPI
 ```julia
-julia> using P4est
-```
-Then load and initialize MPI
-```julia
-julia> using MPI; MPI.Init()
+julia> using P4est, MPI
+julia> MPI.Init()
 ```
 You can then access the full [p4est](https://github.com/cburstedde/p4est) API that is defined
 by the headers. For example, to create a periodic connectivity and check its validity, execute
