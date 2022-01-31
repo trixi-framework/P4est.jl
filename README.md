@@ -27,7 +27,7 @@ library, which is available in the Julia package P4est\_jll.jl and which is auto
 installed as a dependency. The binaries provided by P4est\_jll.jl support MPI and are compiled
 against the MPI binaries provided by MicrosoftMPI\_jll.jl on Windows and MPICH\_jll.jl on all
 other platforms. Note that [MPI.jl](https://github.com/JuliaParallel/MPI.jl)
-should be configured to use the same MPI binaries. 
+should be configured to use the same MPI binaries.
 
 By default, P4est.jl provides pre-generated Julia bindings to all exported C
 functions of the underlying p4est library. You can force the build script to
@@ -100,6 +100,10 @@ julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
 ```
 
 ## Usage
+The `P4est.uses_mpi()` function can be used to check if the p4est binaries that P4est.jl uses were
+compiled with MPI enabled. This returns true for the default binaries provided by the P4est_jll.jl
+package. In this case P4est.jl can be used as follows.
+
 In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and initialize MPI
 ```julia
 julia> using P4est, MPI
