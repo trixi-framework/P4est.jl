@@ -15,7 +15,7 @@ connected adaptive quadtrees or octrees in parallel.
 ## Installation
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/). P4est.jl works
-with Julia v1.6.
+with Julia v1.6 and up.
 
 P4est.jl is a registered Julia package. Hence, you can install it by executing
 the following commands in the Julia REPL:
@@ -23,22 +23,23 @@ the following commands in the Julia REPL:
 julia> import Pkg; Pkg.add("P4est")
 ```
 P4est.jl depends on the binary distribution of the [p4est](https://github.com/cburstedde/p4est)
-library, which is available in the Julia package `P4est_jll.jl` and which is automatically
-installed as a dependency.
-
-*Note: Currently, `P4est_jll.jl` only provides serial binaries without MPI
-support. This limitation is planned to be lifted in the future.*
+library, which is available in the Julia package P4est\_jll.jl and which is automatically
+installed as a dependency. The binaries provided by P4est\_jll.jl support MPI and are compiled
+against the MPI binaries provided by MicrosoftMPI\_jll.jl on Windows and MPICH\_jll.jl on all
+other platforms. Note that [MPI.jl](https://github.com/JuliaParallel/MPI.jl)
+should be configured to use the same MPI binaries.
 
 By default, P4est.jl provides pre-generated Julia bindings to all exported C
 functions of the underlying p4est library. You can force the build script to
 re-generate the bindings by setting the environment variable
 `JULIA_P4EST_GENERATE_BINDINGS` to a non-empty string.
 
-*Note: Currently, `P4est.jl` can only be used with pre-generated bindings on
-Julia v1.7. See [issue #39](https://github.com/trixi-framework/P4est.jl/issues/39)
-for further discussions.*
+*Note: Currently, P4est.jl can only be used with pre-generated bindings on
+Julia v1.7. New bindings can only be generated with Julia v1.6.
+See [issue #39](https://github.com/trixi-framework/P4est.jl/issues/39) for further discussions.*
 
-In addition, when `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
+### Using a custom build of p4est
+When `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
 configure P4est.jl to use a custom build of p4est. For this, set the following
 environment variables and build P4est.jl again afterwards:
 1. **Set `JULIA_P4EST_PATH`.**
@@ -65,10 +66,7 @@ julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
 ```
 
 P4est.jl supports [p4est](https://github.com/cburstedde/p4est) both with and
-without MPI enabled. By default, it uses the p4est library from the binary
-Julia package `P4est_jll`, which currently is not compiled with MPI support.
-However, you may specify a custom p4est build with MPI enabled using the
-environment variables desribed above. In this case, you need to set a few
+without MPI enabled. If your custom build supports MPI, you need to set a few
 additional variables to make sure that P4est.jl can create the correct C
 bindings:
 1. **Set `JULIA_P4EST_USES_MPI` to `yes`.**
@@ -102,29 +100,34 @@ julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
 ```
 
 ## Usage
-In the Julia REPL, first load the package P4est.jl
+The `P4est.uses_mpi()` function can be used to check if the p4est binaries that P4est.jl uses were
+compiled with MPI enabled. This returns true for the default binaries provided by the P4est_jll.jl
+package. In this case P4est.jl can be used as follows.
+
+In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and initialize MPI
 ```julia
-julia> using P4est
+julia> using P4est, MPI
+julia> MPI.Init()
 ```
 You can then access the full [p4est](https://github.com/cburstedde/p4est) API that is defined
 by the headers. For example, to create a periodic connectivity and check its validity, execute
 the following lines:
 ```julia
 julia> conn_ptr = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x0000000001ad2080
+Ptr{p4est_connectivity} @0x0000000002412d20
 
 julia> p4est_connectivity_is_valid(conn_ptr)
 1
 
-julia> p4est_ptr = p4est_new_ext(sc_MPI_Comm(0), conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
+julia> p4est_ptr = p4est_new_ext(MPI.COMM_WORLD, conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
 Into p4est_new with min quadrants 0 level 2 uniform 0
 New p4est with 1 trees on 1 processors
 Initial level 2 potential global quadrants 16 per tree 16
 Done p4est_new with 10 total quadrants
-Ptr{p4est} @0x00000000029e9fc0
+Ptr{p4est} @0x0000000002dd1fd0
 
 julia> p4est_ = unsafe_wrap(p4est_ptr)
-p4est(mpicomm=0, mpisize=1, mpirank=0, mpicomm_owned=0, data_size=0x0000000000000000, user_pointer=Ptr{Nothing} @0x0000000000000000, revision=0, first_local_tree=0, last_local_tree=0, local_num_quadrants=10, global_num_quadrants=10, global_first_quadrant=Ptr{Int64} @0x00000000025b2880, global_first_position=Ptr{p4est_quadrant} @0x0000000001ee1390, connectivity=Ptr{p4est_connectivity} @0x000000000256de60, trees=Ptr{sc_array} @0x0000000002210e20, user_data_pool=Ptr{sc_mempool} @0x0000000000000000, quadrant_pool=Ptr{sc_mempool} @0x00000000020a5820, inspect=Ptr{p4est_inspect} @0x0000000000000000)
+p4est(mpicomm=1140850688, mpisize=1, mpirank=0, mpicomm_owned=0, data_size=0x0000000000000000, user_pointer=Ptr{Nothing} @0x0000000000000000, revision=0, first_local_tree=0, last_local_tree=0, local_num_quadrants=10, global_num_quadrants=10, global_first_quadrant=Ptr{Int64} @0x000000000280c760, global_first_position=Ptr{p4est_quadrant} @0x0000000002a1d270, connectivity=Ptr{p4est_connectivity} @0x0000000002412d20, trees=Ptr{sc_array} @0x0000000002756960, user_data_pool=Ptr{sc_mempool} @0x0000000000000000, quadrant_pool=Ptr{sc_mempool} @0x0000000002dd1e40, inspect=Ptr{p4est_inspect} @0x0000000000000000)
 
 julia> p4est_.connectivity == conn_ptr
 true

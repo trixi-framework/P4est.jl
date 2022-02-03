@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [ -z "$P4EST_RELEASE" ]; then
-  P4EST_RELEASE="2.2"
+  P4EST_RELEASE="2.8"
 fi
 
-if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS" ]; then
+if [ "${P4EST_TEST}" = "P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS" ]; then
   echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
 fi
-if [ "${P4EST_TEST}" = "P4EST_JLL_NON_MPI" ]; then
+if [ "${P4EST_TEST}" = "P4EST_JLL_USES_MPI" ]; then
   echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
 fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_NON_MPI" ]; then

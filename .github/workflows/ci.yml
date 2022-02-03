@@ -42,8 +42,8 @@ jobs:
         arch:
           - x64
         p4est_test:
-          - P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
-          - P4EST_JLL_NON_MPI
+          - P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
+          - P4EST_JLL_USES_MPI
           - P4EST_CUSTOM_NON_MPI
           - P4EST_CUSTOM_USES_MPI
         # Only selected tests on macOS and Windows, since not everything works everywhere yet
@@ -51,28 +51,28 @@ jobs:
           - version: '1.6'
             os: macOS-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
           - version: '1.6'
             os: macOS-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI
+            p4est_test: P4EST_JLL_USES_MPI
           - version: '1.6'
             os: windows-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
           # Additional tests on Julia v1.7
           - version: '^1.7.0-0'
             os: ubuntu-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
           - version: '^1.7.0-0'
             os: macOS-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
           - version: '^1.7.0-0'
             os: windows-latest
             arch: x64
-            p4est_test: P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS
+            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
     steps:
       - uses: actions/checkout@v2
       - name: Set p4est release to run tests against
@@ -86,9 +86,9 @@ jobs:
           echo "Setting variables for '${{ matrix.p4est_test }}'..."
           echo "P4EST_TEST=${{ matrix.p4est_test }}" >> $GITHUB_ENV
           echo "P4EST_TEST=${{ matrix.p4est_test }}"
-          if [[ ${{ matrix.p4est_test }} == "P4EST_JLL_NON_MPI_PRE_GENERATED_BINDINGS" ]]; then
+          if [[ ${{ matrix.p4est_test }} == "P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS" ]]; then
             echo "(no additional environment variables required)"
-          elif [[ ${{ matrix.p4est_test }} == "P4EST_JLL_NON_MPI" ]]; then
+          elif [[ ${{ matrix.p4est_test }} == "P4EST_JLL_USES_MPI" ]]; then
             echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
             echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
           elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_NON_MPI" ]]; then
