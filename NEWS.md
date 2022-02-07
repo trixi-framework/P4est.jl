@@ -20,7 +20,7 @@ for human readability.
 #### Removed
 
 
-## Changes in v0.3
+## Changes when updating to v0.3 from v0.2.x
 
 #### Added
 
