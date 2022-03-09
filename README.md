@@ -182,7 +182,7 @@ please refer to the [documentation for p4est itself](http://www.p4est.org/) or t
 P4est.jl was initiated by
 [Michael Schlottke-Lakemper](https://www.mi.uni-koeln.de/NumSim/schlottke-lakemper)
 (University of Cologne, Germany),
-[Hendrik Ranocha](https://ranocha.de)  (University of Münster, Germany), and
+[Hendrik Ranocha](https://ranocha.de) (University of Hamburg, Germany), and
 [Alexander Astanin](https://www.mi.uni-koeln.de/NumSim/astanin)
 (University of Cologne, Germany).
 Together, they are the principal developers of P4est.jl.
