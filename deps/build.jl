@@ -167,9 +167,9 @@ else
   # Step 4: Generate binding using the include path according to the settings
 
   # Manually set header files to consider
-  hdrs = ["p4est.h", "p4est_extended.h",
+  hdrs = ["p4est.h", "p4est_extended.h", "p4est_search.h",
           "p6est.h", "p6est_extended.h",
-          "p8est.h", "p8est_extended.h"]
+          "p8est.h", "p8est_extended.h", "p8est_search.h"]
 
   # Build list of arguments for Clang
   include_args = String[]
