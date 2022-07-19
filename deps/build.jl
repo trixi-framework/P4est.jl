@@ -1,3 +1,9 @@
+
+# TODO: Clang; update build step, docs, README.md, etc.
+@warn "The build step needs to be updated."
+
+#=
+
 using Libdl
 using MPI
 import Pkg.TOML
@@ -218,3 +224,5 @@ else
     generate(io, p4est_library => cvts)
   end
 end
+
+=#

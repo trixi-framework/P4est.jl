@@ -78,6 +78,9 @@ julia> conn_[1].num_trees
 1
 ```
 
+The generated file `LibP4est.jl` is used in `P4est/src/LibP4est_v2.jl`.
+
+
 ## Types are missing
 
 Need an `prologue.jl` file with
