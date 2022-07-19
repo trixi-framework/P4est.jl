@@ -255,7 +255,7 @@ struct sc_array
     elem_size::Csize_t
     elem_count::Csize_t
     byte_alloc::Cssize_t
-    array::Cstring
+    array::Ptr{Int8}
 end
 
 """The [`sc_array`](@ref) object provides a dynamic array of equal-size elements. Elements are accessed by their 0-based index. Their address may change. The number of elements (== elem\\_count) of the array can be changed by  sc_array_resize and sc_array_rewind. Elements can be sorted with sc_array_sort. If the array is sorted, it can be searched with sc_array_bsearch. A priority queue is implemented with pqueue\\_add and pqueue\\_pop (untested)."""
