@@ -19,9 +19,9 @@ end
 
 
 """
-    uses_mpi()
+    P4est.uses_mpi()
 
-Returns true if the p4est library was compiled with MPI enabled.
+Returns true if the `p4est` library was compiled with MPI enabled.
 """
 uses_mpi() = isdefined(@__MODULE__, :P4EST_ENABLE_MPI)
 
