@@ -1,6 +1,6 @@
 [libp4est]
-git-tree-sha1 = "ab08f50b99b6c4060e331e5ece8352645c380dd5"
+git-tree-sha1 = "3f5d810564ee7aa8f388d206123c891e97e65c65"
 
     [[libp4est.download]]
-    sha256 = "837eacdd075584af5a5e5f727973b0a216717919ab6e2bdd0200b222c3c3f38d"
-    url = "https://github.com/trixi-framework/P4est_jll_bindings/releases/download/P4est-v2.8.0+0/P4est.v2.8.0.tar.gz"
+    sha256 = "af48410539e41c990300966c22d4012a94d5ac0f05045091687803eaef9d381b"
+    url = "https://github.com/trixi-framework/P4est_jll_bindings/releases/download/P4est-v2.8.0+0-v2/P4est.v2.8.0.tar.gz"
