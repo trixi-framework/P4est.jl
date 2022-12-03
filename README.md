@@ -183,7 +183,7 @@ P4est.jl is maintained by
 [Michael Schlottke-Lakemper](https://www.hlrs.de/people/schlottke-lakemper)
 (University of Stuttgart, Germany),
 [Hendrik Ranocha](https://ranocha.de) (University of Hamburg, Germany),
-and Lars Christmann.
+and [Lars Christmann](https://github.com/lchristm).
 The [p4est](https://github.com/cburstedde/p4est) library itself is written by
 Carsten Burstedde, Lucas C. Wilcox, and Tobin Isaac.
 
