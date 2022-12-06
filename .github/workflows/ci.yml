@@ -74,7 +74,7 @@ jobs:
             arch: x64
             p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set p4est release to run tests against
         run: |
           P4EST_RELEASE=2.3.1
@@ -147,7 +147,7 @@ jobs:
           flag-name: run-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}
           parallel: true
           path-to-lcov: ./lcov.info
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
           files: ./lcov.info # optional
