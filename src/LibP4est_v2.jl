@@ -1,6 +1,6 @@
 module LibP4est
 
-using P4est_jll
+using P4est_jll: P4est_jll, libp4est
 export P4est_jll
 
 using CEnum
