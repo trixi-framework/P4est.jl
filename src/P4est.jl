@@ -8,9 +8,7 @@ include("LibP4est_v2.jl")
 @reexport using .LibP4est
 
 function __init__()
-    version = VersionNumber(
-        p4est_version_major(), p4est_version_minor()
-    )
+    version = P4est.version()
 
     if !(v"2.3" <= version < v"3-")
         @warn "Detected version $(version) of `p4est`. Currently, we only support versions v2.x.y from v2.3.0 on. Not everything may work correctly."
@@ -24,5 +22,13 @@ end
 Returns true if the `p4est` library was compiled with MPI enabled.
 """
 uses_mpi() = isdefined(@__MODULE__, :P4EST_ENABLE_MPI)
+
+"""
+    P4est.version()
+
+Returns the version of the unterlying `p4est` library.
+"""
+version() = VersionNumber(p4est_version_major(), p4est_version_minor())
+
 
 end
