@@ -50,31 +50,29 @@ julia> using .LibP4est, MPI
 julia> MPI.Init()
 THREAD_SERIALIZED::ThreadLevel = 2
 
-julia> conn_ptr = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x0000000002698e10
+julia> connectivity = p4est_connectivity_new_periodic()
+Ptr{p4est_connectivity} @0x0000000002412d20
 
-julia> p4est_connectivity_is_valid(conn_ptr)
+julia> p4est_connectivity_is_valid(connectivity)
 1
 
-julia> p4est_ptr = p4est_new_ext(MPI.COMM_WORLD, conn_ptr, 0, 2, 0, 0, C_NULL, C_NULL)
+julia> p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 2, 0, 0, C_NULL, C_NULL)
 Into p4est_new with min quadrants 0 level 2 uniform 0
 New p4est with 1 trees on 1 processors
 Initial level 2 potential global quadrants 16 per tree 16
 Done p4est_new with 10 total quadrants
-Ptr{Main.LibP4est.p4est} @0x00000000025a4f50
+Ptr{p4est} @0x0000000002dd1fd0
 
-julia> p4est_ = unsafe_wrap(Array, p4est_ptr, 1)
-1-element Vector{Main.LibP4est.p4est}:
- Main.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing} @0x0000000000000000, 0, 0, 0, 10, 10, Ptr{Int64} @0x000000000262a3c0, Ptr{p4est_quadrant} @0x0000000002483f80, Ptr{p4est_connectivity} @0x0000000002698e10, Ptr{sc_array} @0x0000000001d04770, Ptr{sc_mempool} @0x0000000000000000, Ptr{sc_mempool} @0x00000000025a5a10, Ptr{p4est_inspect} @0x0000000000000000)
+julia> _p4est = unsafe_load(p4est)
+P4est.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing} @0x0000000000000000, 0, 0, 0, 10, 10, Ptr{Int64} @0x00000000021a5f70, Ptr{p4est_quadrant} @0x0000000002274330, Ptr{p4est_connectivity} @0x000000000255cdf0, Ptr{sc_array} @0x00000000023b64a0, Ptr{sc_mempool} @0x0000000000000000, Ptr{sc_mempool} @0x00000000023b1620, Ptr{p4est_inspect} @0x0000000000000000)
 
-julia> p4est_[1].connectivity == conn_ptr
+julia> _p4est.connectivity == connectivity
 true
 
-julia> conn_ = unsafe_wrap(Array, p4est_[1].connectivity, 1)
-1-element Vector{p4est_connectivity}:
- p4est_connectivity(4, 1, 1, Ptr{Float64} @0x0000000002585c50, Ptr{Int32} @0x0000000002585460, 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32} @0x000000000253d350, Ptr{Int8} @0x00000000026e12f0, Ptr{Int32} @0x00000000026919b0, Ptr{Int32} @0x00000000024aa340, Ptr{Int32} @0x00000000023d2e40, Ptr{Int8} @0x00000000024cdf60)
+julia> _connectivity = unsafe_load(_p4est.connectivity)
+p4est_connectivity(4, 1, 1, Ptr{Float64} @0x00000000021e8170, Ptr{Int32} @0x00000000020d2450, 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32} @0x0000000002468e10, Ptr{Int8} @0x00000000022035e0, Ptr{Int32} @0x0000000002667230, Ptr{Int32} @0x000000000219eea0, Ptr{Int32} @0x000000000279ae00, Ptr{Int8} @0x00000000021ff910)
 
-julia> conn_[1].num_trees
+julia> _connectivity.num_trees
 1
 ```
 

@@ -1,7 +1,17 @@
 module LibP4est
 
-using P4est_jll
+using Preferences: @load_preference
+
+using P4est_jll: P4est_jll
 export P4est_jll
+
+const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
+@static if _PREFERENCE_LIBP4EST == "P4est_jll"
+    using P4est_jll: libp4est
+else
+    const libp4est = _PREFERENCE_LIBP4EST
+end
+
 
 using CEnum
 

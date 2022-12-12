@@ -7,6 +7,7 @@ version = "0.3.3-pre"
 CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
 MPI = "da04e1cc-30fd-572f-bb4f-1f8673147195"
 P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
+Preferences = "21216c6a-2e73-6563-6e65-726566657250"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 
 [compat]
