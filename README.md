@@ -6,9 +6,9 @@
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/P4est.jl/badge.svg?branch=main)](https://coveralls.io/github/trixi-framework/P4est.jl?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
-**P4est.jl** is a Julia package that wraps
-[p4est](https://github.com/cburstedde/p4est), a C library to manage multiple
-connected adaptive quadtrees or octrees in parallel.
+**[P4est.jl](https://github.com/trixi-framework/P4est.jl)** is a Julia package
+that wraps [p4est](https://github.com/cburstedde/p4est), a C library to manage
+multiple connected adaptive quadtrees or octrees in parallel.
 
 
 ## Installation
@@ -17,28 +17,68 @@ If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/). P4est.jl works
 with Julia v1.6 and up.
 
-P4est.jl is a registered Julia package. Hence, you can install it by executing
-the following commands in the Julia REPL:
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) is a registered Julia
+package. Hence, you can install it by executing the following commands in the
+Julia REPL:
 
 ```julia
 julia> import Pkg; Pkg.add("P4est")
 ```
 
-P4est.jl depends on the binary distribution of the [p4est](https://github.com/cburstedde/p4est)
-library, which is available in the Julia package P4est\_jll.jl and which is automatically
-installed as a dependency. The binaries provided by P4est\_jll.jl support MPI and are compiled
-against the default MPI binaries of MPI.jl. At the time of writing, these are the binaries
-provided by MicrosoftMPI\_jll.jl on Windows and MPICH\_jll.jl on all
-other platforms. Note that [MPI.jl](https://github.com/JuliaParallel/MPI.jl)
-should be configured to use the same MPI binaries.
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) depends on the binary
+distribution of the [p4est](https://github.com/cburstedde/p4est) library, which
+is available in the Julia package P4est\_jll.jl and which is automatically
+installed as a dependency. The binaries provided by P4est\_jll.jl support MPI
+and are compiled against the default MPI binaries of MPI.jl. At the time of
+writing, these are the binaries provided by MicrosoftMPI\_jll.jl on Windows and
+MPICH\_jll.jl on all other platforms. Note that the Julia MPI wrapper
+[MPI.jl](https://github.com/JuliaParallel/MPI.jl) should be configured to use
+the same MPI binaries.
 
-By default, P4est.jl provides pre-generated Julia bindings to all exported C
-functions of the underlying p4est library. If you want/need to generate new
-bindings, please follow the instructions in the `dev` folder and copy the
-generated files to the appropriate places in `src`.
+By default, [P4est.jl](https://github.com/trixi-framework/P4est.jl) provides
+pre-generated Julia bindings to all exported C functions of the underlying
+[p4est](https://github.com/cburstedde/p4est) library. If you want/need to
+generate new bindings, please follow the instructions in the `dev` folder and
+copy the generated files to the appropriate places in `src`.
 
 
 ### Using a custom build of p4est
+
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) allows using a
+[p4est](https://github.com/cburstedde/p4est) binary different from the default
+one provided by P4est\_jll.jl.
+
+To enable this, you first need to obtain a local binary installation of
+[p4est](https://github.com/cburstedde/p4est). Next, you need to configure
+[MPI.jl](https://github.com/JuliaParallel/MPI.jl) to use the same MPI
+implementation used to build your local installation of
+[p4est](https://github.com/cburstedde/p4est), see
+[the documentation of MPI.jl](https://juliaparallel.org/MPI.jl/stable/configuration/).
+At the time of writing, this can be done via
+
+```julia
+julia> using MPIPreferences; MPIPreferences.use_system_binary()
+```
+
+if you use the default system MPI binary installation to build
+[p4est](https://github.com/cburstedde/p4est).
+
+Next, you need to set up the
+[Preferences.jl](https://github.com/JuliaPackaging/Preferences.jl)
+setting containing the path to your local build of the shared library
+[p4est](https://github.com/cburstedde/p4est).
+
+```julia
+julia> using Preferences, UUIDs
+
+julia> set_preferences!(
+           UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
+           "libp4est" => "/path/to/your/libp4est.so", force = true)
+```
+
+Currently, custom builds of [p4est](https://github.com/cburstedde/p4est)
+without MPI support are not supported.
+
 
 TODO:
 
@@ -105,9 +145,12 @@ julia --project -e 'ENV["JULIA_P4EST_GENERATE_BINDINGS"] = "yes";
 
 ## Usage
 
-The `P4est.uses_mpi()` function can be used to check if the p4est binaries that P4est.jl uses were
-compiled with MPI enabled. This returns `true` for the default binaries provided by the P4est_jll.jl
-package. In this case P4est.jl can be used as follows.
+The `P4est.uses_mpi()` function can be used to check if the
+[p4est](https://github.com/cburstedde/p4est) binaries that
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) uses were compiled with
+MPI enabled. This returns `true` for the default binaries provided by the
+P4est_jll.jl package. In this case
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) can be used as follows.
 
 In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and initialize MPI
 
@@ -116,9 +159,9 @@ julia> using P4est, MPI
 julia> MPI.Init()
 ```
 
-You can then access the full [p4est](https://github.com/cburstedde/p4est) API that is defined
-by the headers. For example, to create a periodic connectivity and check its validity, execute
-the following lines:
+You can then access the full [p4est](https://github.com/cburstedde/p4est) API
+that is defined by the headers. For example, to create a periodic connectivity
+and check its validity, execute the following lines:
 
 ```julia
 julia> connectivity = p4est_connectivity_new_periodic()
