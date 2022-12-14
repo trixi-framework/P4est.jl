@@ -3,6 +3,12 @@ using Test
 # Assume that everything has been configured correctly via environment
 # variables in CI and `configure_packages.jl`.
 
+# First, we get the settings and remove all local preference configurations
+# that may still exist.
+const P4EST_TEST = get(ENV, "P4EST_TEST", "P4EST_JLL_MPI_DEFAULT")
+const P4EST_TEST_LIBP4EST = get(ENV, "P4EST_TEST_LIBP4EST", "")
+rm(joinpath(@__DIR__, "LocalPreferences.toml"), force = true)
+
 # Finally, we configure P4est.jl as desired.
 @static if P4EST_TEST in ("P4EST_CUSTOM_MPI_DEFAULT", "P4EST_CUSTOM_MPI_CUSTOM")
   import UUIDs, Preferences
