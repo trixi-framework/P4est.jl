@@ -5,15 +5,10 @@ export P4est_jll
 
 using ..P4est: _PREFERENCE_LIBP4EST
 
-@warn "Precompiling P4est.LibP4est..." _PREFERENCE_LIBP4EST # TODO: Clang; remove
 @static if _PREFERENCE_LIBP4EST == "P4est_jll"
-    @warn "... first branch" _PREFERENCE_LIBP4EST # TODO: Clang; remove
     const libp4est = P4est_jll.libp4est
-    @warn "... first branch" _PREFERENCE_LIBP4EST libp4est # TODO: Clang; remove
 else
-    @warn "... second branch" _PREFERENCE_LIBP4EST # TODO: Clang; remove
     const libp4est = _PREFERENCE_LIBP4EST
-    @warn "... second branch" _PREFERENCE_LIBP4EST libp4est # TODO: Clang; remove
 end
 
 
