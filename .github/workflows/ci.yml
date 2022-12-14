@@ -38,8 +38,8 @@ jobs:
           # - 'nightly'
         os:
           - ubuntu-latest
-          # - macos-latest
-          # - windows-latest
+          - macos-latest
+          - windows-latest
         arch:
           - x64
         p4est_test:
@@ -49,34 +49,24 @@ jobs:
           # - P4EST_JLL_MPI_OPENMPIJLL
           # - P4EST_CUSTOM_MPI_DEFAULT # TODO: Clang, enable this
           - P4EST_CUSTOM_MPI_CUSTOM
-        # Only selected tests on macOS and Windows, since not everything works everywhere yet
-        include:
+        exclude:
+          # TODO: Clang
+          #       Some preferences are not loaded in package tests in older
+          #       versions of Julia, see
+          #       https://github.com/JuliaPackaging/Preferences.jl/issues/40
           - version: '1.6'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_DEFAULT
-          # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
-          # - version: '1.6'
-          #   os: macOS-latest
-          #   arch: x64
-          #   p4est_test: P4EST_JLL_MPI_OPENMPIJLL
-          - version: '1'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_DEFAULT
-          # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
-          # - version: '1'
-          #   os: macOS-latest
-          #   arch: x64
-          #   p4est_test: P4EST_JLL_MPI_OPENMPIJLL
-          - version: '1.6'
-            os: windows-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_DEFAULT
-          - version: '1'
-            os: windows-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_DEFAULT
+            p4est_test: P4EST_CUSTOM_MPI_CUSTOM
+          # Only selected tests on macOS and Windows, since not everything works
+          # everywhere yet and we are most familiar with setting up custom
+          # p4est and MPI builds on Linux
+          - os: macos-latest
+            p4est_test: P4EST_JLL_MPI_CUSTOM
+          - os: macos-latest
+            p4est_test: P4EST_CUSTOM_MPI_CUSTOM
+          - os: windows-latest
+            p4est_test: P4EST_JLL_MPI_CUSTOM
+          - os: windows-latest
+            p4est_test: P4EST_CUSTOM_MPI_CUSTOM
     steps:
       - uses: actions/checkout@v3
       - name: Set p4est release to run tests against
