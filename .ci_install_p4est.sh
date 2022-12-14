@@ -4,14 +4,14 @@ if [ -z "$P4EST_RELEASE" ]; then
   P4EST_RELEASE="2.8"
 fi
 
-if [ "${P4EST_TEST}" = "P4EST_JLL_MPI_DEFAULT" ]; then
-  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
+if [ "${JULIA_P4EST_TEST}" = "P4EST_JLL_MPI_DEFAULT" ]; then
+  echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Nothing to do here."
 fi
-if [ "${P4EST_TEST}" = "P4EST_JLL_MPI_OPENMPIJLL" ]; then
-  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
+if [ "${JULIA_P4EST_TEST}" = "P4EST_JLL_MPI_OPENMPIJLL" ]; then
+  echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Nothing to do here."
 fi
-if [ "${P4EST_TEST}" = "P4EST_CUSTOM_MPI_DEFAULT" ]; then
-  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation of MPI.jl."
+if [ "${JULIA_P4EST_TEST}" = "P4EST_CUSTOM_MPI_DEFAULT" ]; then
+  echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation of MPI.jl."
   # TODO: Clang; write this part
   # pushd `pwd`
   # export P4EST_TMP=`pwd`/libp4est_tmp_non_mpi
@@ -30,8 +30,8 @@ if [ "${P4EST_TEST}" = "P4EST_CUSTOM_MPI_DEFAULT" ]; then
   # $P4EST_TMP/prefix/bin/p4est_step1
   # popd
 fi
-if [ "${P4EST_TEST}" = "P4EST_CUSTOM_MPI_CUSTOM" ]; then
-  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation on the system."
+if [ "${JULIA_P4EST_TEST}" = "P4EST_CUSTOM_MPI_CUSTOM" ]; then
+  echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation on the system."
   pushd `pwd`
   export P4EST_TMP=`pwd`/libp4est_tmp
   mkdir -p $P4EST_TMP
