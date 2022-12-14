@@ -22,6 +22,9 @@ rm(joinpath(@__DIR__, "LocalPreferences.toml"), force = true)
 @static if P4EST_TEST in ("P4EST_JLL_MPI_CUSTOM", "P4EST_CUSTOM_MPI_CUSTOM")
   import MPIPreferences
   MPIPreferences.use_system_binary()
+elseif P4EST_TEST == "P4EST_JLL_MPI_OPENMPIJLL"
+  import MPIPreferences
+  MPIPreferences.use_jll_binary("OpenMPI_jll")
 end
 
 # Finally, we configure P4est.jl as desired.
