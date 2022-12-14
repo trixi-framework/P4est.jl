@@ -7,7 +7,8 @@ using Test
 using MPI: MPI
 using P4est
 
-@info "Testing P4est.jl with" P4est.MPIPreferences.binary P4est.MPIPreferences.abi
+import MPIPreferences
+@info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
 
 
 # This belongs to the testset "p4est_qcoord_to_vertex" below. However,

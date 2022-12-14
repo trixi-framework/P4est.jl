@@ -9,10 +9,6 @@ using Reexport: @reexport
 using Preferences: @load_preference
 const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
 
-# We also import MPIPreferences here so that we can set their preferences
-# for CI and inspect the MPIPreferences settings in tests.
-import MPIPreferences
-
 
 # Include p4est bindings
 include("LibP4est_v2.jl")
