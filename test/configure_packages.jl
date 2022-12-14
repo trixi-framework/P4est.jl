@@ -26,6 +26,10 @@ end
 
 # Finally, we configure P4est.jl as desired.
 @static if P4EST_TEST in ("P4EST_CUSTOM_MPI_DEFAULT", "P4EST_CUSTOM_MPI_CUSTOM")
+  # Activate the environment of P4est.jl to be able to set the preferences there
+  Pkg.activate(dirname(@__DIR__))
+  Pkg.instantiate()
+
   import UUIDs, Preferences
   Preferences.set_preferences!(
     UUIDs.UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
