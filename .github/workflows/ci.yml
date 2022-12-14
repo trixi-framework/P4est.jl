@@ -130,7 +130,7 @@ jobs:
         shell: julia --color=yes {0}
         run: |
           @show pwd()
-          include(joinpath("test", "configure_packages.jl"))
+          include(joinpath(pwd(), "test", "configure_packages.jl"))
       - uses: julia-actions/julia-buildpkg@v1
         env:
           PYTHON: ""
