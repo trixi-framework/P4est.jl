@@ -45,7 +45,8 @@ jobs:
         p4est_test:
           - P4EST_JLL_MPI_DEFAULT
           - P4EST_JLL_MPI_CUSTOM
-          - P4EST_JLL_MPI_OPENMPIJLL
+          # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
+          # - P4EST_JLL_MPI_OPENMPIJLL
           # - P4EST_CUSTOM_MPI_DEFAULT # TODO: Clang, enable this
           - P4EST_CUSTOM_MPI_CUSTOM
         # Only selected tests on macOS and Windows, since not everything works everywhere yet
@@ -54,18 +55,20 @@ jobs:
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_MPI_DEFAULT
-          - version: '1.6'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_OPENMPIJLL
+          # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
+          # - version: '1.6'
+          #   os: macOS-latest
+          #   arch: x64
+          #   p4est_test: P4EST_JLL_MPI_OPENMPIJLL
           - version: '1'
             os: macOS-latest
             arch: x64
             p4est_test: P4EST_JLL_MPI_DEFAULT
-          - version: '1'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_MPI_OPENMPIJLL
+          # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
+          # - version: '1'
+          #   os: macOS-latest
+          #   arch: x64
+          #   p4est_test: P4EST_JLL_MPI_OPENMPIJLL
           - version: '1.6'
             os: windows-latest
             arch: x64
