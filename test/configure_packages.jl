@@ -5,8 +5,6 @@ Pkg.instantiate()
 # Configure the test setup based on environment variables set in CI.
 # We test the following combinations set in `P4EST_TEST`:
 # - `P4EST_JLL_MPI_DEFAULT`
-# - `P4EST_JLL_MPI_CUSTOM`
-# - `P4EST_JLL_MPI_OPENMPIJLL` # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
 # - `P4EST_CUSTOM_MPI_DEFAULT`
 # - `P4EST_CUSTOM_MPI_CUSTOM`
 # For CI runs testing a custom installation of `p4est`, the path to the
@@ -20,13 +18,9 @@ const P4EST_TEST_LIBP4EST = get(ENV, "P4EST_TEST_LIBP4EST", "")
 rm(joinpath(dirname(@__DIR__), "LocalPreferences.toml"), force = true)
 
 # Next, we configure MPI.jl appropriately.
-@static if P4EST_TEST in ("P4EST_JLL_MPI_CUSTOM", "P4EST_CUSTOM_MPI_CUSTOM")
+@static if P4EST_TEST == "P4EST_CUSTOM_MPI_CUSTOM"
   import MPIPreferences
   MPIPreferences.use_system_binary()
-elseif P4EST_TEST == "P4EST_JLL_MPI_OPENMPIJLL"
-  # TODO: Clang; it looks like we do not build binaries in P4est_jll for OpenMPI_jll
-  import MPIPreferences
-  MPIPreferences.use_jll_binary("OpenMPI_jll")
 end
 
 # Finally, we configure P4est.jl as desired.
