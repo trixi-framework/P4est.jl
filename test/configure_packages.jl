@@ -16,7 +16,7 @@ Pkg.instantiate()
 # that may still exist.
 const P4EST_TEST = get(ENV, "P4EST_TEST", "P4EST_JLL_MPI_DEFAULT")
 const P4EST_TEST_LIBP4EST = get(ENV, "P4EST_TEST_LIBP4EST", "")
-@test_nowarn rm(joinpath(@__DIR__, "LocalPreferences.toml"), force = true)
+rm(joinpath(@__DIR__, "LocalPreferences.toml"), force = true)
 
 # Next, we configure MPI.jl appropriately.
 @static if P4EST_TEST in ("P4EST_JLL_MPI_CUSTOM", "P4EST_CUSTOM_MPI_CUSTOM")
