@@ -6,10 +6,15 @@ using P4est_jll: P4est_jll
 export P4est_jll
 
 const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
+@warn "Precompiling" _PREFERENCE_LIBP4EST # TODO: Clang; remove
 @static if _PREFERENCE_LIBP4EST == "P4est_jll"
-    using P4est_jll: libp4est
+    @warn "... first branch" _PREFERENCE_LIBP4EST # TODO: Clang; remove
+    const libp4est = P4est_jll.libp4est
+    @warn "... first branch" _PREFERENCE_LIBP4EST libp4est # TODO: Clang; remove
 else
+    @warn "... second branch" _PREFERENCE_LIBP4EST # TODO: Clang; remove
     const libp4est = _PREFERENCE_LIBP4EST
+    @warn "... second branch" _PREFERENCE_LIBP4EST libp4est # TODO: Clang; remove
 end
 
 

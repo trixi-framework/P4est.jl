@@ -10,6 +10,9 @@ fi
 if [ "${P4EST_TEST}" = "P4EST_JLL_MPI_CUSTOM" ]; then
   echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
 fi
+if [ "${P4EST_TEST}" = "P4EST_JLL_MPI_OPENMPIJLL" ]; then
+  echo "Found 'P4EST_TEST=${P4EST_TEST}'. Nothing to do here."
+fi
 if [ "${P4EST_TEST}" = "P4EST_CUSTOM_MPI_DEFAULT" ]; then
   echo "Found 'P4EST_TEST=${P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation of MPI.jl."
   # TODO: Clang; write this part
