@@ -30,5 +30,13 @@ Returns the version of the unterlying `p4est` library.
 """
 version() = VersionNumber(p4est_version_major(), p4est_version_minor())
 
+"""
+    P4est.package_id()
+
+Returns the value of the global variable `p4est_package_id` which can be used
+to check whether `p4est` has been initialized.
+"""
+package_id() = unsafe_load(cglobal((:p4est_package_id, LibP4est.libp4est), Cint))
+
 
 end
