@@ -1,12 +1,11 @@
 module LibP4est
 
-using Preferences: @load_preference
-
 using P4est_jll: P4est_jll
 export P4est_jll
 
-const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
-@warn "Precompiling" _PREFERENCE_LIBP4EST # TODO: Clang; remove
+using ..P4est: _PREFERENCE_LIBP4EST
+
+@warn "Precompiling P4est.LibP4est..." _PREFERENCE_LIBP4EST # TODO: Clang; remove
 @static if _PREFERENCE_LIBP4EST == "P4est_jll"
     @warn "... first branch" _PREFERENCE_LIBP4EST # TODO: Clang; remove
     const libp4est = P4est_jll.libp4est

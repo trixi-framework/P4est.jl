@@ -3,6 +3,12 @@ module P4est
 using Reexport: @reexport
 
 
+# We need to load the preference setting from here and not from `LibP4est_v2.jl`
+# since `@load_preference` looks into the module it is running from. Thus, we
+# load all preferences here and access them from the `module LibP4est`.
+using Preferences: @load_preference
+const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
+
 # Include p4est bindings
 include("LibP4est_v2.jl")
 @reexport using .LibP4est
