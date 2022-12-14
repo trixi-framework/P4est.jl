@@ -126,6 +126,11 @@ jobs:
         run: |
           ./.ci_install_p4est.sh
         shell: bash
+      - name: Configure MPI.jl
+        shell: julia --color=yes {0}
+        run: |
+          @show pwd()
+          include(joinpath("test", "configure_packages.jl"))
       - uses: julia-actions/julia-buildpkg@v1
         env:
           PYTHON: ""
