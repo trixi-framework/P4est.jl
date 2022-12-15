@@ -417,7 +417,7 @@ size_t sc_mpi_sizeof (sc_MPI_Datatype t);
 ```
 """
 function sc_mpi_sizeof(t)
-    @ccall libp4est.sc_mpi_sizeof(t::Cint)::Csize_t
+    @ccall libp4est.sc_mpi_sizeof(t::MPI_Datatype)::Csize_t
 end
 
 """
@@ -3129,7 +3129,7 @@ void sc_mpi_read (MPI_File mpifile, const void *ptr, size_t zcount, sc_MPI_Datat
 ```
 """
 function sc_mpi_read(mpifile, ptr, zcount, t, errmsg)
-    @ccall libp4est.sc_mpi_read(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::Cint, errmsg::Cstring)::Cvoid
+    @ccall libp4est.sc_mpi_read(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
 end
 
 """
@@ -3141,7 +3141,7 @@ void sc_mpi_write (MPI_File mpifile, const void *ptr, size_t zcount, sc_MPI_Data
 ```
 """
 function sc_mpi_write(mpifile, ptr, zcount, t, errmsg)
-    @ccall libp4est.sc_mpi_write(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::Cint, errmsg::Cstring)::Cvoid
+    @ccall libp4est.sc_mpi_write(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
 end
 
 """
