@@ -69,14 +69,6 @@ function __init__()
         @warn "Detected version $(version) of `p4est`. Currently, we only support versions v2.x.y from v2.3.0 on. Not everything may work correctly."
     end
 
-    # TODO: Clang; decide whether we want to initialize MPI automatically
-    #
-    # # MPI.jl handles multiple calls to MPI.Init appropriately. Thus, we don't need
-    # # any common checks of the form `if MPI.Initialized() ...`.
-    # # threadlevel=MPI.THREAD_FUNNELED: Only main thread makes MPI calls
-    # # finalize_atexit=true           : MPI.jl will call MPI.Finalize as `atexit` hook
-    # MPI.Init(threadlevel = MPI.THREAD_FUNNELED, finalize_atexit = true)
-
     return nothing
 end
 
