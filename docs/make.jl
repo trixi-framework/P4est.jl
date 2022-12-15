@@ -97,6 +97,7 @@ makedocs(
   # Explicitly specify documentation structure
   pages = [
     "Home" => "index.md",
+    "Introduction" => "introduction.md",
     "API Reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",

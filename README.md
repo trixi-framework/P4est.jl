@@ -175,10 +175,14 @@ search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_c
   size_t p4est_memory_used (p4est_t * p4est);
 ```
 
-For more information on how to use [`p4est`](https://github.com/cburstedde/p4est)
-via [P4est.jl](https://github.com/trixi-framework/P4est.jl), please refer to the
-[documentation for p4est itself](http://www.p4est.org/) or to the header files
-(`*.h`) in the [p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
+For more information on how to use [`p4est`](https://github.com/cburstedde/p4est),
+please refer to the [documentation for p4est itself](http://www.p4est.org/) or
+to the header files (`*.h`) in the
+[p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
+
+For more information on how to use the Julia wrapper
+[P4est.jl](https://github.com/trixi-framework/P4est.jl), please consult the
+[documentation](https://trixi-framework.github.io/P4est.jl/stable).
 
 
 ## Authors
