@@ -291,7 +291,7 @@ help?> P4est.init
 For more information on how to use [`p4est`](https://github.com/cburstedde/p4est),
 please refer to the [documentation for p4est itself](http://www.p4est.org/) or
 to the header files (`*.h`) in the
-[p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
+[`p4est` repository](https://github.com/cburstedde/p4est/tree/master/src).
 
 For more information on how to use the Julia wrapper
 [P4est.jl](https://github.com/trixi-framework/P4est.jl), please consult the

@@ -13,14 +13,10 @@ The general process for creating bindings with Clang.jl is as follows:
 8. Go back to 3.
 9. Despair.
 
-If you want to try this yourself using the setup provided in this directory,
-set up all dependencies using
-```shell
-julia --project -e 'using Pkg; Pkg.instantiate()'
-```
-This is only required once. The current version of the bindings has been
-generated using Julia v1.7.3; the corresponding `Manifest.toml` file is
-included for reproducibility.
+If you want to try this yourself, proceed as follows. The current version of
+the bindings has been generated using Julia v1.7.3; the corresponding
+`Manifest.toml` file is included for reproducibility. Updating everything
+to Julia v1.8.3 was also successful.
 
 To generate new bindings, run
 ```shell
