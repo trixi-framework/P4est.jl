@@ -12891,7 +12891,7 @@ const SC_CFLAGS = "-g -O2"
 
 const SC_CPP = "mpicc -E"
 
-const SC_CPPFLAGS = ""
+const SC_CPPFLAGS = "-I/workspace/destdir/include"
 
 const SC_ENABLE_MEMALIGN = 1
 
@@ -12913,8 +12913,6 @@ const SC_ENABLE_USE_REALLOC = 1
 
 const SC_ENABLE_V4L2 = 1
 
-const SC_HAVE_ALIGNED_ALLOC = 1
-
 const SC_HAVE_BACKTRACE = 1
 
 const SC_HAVE_BACKTRACE_SYMBOLS = 1
@@ -12933,7 +12931,7 @@ const SC_HAVE_STRTOLL = 1
 
 const SC_HAVE_ZLIB = 1
 
-const SC_LDFLAGS = ""
+const SC_LDFLAGS = "-L/workspace/destdir/lib"
 
 const SC_LIBS = "-lz -lm "
 
@@ -13263,7 +13261,7 @@ const P4EST_CFLAGS = "-g -O2"
 
 const P4EST_CPP = "mpicc -E"
 
-const P4EST_CPPFLAGS = ""
+const P4EST_CPPFLAGS = "-I/workspace/destdir/include"
 
 const P4EST_ENABLE_BUILD_2D = 1
 
@@ -13289,15 +13287,13 @@ const P4EST_ENABLE_VTK_BINARY = 1
 
 const P4EST_ENABLE_VTK_COMPRESSION = 1
 
-const P4EST_HAVE_ALIGNED_ALLOC = 1
-
 const P4EST_HAVE_GNU_QSORT_R = 1
 
 const P4EST_HAVE_POSIX_MEMALIGN = 1
 
 const P4EST_HAVE_ZLIB = 1
 
-const P4EST_LDFLAGS = ""
+const P4EST_LDFLAGS = "-L/workspace/destdir/lib"
 
 const P4EST_LIBS = "-lz -lm "
 

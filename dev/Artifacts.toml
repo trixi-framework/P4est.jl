@@ -1,0 +1,11 @@
+[[P4est]]
+arch = "x86_64"
+git-tree-sha1 = "16363fca48e0da737994c3f9b3a7cbebb049a644"
+lazy = true
+libc = "glibc"
+mpi = "mpich"
+os = "linux"
+
+    [[P4est.download]]
+    sha256 = "1fda78659f3436aa7a3ed53d5f8924ed66c4a5e33ceb3558cf7a4ed9cb97cafa"
+    url = "https://github.com/JuliaBinaryWrappers/P4est_jll.jl/releases/download/P4est-v2.8.1+0/P4est.v2.8.1.x86_64-linux-gnu-mpi+mpich.tar.gz"
