@@ -47,7 +47,7 @@ open(joinpath(@__DIR__, "src", "contributing.md"), "w") do io
   end
 end
 
-open(joinpath(@__DIR__, "src", "home.md"), "w") do io
+open(joinpath(@__DIR__, "src", "index.md"), "w") do io
   # Point to source license file
   println(io, """
   ```@meta
@@ -96,13 +96,13 @@ makedocs(
   ),
   # Explicitly specify documentation structure
   pages = [
-    "Home" => "home.md",
+    "Home" => "index.md",
     "Introduction" => "introduction.md",
     "API Reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",
     "License" => "license.md",
-    "Index" => "index.md"
+    "Index" => "refindex.md"
   ],
   strict = false, # `true` lets Documenter CI fail when doctests fail
   checkdocs = :exports, # complain only about non-included docstrings for exported names

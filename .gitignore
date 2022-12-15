@@ -3,7 +3,7 @@
 docs/build
 docs/src/authors.md
 docs/src/contributing.md
-docs/src/home.md
+docs/src/index.md
 docs/src/license.md
 public/
 coverage/
