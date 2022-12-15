@@ -47,7 +47,7 @@ open(joinpath(@__DIR__, "src", "contributing.md"), "w") do io
   end
 end
 
-open(joinpath(@__DIR__, "src", "index.md"), "w") do io
+open(joinpath(@__DIR__, "src", "home.md"), "w") do io
   # Point to source license file
   println(io, """
   ```@meta
@@ -96,15 +96,15 @@ makedocs(
   ),
   # Explicitly specify documentation structure
   pages = [
-    "Home" => "index.md",
+    "Home" => "home.md",
     "Introduction" => "introduction.md",
     "API Reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",
-    "License" => "license.md"
+    "License" => "license.md",
+    "Index" => "index.md"
   ],
-  # TODO: Clang; make strict = true
-  strict = false # to make the GitHub action fail when doctests fail
+  strict = true # to make the GitHub action fail when doctests fail
 )
 
 deploydocs(
