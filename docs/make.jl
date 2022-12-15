@@ -50,6 +50,23 @@ open(joinpath(@__DIR__, "src", "contributing.md"), "w") do io
   end
 end
 
+open(joinpath(@__DIR__, "src", "index.md"), "w") do io
+  # Point to source license file
+  println(io, """
+  ```@meta
+  EditURL = "https://github.com/trixi-framework/P4est.jl/blob/main/README.md"
+  ```
+  """)
+  # Write the modified contents
+  println(io, "# P4est.jl")
+  println(io, "")
+  for line in eachline(joinpath(dirname(@__DIR__), "README.md"))
+    line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
+    line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
+    println(io, "> ", line)
+  end
+end
+
 # If we want to build the docs locally, add the parent folder to the
 # load path so that we can use the current development version of P4est.jl.
 # See also https://github.com/trixi-framework/Trixi.jl/issues/668

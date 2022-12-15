@@ -1,12 +1,12 @@
 # P4est.jl
 
-<!-- [![Docs-stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://trixi-framework.github.io/P4est.jl/stable) -->
+[![Docs-stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://trixi-framework.github.io/P4est.jl/stable)
 [![Build Status](https://github.com/trixi-framework/P4est.jl/workflows/CI/badge.svg)](https://github.com/trixi-framework/P4est.jl/actions?query=workflow%3ACI)
 [![Codecov](https://codecov.io/gh/trixi-framework/P4est.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/trixi-framework/P4est.jl)
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/P4est.jl/badge.svg?branch=main)](https://coveralls.io/github/trixi-framework/P4est.jl?branch=main)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
-**[P4est.jl](https://github.com/trixi-framework/P4est.jl)** is a Julia package
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) is a Julia package
 that wraps [p4est](https://github.com/cburstedde/p4est), a C library to manage
 multiple connected adaptive quadtrees or octrees in parallel.
 
@@ -80,7 +80,7 @@ Currently, custom builds of [p4est](https://github.com/cburstedde/p4est)
 without MPI support are not supported.
 
 
-TODO:
+TODO: Clang
 
 When `JULIA_P4EST_GENERATE_BINDINGS` is non-empty you can also
 configure P4est.jl to use a custom build of p4est. For this, set the following
