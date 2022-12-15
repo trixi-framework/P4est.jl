@@ -4,6 +4,8 @@
 [p4est](https://github.com/cburstedde/p4est), a C library to manage multiple
 connected adaptive quadtrees or octrees in parallel.
 
+TODO: Clang; update this
+
 
 ## Installation
 If you have not yet installed Julia, please [follow the instructions for your

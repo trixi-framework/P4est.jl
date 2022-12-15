@@ -231,12 +231,11 @@ please refer to the [documentation for p4est itself](http://www.p4est.org/) or t
 
 ## Authors
 
-P4est.jl is maintained by
-[Michael Schlottke-Lakemper](https://www.hlrs.de/people/schlottke-lakemper)
-(University of Stuttgart, Germany),
-[Hendrik Ranocha](https://ranocha.de) (University of Hamburg, Germany),
-[Lars Christmann](https://github.com/lchristm).
-and [Joshua Lampert](https://github.com/JoshuaLampert).
+P4est.jl is mainly maintained by
+[Michael Schlottke-Lakemper](https://lakemper.eu)
+(RWTH Aachen University, Germany)
+and [Hendrik Ranocha](https://ranocha.de) (University of Hamburg, Germany).
+The full list of contributors can be found in [AUTHORS.md](AUTHORS.md).
 The [p4est](https://github.com/cburstedde/p4est) library itself is written by
 Carsten Burstedde, Lucas C. Wilcox, and Tobin Isaac.
 
