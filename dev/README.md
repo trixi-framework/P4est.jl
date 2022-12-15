@@ -18,7 +18,9 @@ set up all dependencies using
 ```shell
 julia --project -e 'using Pkg; Pkg.instantiate()'
 ```
-This is only required once.
+This is only required once. The current version of the bindings has been
+generated using Julia v1.7.3; the corresponding `Manifest.toml` file is
+included for reproducibility.
 
 To generate new bindings, run
 ```shell
