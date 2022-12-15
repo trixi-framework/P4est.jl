@@ -23,12 +23,20 @@ package. Hence, you can install it by executing the following commands in the
 Julia REPL:
 
 ```julia
-julia> import Pkg; Pkg.add("P4est")
+julia> import Pkg; Pkg.add(["P4est", "MPI"])
 ```
 
+With this command, you install both
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) and
+[MPI.jl](https://github.com/JuliaParallel/MPI.jl).
+Currently, [P4est.jl](https://github.com/trixi-framework/P4est.jl) supports
+only builds of the C library [`p4est`](https://github.com/cburstedde/p4est)
+with MPI support, so you need to initialize MPI appropriately as described
+in the "Usage" section below.
+
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) depends on the binary
-distribution of the [`p4est`](https://github.com/cburstedde/p4est) library, which
-is available in the Julia package P4est\_jll.jl and which is automatically
+distribution of the [`p4est`](https://github.com/cburstedde/p4est) library,
+which is available in the Julia package P4est\_jll.jl and which is automatically
 installed as a dependency. The binaries provided by P4est\_jll.jl support MPI
 and are compiled against the default MPI binaries of MPI.jl. At the time of
 writing, these are the binaries provided by MicrosoftMPI\_jll.jl on Windows and
@@ -67,7 +75,9 @@ implementation used to build your local installation of
 At the time of writing, this can be done via
 
 ```julia
-julia> using MPIPreferences; MPIPreferences.use_system_binary()
+julia> using MPIPreferences
+
+julia> MPIPreferences.use_system_binary()
 ```
 
 if you use the default system MPI binary installation to build
@@ -86,6 +96,41 @@ julia> set_preferences!(
            "libp4est" => "/path/to/your/libp4est.so", force = true)
 ```
 
+Note that you should restart your Julia session after changing the preferences.
+To sum up, follow these steps to use
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) with a custom
+installation of the underlying C libraries.
+- Create a Julia project for your setup.
+  ```julia
+  julia> import Pkg; Pkg.activate(".")
+  ```
+  This uses the Julia project in your current working directory or creates a
+  new one if there is none.
+- Install the required packages.
+  ```julia
+  julia> Pkg.add(["MPIPreferences", "MPI", "UUIDs", "Preferences", "P4est"])
+  ```
+- Set [MPI.jl](https://github.com/JuliaParallel/MPI.jl) preferences.
+  ```julia
+  julia> using MPIPreferences
+
+  julia> MPIPreferences.use_system_binary()
+  ```
+- Set [P4est.jl](https://github.com/trixi-framework/P4est.jl) preferences.
+  ```julia
+  julia> using Preferences, UUIDs
+
+  julia> set_preferences!(
+             UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
+             "libp4est" => "/path/to/your/libp4est.so", force = true)
+  ```
+- Restart the Julia REPL and load the packages.
+  ```julia
+  julia> import Pkg; Pkg.activate(".")
+
+  julia> using P4est, MPI; MPI.Init()
+  ```
+
 Currently, custom builds of [`p4est`](https://github.com/cburstedde/p4est)
 without MPI support are not supported.
 
@@ -99,7 +144,10 @@ MPI enabled. This returns `true` for the default binaries provided by the
 P4est_jll.jl package. In this case
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) can be used as follows.
 
-In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and initialize MPI
+In the Julia REPL, first load the packages
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) and
+[MPI.jl](https://github.com/JuliaParallel/MPI.jl) in any order and
+initialize MPI.
 
 ```julia
 julia> using P4est, MPI; MPI.Init()
