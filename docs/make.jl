@@ -9,11 +9,10 @@ open(joinpath(@__DIR__, "src", "authors.md"), "w") do io
   ```
   """)
   # Write the modified contents
-  println(io, "# [Authors](@id authors_separate_page)")
-  println(io, "")
   for line in eachline(joinpath(dirname(@__DIR__), "AUTHORS.md"))
     line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
-    println(io, "> ", line)
+    line = replace(line, "# Authors" => "# [Authors](@id authors_separate_page)")
+    println(io, line)
   end
 end
 
@@ -41,12 +40,10 @@ open(joinpath(@__DIR__, "src", "contributing.md"), "w") do io
   ```
   """)
   # Write the modified contents
-  println(io, "# Contributing")
-  println(io, "")
   for line in eachline(joinpath(dirname(@__DIR__), "CONTRIBUTING.md"))
     line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
     line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
-    println(io, "> ", line)
+    println(io, line)
   end
 end
 
@@ -58,12 +55,10 @@ open(joinpath(@__DIR__, "src", "index.md"), "w") do io
   ```
   """)
   # Write the modified contents
-  println(io, "# P4est.jl")
-  println(io, "")
   for line in eachline(joinpath(dirname(@__DIR__), "README.md"))
     line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
     line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
-    println(io, "> ", line)
+    println(io, line)
   end
 end
 
