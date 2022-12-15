@@ -235,6 +235,11 @@ julia> p4est_destroy(p4est)
 julia> p4est_connectivity_destroy(connectivity)
 ```
 
+To suppress the relatively verbose output of
+[`p4est`](https://github.com/cburstedde/p4est) in the example above, you can
+call `P4est.init(C_NULL, SC_LP_ERROR)` before calling other functions from
+[`p4est`](https://github.com/cburstedde/p4est).
+
 Many functions and types in [`p4est`](https://github.com/cburstedde/p4est) have
 been documented with comments by the [`p4est`](https://github.com/cburstedde/p4est)
 authors; you can access this documentation as you would for any Julia-native
@@ -264,6 +269,23 @@ search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_c
   –––––––––––
 
   size_t p4est_memory_used (p4est_t * p4est);
+```
+
+The same is of course true for the higher-level interface functions provided
+by [P4est.jl](https://github.com/trixi-framework/P4est.jl), e.g.,
+
+```
+help?> P4est.init
+  P4est.init(log_handler, log_threshold)
+
+  Calls p4est_init if it has not already been called, otherwise do nothing. Thus, P4est.init can safely be
+  called multiple times.
+
+  To use the default log handler and suppress most output created by default by p4est, call this function as
+
+  P4est.init(C_NULL, SC_LP_ERROR)
+
+  before calling other functions from p4est.
 ```
 
 For more information on how to use [`p4est`](https://github.com/cburstedde/p4est),

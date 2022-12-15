@@ -24,8 +24,15 @@ end
 @testset "basic tests" begin
   @test_nowarn MPI.Init()
 
-  @testset "uses_mpi" begin
+  @testset "P4est.uses_mpi" begin
     @test P4est.uses_mpi() == true
+  end
+
+  @testset "P4est.init" begin
+    @test_nowarn P4est.init(C_NULL, SC_LP_DEFAULT)
+    # calling p4est_init directly a second time would error
+    @test_nowarn P4est.init(C_NULL, SC_LP_ERROR)
+    @test_nowarn P4est.init(C_NULL, SC_LP_DEFAULT)
   end
 
   @testset "p4est_connectivity_new_periodic" begin

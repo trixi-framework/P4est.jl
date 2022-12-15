@@ -38,6 +38,29 @@ to check whether `p4est` has been initialized.
 """
 package_id() = unsafe_load(cglobal((:p4est_package_id, LibP4est.libp4est), Cint))
 
+"""
+    P4est.init(log_handler, log_threshold)
+
+Calls [`p4est_init`](@ref) if it has not already been called, otherwise do
+nothing. Thus, `P4est.init` can safely be called multiple times.
+
+To use the default log handler and suppress most output created by default by
+`p4est`, call this function as
+```julia
+P4est.init(C_NULL, SC_LP_ERROR)
+```
+before calling other functions from `p4est`.
+"""
+function init(log_handler, log_threshold)
+    if package_id() >= 0
+        return nothing
+    end
+
+    p4est_init(log_handler, log_threshold)
+
+    return nothing
+end
+
 
 function __init__()
     version = P4est.version()
