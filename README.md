@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) is a Julia package
-that wraps [p4est](https://github.com/cburstedde/p4est), a C library to manage
+that wraps [`p4est`](https://github.com/cburstedde/p4est), a C library to manage
 multiple connected adaptive quadtrees or octrees in parallel.
 
 
@@ -27,7 +27,7 @@ julia> import Pkg; Pkg.add("P4est")
 ```
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) depends on the binary
-distribution of the [p4est](https://github.com/cburstedde/p4est) library, which
+distribution of the [`p4est`](https://github.com/cburstedde/p4est) library, which
 is available in the Julia package P4est\_jll.jl and which is automatically
 installed as a dependency. The binaries provided by P4est\_jll.jl support MPI
 and are compiled against the default MPI binaries of MPI.jl. At the time of
@@ -38,31 +38,31 @@ the same MPI binaries.
 
 By default, [P4est.jl](https://github.com/trixi-framework/P4est.jl) provides
 pre-generated Julia bindings to all exported C functions of the underlying
-[p4est](https://github.com/cburstedde/p4est) library. If you want/need to
+[`p4est`](https://github.com/cburstedde/p4est) library. If you want/need to
 generate new bindings, please follow the instructions in the `dev` folder and
 copy the generated files to the appropriate places in `src`.
 
 
 ### Using a custom version of MPI and/or `p4est`
 
-The C library [p4est](https://github.com/cburstedde/p4est) needs to be
+The C library [`p4est`](https://github.com/cburstedde/p4est) needs to be
 compiled against the same MPI implementation used by
 [MPI.jl](https://github.com/JuliaParallel/MPI.jl). Thus, if you want to
 configure [MPI.jl](https://github.com/JuliaParallel/MPI.jl) to not use the
 default MPI binary provided by JLL wrappers, you also need to build the C
-library [p4est](https://github.com/cburstedde/p4est) locally using the same
+library [`p4est`](https://github.com/cburstedde/p4est) locally using the same
 MPI implementation. This is typically the situation on HPC clusters. If you
 are just using a single workstation, the default installation instructions
 should be sufficient.
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) allows using a
-[p4est](https://github.com/cburstedde/p4est) binary different from the default
+[`p4est`](https://github.com/cburstedde/p4est) binary different from the default
 one provided by P4est\_jll.jl.
 To enable this, you first need to obtain a local binary installation of
-[p4est](https://github.com/cburstedde/p4est). Next, you need to configure
+[`p4est`](https://github.com/cburstedde/p4est). Next, you need to configure
 [MPI.jl](https://github.com/JuliaParallel/MPI.jl) to use the same MPI
 implementation used to build your local installation of
-[p4est](https://github.com/cburstedde/p4est), see
+[`p4est`](https://github.com/cburstedde/p4est), see
 [the documentation of MPI.jl](https://juliaparallel.org/MPI.jl/stable/configuration/).
 At the time of writing, this can be done via
 
@@ -71,12 +71,12 @@ julia> using MPIPreferences; MPIPreferences.use_system_binary()
 ```
 
 if you use the default system MPI binary installation to build
-[p4est](https://github.com/cburstedde/p4est).
+[`p4est`](https://github.com/cburstedde/p4est).
 
 Next, you need to set up the
 [Preferences.jl](https://github.com/JuliaPackaging/Preferences.jl)
 setting containing the path to your local build of the shared library of
-[p4est](https://github.com/cburstedde/p4est).
+[`p4est`](https://github.com/cburstedde/p4est).
 
 ```julia
 julia> using Preferences, UUIDs
@@ -86,14 +86,14 @@ julia> set_preferences!(
            "libp4est" => "/path/to/your/libp4est.so", force = true)
 ```
 
-Currently, custom builds of [p4est](https://github.com/cburstedde/p4est)
+Currently, custom builds of [`p4est`](https://github.com/cburstedde/p4est)
 without MPI support are not supported.
 
 
 ## Usage
 
 The `P4est.uses_mpi()` function can be used to check if the
-[p4est](https://github.com/cburstedde/p4est) binaries that
+[`p4est`](https://github.com/cburstedde/p4est) binaries that
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) uses were compiled with
 MPI enabled. This returns `true` for the default binaries provided by the
 P4est_jll.jl package. In this case
@@ -105,7 +105,7 @@ In the Julia REPL, first load the packages P4est.jl and MPI.jl in any order and 
 julia> using P4est, MPI; MPI.Init()
 ```
 
-You can then access the full [p4est](https://github.com/cburstedde/p4est) API
+You can then access the full [`p4est`](https://github.com/cburstedde/p4est) API
 that is defined by the headers. For example, to create a periodic connectivity
 and check its validity, execute the following lines:
 
@@ -139,13 +139,13 @@ julia> connectivity_obj.num_trees
 ```
 
 As shown here, `unsafe_load` allows to convert pointers to
-[p4est](https://github.com/cburstedde/p4est) C `struct`s to the corresponding
+[`p4est`](https://github.com/cburstedde/p4est) C `struct`s to the corresponding
 Julia wrapper type generated by
 [Clang.jl](https://github.com/JuliaInterop/Clang.jl). They follow the basic
 [C interface of Julia](https://docs.julialang.org/en/v1/manual/calling-c-and-fortran-code/).
 
-Many functions and types in [p4est](https://github.com/cburstedde/p4est) have
-been documented with comments by the [p4est](https://github.com/cburstedde/p4est)
+Many functions and types in [`p4est`](https://github.com/cburstedde/p4est) have
+been documented with comments by the [`p4est`](https://github.com/cburstedde/p4est)
 authors; you can access this documentation as you would for any Julia-native
 entity through `?`:
 
@@ -175,7 +175,7 @@ search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_c
   size_t p4est_memory_used (p4est_t * p4est);
 ```
 
-For more information on how to use [p4est](https://github.com/cburstedde/p4est)
+For more information on how to use [`p4est`](https://github.com/cburstedde/p4est)
 via [P4est.jl](https://github.com/trixi-framework/P4est.jl), please refer to the
 [documentation for p4est itself](http://www.p4est.org/) or to the header files
 (`*.h`) in the [p4est repository](https://github.com/cburstedde/p4est/tree/master/src).
@@ -188,12 +188,12 @@ P4est.jl is mainly maintained by
 (RWTH Aachen University, Germany)
 and [Hendrik Ranocha](https://ranocha.de) (University of Hamburg, Germany).
 The full list of contributors can be found in [AUTHORS.md](AUTHORS.md).
-The [p4est](https://github.com/cburstedde/p4est) library itself is written by
+The [`p4est`](https://github.com/cburstedde/p4est) library itself is written by
 Carsten Burstedde, Lucas C. Wilcox, and Tobin Isaac.
 
 
 ## License and contributing
 
 P4est.jl is licensed under the MIT license (see [LICENSE.md](LICENSE.md)).
-[p4est](https://github.com/cburstedde/p4est) itself is licensed under the GNU
+[`p4est`](https://github.com/cburstedde/p4est) itself is licensed under the GNU
 General Public License, version 2.
