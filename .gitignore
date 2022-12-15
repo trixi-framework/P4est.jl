@@ -1,6 +1,9 @@
 *.mem
 **/Manifest.toml
 docs/build
+docs/src/authors.md
+docs/src/contributing.md
+docs/src/license.md
 public/
 coverage/
 coverage_report/

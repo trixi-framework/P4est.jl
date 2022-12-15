@@ -1,9 +1,21 @@
 
 # Copy files and modify them for the docs so that we do not maintain two
 # versions manually.
-authors_text = read(joinpath(dirname(@__DIR__), "AUTHORS.md"), String)
-authors_text = replace(authors_text, "in the [LICENSE.md](LICENSE.md) file" => "under [License](@ref)")
-write(joinpath(@__DIR__, "src", "authors.md"), authors_text)
+open(joinpath(@__DIR__, "src", "authors.md"), "w") do io
+  # Point to source license file
+  println(io, """
+  ```@meta
+  EditURL = "https://github.com/trixi-framework/P4est.jl/blob/main/AUTHORS.md"
+  ```
+  """)
+  # Write the modified contents
+  println(io, "# [Authors](@id authors_separate_page)")
+  println(io, "")
+  for line in eachline(joinpath(dirname(@__DIR__), "AUTHORS.md"))
+    line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
+    println(io, "> ", line)
+  end
+end
 
 open(joinpath(@__DIR__, "src", "license.md"), "w") do io
   # Point to source license file
@@ -16,7 +28,7 @@ open(joinpath(@__DIR__, "src", "license.md"), "w") do io
   println(io, "# License")
   println(io, "")
   for line in eachline(joinpath(dirname(@__DIR__), "LICENSE.md"))
-    line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
+    line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
     println(io, "> ", line)
   end
 end
@@ -33,6 +45,7 @@ open(joinpath(@__DIR__, "src", "contributing.md"), "w") do io
   println(io, "")
   for line in eachline(joinpath(dirname(@__DIR__), "CONTRIBUTING.md"))
     line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
+    line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
     println(io, "> ", line)
   end
 end
