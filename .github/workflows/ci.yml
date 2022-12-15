@@ -44,7 +44,6 @@ jobs:
           - x64
         JULIA_P4EST_TEST:
           - P4EST_JLL_MPI_DEFAULT
-          # - P4EST_CUSTOM_MPI_DEFAULT # TODO: Clang, enable this
           - P4EST_CUSTOM_MPI_CUSTOM
         exclude:
           # Some preferences are not loaded in package tests in older versions
@@ -83,21 +82,6 @@ jobs:
             echo "P4EST_TMP=$P4EST_TMP"
             echo "JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
             echo "$JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so"
-          # TODO: Clang; remove
-          # elif [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_USES_MPI" ]]; then
-          #   echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
-          #   echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
-          #   P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi
-          #   echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
-          #   echo "P4EST_TMP=$P4EST_TMP"
-          #   echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
-          #   echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so"
-          #   echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
-          #   echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
-          #   echo "JULIA_P4EST_USES_MPI=yes" >> $GITHUB_ENV
-          #   echo "JULIA_P4EST_USES_MPI=yes"
-          #   echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich" >> $GITHUB_ENV
-          #   echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich"
           else
             echo "ERROR: unknown test type ${{ matrix.JULIA_P4EST_TEST }}" >&2
             exit 1

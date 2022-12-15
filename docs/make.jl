@@ -104,7 +104,8 @@ makedocs(
     "License" => "license.md",
     "Index" => "index.md"
   ],
-  strict = true # to make the GitHub action fail when doctests fail
+  strict = true, # to make the GitHub action fail when doctests fail
+  checkdocs = :exports, # complain only about non-included docstrings for exported names
 )
 
 deploydocs(

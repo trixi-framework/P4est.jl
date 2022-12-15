@@ -1,5 +1,5 @@
 
-# TODO: Clang; update build step, docs, README.md, etc.
+# TODO: Clang; remove
 @warn "The build step needs to be updated."
 
 #=
