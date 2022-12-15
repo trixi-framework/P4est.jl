@@ -48,8 +48,8 @@ end
 
   @testset "unsafe_load" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
-    _connectivity = unsafe_load(connectivity)
-    @test _connectivity.num_vertices == 4
+    connectivity_obj = unsafe_load(connectivity)
+    @test connectivity_obj.num_vertices == 4
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
 
