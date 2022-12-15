@@ -47,6 +47,18 @@ end
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
 
+  @testset "smoke test" begin
+    connectivity = @test_nowarn p4est_connectivity_new_periodic()
+    p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 2, 0, 0, C_NULL, C_NULL)
+    p4est_obj = @test_nowarn unsafe_load(p4est)
+    @test connectivity == p4est_obj.connectivity
+
+    @test_nowarn MPI.Barrier(MPI.COMM_WORLD)
+    rank = @test_nowarn MPI.Comm_rank(MPI.COMM_WORLD)
+    println("rank $rank: local/global num quadrants = ",
+      p4est_obj.local_num_quadrants, "/", p4est_obj.global_num_quadrants)
+  end
+
   @testset "p4est_qcoord_to_vertex" begin
     iter_volume_c = @cfunction(iter_volume_for_p4est_qcoord_to_vertex, Cvoid, (Ptr{p4est_iter_volume_info_t}, Ptr{Cvoid}))
     connectivity = @test_nowarn p4est_connectivity_new_brick(2, 2, 0, 0)
