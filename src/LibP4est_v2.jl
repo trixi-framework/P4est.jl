@@ -1,6 +1,13 @@
 module LibP4est
 
-using P4est_jll: P4est_jll, libp4est
+using CEnum
+
+to_c_type(t::Type) = t
+to_c_type_pairs(va_list) = map(enumerate(to_c_type.(va_list))) do (ind, type)
+    :(va_list[$ind]::$type)
+end
+
+using P4est_jll: P4est_jll
 export P4est_jll
 
 using ..P4est: _PREFERENCE_LIBP4EST
@@ -12,132 +19,28 @@ else
 end
 
 
-using CEnum
-
-to_c_type(t::Type) = t
-to_c_type_pairs(va_list) = map(enumerate(to_c_type.(va_list))) do (ind, type)
-    :(va_list[$ind]::$type)
-end
-
-using MPI: MPI_Datatype, MPI_Comm, MPI_File
-
 # Define missing types
 const ptrdiff_t = Cptrdiff_t
 
-# Dummy definitions to avoid `UndefVarError`s
-const MPI_SUCCESS = C_NULL
-const MPI_ERR_OTHER = C_NULL
-const MPI_COMM_NULL = C_NULL
-const MPI_COMM_WORLD = C_NULL
-const MPI_COMM_SELF = C_NULL
-const MPI_COMM_TYPE_SHARED = C_NULL
-const MPI_GROUP_NULL = C_NULL
-const MPI_GROUP_EMPTY = C_NULL
-const MPI_IDENT = C_NULL
-const MPI_CONGRUENT = C_NULL
-const MPI_SIMILAR = C_NULL
-const MPI_UNEQUAL = C_NULL
-const MPI_ANY_SOURCE = C_NULL
-const MPI_ANY_TAG = C_NULL
-const MPI_STATUS_IGNORE = C_NULL
-const MPI_STATUSES_IGNORE = C_NULL
-const MPI_REQUEST_NULL = C_NULL
-const MPI_INFO_NULL = C_NULL
-const MPI_DATATYPE_NULL = C_NULL
-const MPI_CHAR = C_NULL
-const MPI_SIGNED_CHAR = C_NULL
-const MPI_UNSIGNED_CHAR = C_NULL
-const MPI_BYTE = C_NULL
-const MPI_SHORT = C_NULL
-const MPI_UNSIGNED_SHORT = C_NULL
-const MPI_INT = C_NULL
-const MPI_2INT = C_NULL
-const MPI_UNSIGNED = C_NULL
-const MPI_LONG = C_NULL
-const MPI_UNSIGNED_LONG = C_NULL
-const MPI_LONG_LONG_INT = C_NULL
-const MPI_UNSIGNED_LONG_LONG = C_NULL
-const MPI_FLOAT = C_NULL
-const MPI_DOUBLE = C_NULL
-const MPI_LONG_DOUBLE = C_NULL
-const MPI_OP_NULL = C_NULL
-const MPI_MAX = C_NULL
-const MPI_MIN = C_NULL
-const MPI_LAND = C_NULL
-const MPI_BAND = C_NULL
-const MPI_LOR = C_NULL
-const MPI_BOR = C_NULL
-const MPI_LXOR = C_NULL
-const MPI_BXOR = C_NULL
-const MPI_MINLOC = C_NULL
-const MPI_MAXLOC = C_NULL
-const MPI_REPLACE = C_NULL
-const MPI_SUM = C_NULL
-const MPI_PROD = C_NULL
-const MPI_UNDEFINED = C_NULL
-const MPI_KEYVAL_INVALID = C_NULL
-const MPI_Group = C_NULL
-const MPI_Op = C_NULL
-const MPI_Request = C_NULL
-const MPI_Status = C_NULL
-const MPI_Init = C_NULL
-const MPI_Finalize = C_NULL
-const MPI_Abort = C_NULL
-const MPI_Alloc_mem = C_NULL
-const MPI_Free_mem = C_NULL
-const MPI_Comm_set_attr = C_NULL
-const MPI_Comm_get_attr = C_NULL
-const MPI_Comm_delete_attr = C_NULL
-const MPI_Comm_create_keyval = C_NULL
-const MPI_Comm_dup = C_NULL
-const MPI_Comm_create = C_NULL
-const MPI_Comm_split = C_NULL
-const MPI_Comm_split_type = C_NULL
-const MPI_Comm_free = C_NULL
-const MPI_Comm_size = C_NULL
-const MPI_Comm_rank = C_NULL
-const MPI_Comm_compare = C_NULL
-const MPI_Comm_group = C_NULL
-const MPI_Group_free = C_NULL
-const MPI_Group_size = C_NULL
-const MPI_Group_rank = C_NULL
-const MPI_Group_translate_ranks = C_NULL
-const MPI_Group_compare = C_NULL
-const MPI_Group_union = C_NULL
-const MPI_Group_intersection = C_NULL
-const MPI_Group_difference = C_NULL
-const MPI_Group_incl = C_NULL
-const MPI_Group_excl = C_NULL
-const MPI_Group_range_incl = C_NULL
-const MPI_Group_range_excl = C_NULL
-const MPI_Barrier = C_NULL
-const MPI_Bcast = C_NULL
-const MPI_Gather = C_NULL
-const MPI_Gatherv = C_NULL
-const MPI_Allgather = C_NULL
-const MPI_Allgatherv = C_NULL
-const MPI_Alltoall = C_NULL
-const MPI_Reduce = C_NULL
-const MPI_Reduce_scatter_block = C_NULL
-const MPI_Allreduce = C_NULL
-const MPI_Scan = C_NULL
-const MPI_Exscan = C_NULL
-const MPI_Recv = C_NULL
-const MPI_Irecv = C_NULL
-const MPI_Send = C_NULL
-const MPI_Isend = C_NULL
-const MPI_Probe = C_NULL
-const MPI_Iprobe = C_NULL
-const MPI_Get_count = C_NULL
-const MPI_Wtime = C_NULL
-const MPI_Wait = C_NULL
-const MPI_Waitsome = C_NULL
-const MPI_Waitall = C_NULL
-const MPI_THREAD_SINGLE = C_NULL
-const MPI_THREAD_FUNNELED = C_NULL
-const MPI_THREAD_SERIALIZED = C_NULL
-const MPI_THREAD_MULTIPLE = C_NULL
-const MPI_Init_thread = C_NULL
+# Definitions used from MPI.jl
+using MPI: MPI, MPI_Datatype, MPI_Comm, MPI_Group, MPI_File
+
+const MPI_COMM_WORLD = MPI.COMM_WORLD
+const MPI_COMM_SELF = MPI.COMM_SELF
+const MPI_CHAR = MPI.CHAR
+const MPI_SIGNED_CHAR = MPI.SIGNED_CHAR
+const MPI_UNSIGNED_CHAR = MPI.UNSIGNED_CHAR
+const MPI_BYTE = MPI.BYTE
+const MPI_SHORT = MPI.SHORT
+const MPI_UNSIGNED_SHORT = MPI.UNSIGNED_SHORT
+const MPI_INT = MPI.INT
+const MPI_UNSIGNED = MPI.UNSIGNED
+const MPI_LONG = MPI.LONG
+const MPI_UNSIGNED_LONG = MPI.UNSIGNED_LONG
+const MPI_LONG_LONG_INT = MPI.LONG_LONG_INT
+const MPI_UNSIGNED_LONG_LONG = MPI.UNSIGNED_LONG_LONG
+const MPI_FLOAT = MPI.FLOAT
+const MPI_DOUBLE = MPI.DOUBLE
 
 # Other definitions
 const INT32_MIN = typemin(Cint)
@@ -12987,43 +12890,9 @@ const SC_VERSION_POINT = 3
 
 # Skipping MacroDefinition: _sc_const const
 
-const sc_MPI_SUCCESS = MPI_SUCCESS
-
-const sc_MPI_ERR_OTHER = MPI_ERR_OTHER
-
-const sc_MPI_COMM_NULL = MPI_COMM_NULL
-
 const sc_MPI_COMM_WORLD = MPI_COMM_WORLD
 
 const sc_MPI_COMM_SELF = MPI_COMM_SELF
-
-const sc_MPI_COMM_TYPE_SHARED = MPI_COMM_TYPE_SHARED
-
-const sc_MPI_GROUP_NULL = MPI_GROUP_NULL
-
-const sc_MPI_GROUP_EMPTY = MPI_GROUP_EMPTY
-
-const sc_MPI_IDENT = MPI_IDENT
-
-const sc_MPI_CONGRUENT = MPI_CONGRUENT
-
-const sc_MPI_SIMILAR = MPI_SIMILAR
-
-const sc_MPI_UNEQUAL = MPI_UNEQUAL
-
-const sc_MPI_ANY_SOURCE = MPI_ANY_SOURCE
-
-const sc_MPI_ANY_TAG = MPI_ANY_TAG
-
-const sc_MPI_STATUS_IGNORE = MPI_STATUS_IGNORE
-
-const sc_MPI_STATUSES_IGNORE = MPI_STATUSES_IGNORE
-
-const sc_MPI_REQUEST_NULL = MPI_REQUEST_NULL
-
-const sc_MPI_INFO_NULL = MPI_INFO_NULL
-
-const sc_MPI_DATATYPE_NULL = MPI_DATATYPE_NULL
 
 const sc_MPI_CHAR = MPI_CHAR
 
@@ -13039,8 +12908,6 @@ const sc_MPI_UNSIGNED_SHORT = MPI_UNSIGNED_SHORT
 
 const sc_MPI_INT = MPI_INT
 
-const sc_MPI_2INT = MPI_2INT
-
 const sc_MPI_UNSIGNED = MPI_UNSIGNED
 
 const sc_MPI_LONG = MPI_LONG
@@ -13055,167 +12922,11 @@ const sc_MPI_FLOAT = MPI_FLOAT
 
 const sc_MPI_DOUBLE = MPI_DOUBLE
 
-const sc_MPI_LONG_DOUBLE = MPI_LONG_DOUBLE
-
-const sc_MPI_OP_NULL = MPI_OP_NULL
-
-const sc_MPI_MAX = MPI_MAX
-
-const sc_MPI_MIN = MPI_MIN
-
-const sc_MPI_LAND = MPI_LAND
-
-const sc_MPI_BAND = MPI_BAND
-
-const sc_MPI_LOR = MPI_LOR
-
-const sc_MPI_BOR = MPI_BOR
-
-const sc_MPI_LXOR = MPI_LXOR
-
-const sc_MPI_BXOR = MPI_BXOR
-
-const sc_MPI_MINLOC = MPI_MINLOC
-
-const sc_MPI_MAXLOC = MPI_MAXLOC
-
-const sc_MPI_REPLACE = MPI_REPLACE
-
-const sc_MPI_SUM = MPI_SUM
-
-const sc_MPI_PROD = MPI_PROD
-
-const sc_MPI_UNDEFINED = MPI_UNDEFINED
-
-const sc_MPI_KEYVAL_INVALID = MPI_KEYVAL_INVALID
-
 const sc_MPI_Comm = MPI_Comm
 
 const sc_MPI_Group = MPI_Group
 
 const sc_MPI_Datatype = MPI_Datatype
-
-const sc_MPI_Op = MPI_Op
-
-const sc_MPI_Request = MPI_Request
-
-const sc_MPI_Status = MPI_Status
-
-const sc_MPI_Init = MPI_Init
-
-const sc_MPI_Finalize = MPI_Finalize
-
-const sc_MPI_Abort = MPI_Abort
-
-const sc_MPI_Alloc_mem = MPI_Alloc_mem
-
-const sc_MPI_Free_mem = MPI_Free_mem
-
-const sc_MPI_Comm_set_attr = MPI_Comm_set_attr
-
-const sc_MPI_Comm_get_attr = MPI_Comm_get_attr
-
-const sc_MPI_Comm_delete_attr = MPI_Comm_delete_attr
-
-const sc_MPI_Comm_create_keyval = MPI_Comm_create_keyval
-
-const sc_MPI_Comm_dup = MPI_Comm_dup
-
-const sc_MPI_Comm_create = MPI_Comm_create
-
-const sc_MPI_Comm_split = MPI_Comm_split
-
-const sc_MPI_Comm_split_type = MPI_Comm_split_type
-
-const sc_MPI_Comm_free = MPI_Comm_free
-
-const sc_MPI_Comm_size = MPI_Comm_size
-
-const sc_MPI_Comm_rank = MPI_Comm_rank
-
-const sc_MPI_Comm_compare = MPI_Comm_compare
-
-const sc_MPI_Comm_group = MPI_Comm_group
-
-const sc_MPI_Group_free = MPI_Group_free
-
-const sc_MPI_Group_size = MPI_Group_size
-
-const sc_MPI_Group_rank = MPI_Group_rank
-
-const sc_MPI_Group_translate_ranks = MPI_Group_translate_ranks
-
-const sc_MPI_Group_compare = MPI_Group_compare
-
-const sc_MPI_Group_union = MPI_Group_union
-
-const sc_MPI_Group_intersection = MPI_Group_intersection
-
-const sc_MPI_Group_difference = MPI_Group_difference
-
-const sc_MPI_Group_incl = MPI_Group_incl
-
-const sc_MPI_Group_excl = MPI_Group_excl
-
-const sc_MPI_Group_range_incl = MPI_Group_range_incl
-
-const sc_MPI_Group_range_excl = MPI_Group_range_excl
-
-const sc_MPI_Barrier = MPI_Barrier
-
-const sc_MPI_Bcast = MPI_Bcast
-
-const sc_MPI_Gather = MPI_Gather
-
-const sc_MPI_Gatherv = MPI_Gatherv
-
-const sc_MPI_Allgather = MPI_Allgather
-
-const sc_MPI_Allgatherv = MPI_Allgatherv
-
-const sc_MPI_Alltoall = MPI_Alltoall
-
-const sc_MPI_Reduce = MPI_Reduce
-
-const sc_MPI_Reduce_scatter_block = MPI_Reduce_scatter_block
-
-const sc_MPI_Allreduce = MPI_Allreduce
-
-const sc_MPI_Scan = MPI_Scan
-
-const sc_MPI_Exscan = MPI_Exscan
-
-const sc_MPI_Recv = MPI_Recv
-
-const sc_MPI_Irecv = MPI_Irecv
-
-const sc_MPI_Send = MPI_Send
-
-const sc_MPI_Isend = MPI_Isend
-
-const sc_MPI_Probe = MPI_Probe
-
-const sc_MPI_Iprobe = MPI_Iprobe
-
-const sc_MPI_Get_count = MPI_Get_count
-
-const sc_MPI_Wtime = MPI_Wtime
-
-const sc_MPI_Wait = MPI_Wait
-
-const sc_MPI_Waitsome = MPI_Waitsome
-
-const sc_MPI_Waitall = MPI_Waitall
-
-const sc_MPI_THREAD_SINGLE = MPI_THREAD_SINGLE
-
-const sc_MPI_THREAD_FUNNELED = MPI_THREAD_FUNNELED
-
-const sc_MPI_THREAD_SERIALIZED = MPI_THREAD_SERIALIZED
-
-const sc_MPI_THREAD_MULTIPLE = MPI_THREAD_MULTIPLE
-
-const sc_MPI_Init_thread = MPI_Init_thread
 
 const SC_EPS = 2.220446049250313e-16
 
