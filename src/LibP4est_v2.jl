@@ -1,6 +1,6 @@
 module LibP4est
 
-using P4est_jll: P4est_jll
+using P4est_jll
 export P4est_jll
 
 using ..P4est: _PREFERENCE_LIBP4EST
