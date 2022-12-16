@@ -1,9 +1,13 @@
 *.mem
 **/Manifest.toml
+dev/p4est_include
 docs/build
+docs/src/authors.md
+docs/src/contributing.md
+docs/src/index.md
+docs/src/license.md
 public/
 coverage/
 coverage_report/
 **/*.jl.*.cov
-deps/libp4est.jl
-deps/*.log
+
