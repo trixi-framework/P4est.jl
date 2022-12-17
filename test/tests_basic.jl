@@ -20,6 +20,16 @@ function iter_volume_for_p4est_qcoord_to_vertex(info::Ptr{p4est_iter_volume_info
   return nothing
 end
 
+# This function belongs to the testset "p4est_refine" below
+function refine_fn(p4est_, which_tree, quadrant)
+  quadrant_obj = unsafe_load(quadrant)
+  if quadrant_obj.level < 2
+    return Cint(1)
+  else
+    return Cint(0)
+  end
+end
+
 
 @testset "basic tests" begin
   @test_nowarn MPI.Init()
@@ -73,6 +83,27 @@ end
     p4est_iterate(p4est, C_NULL, C_NULL, iter_volume_c, C_NULL, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  @testset "p8est_connectivity_new_unitcube" begin
+    connectivity = @test_nowarn p8est_connectivity_new_unitcube()
+    @test_nowarn p8est_connectivity_destroy(connectivity)
+  end
+
+  @testset "p4est_refine" begin
+    connectivity = @test_nowarn p4est_connectivity_new_periodic()
+    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+
+    refine_fn_c = @cfunction(refine_fn, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
+    @test_nowarn p4est_refine(p4est, true, refine_fn_c, C_NULL)
+    @test_nowarn p4est_destroy(p4est)
+    @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  @testset "local_num_quadrants" begin
+    connectivity = @test_nowarn p4est_connectivity_new_periodic()
+    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+    @test_nowarn Int(unsafe_load(p4est).local_num_quadrants)
   end
 end
 
