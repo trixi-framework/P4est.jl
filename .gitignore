@@ -10,4 +10,5 @@ public/
 coverage/
 coverage_report/
 **/*.jl.*.cov
+LocalPreferences.toml
 
