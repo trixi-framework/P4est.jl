@@ -20,10 +20,19 @@ function iter_volume_for_p4est_qcoord_to_vertex(info::Ptr{p4est_iter_volume_info
   return nothing
 end
 
-# This function belongs to the testset "p4est_refine" below
+# These functions belong to the testset "p4est_refine_coarsen" below
 function refine_fn(p4est, which_tree, quadrant)
   quadrant_obj = unsafe_load(quadrant)
   if quadrant_obj.level < 2
+    return Cint(1)
+  else
+    return Cint(0)
+  end
+end
+
+function coarsen_fn(p4est, which_tree, quadrant)
+  quadrant_obj = unsafe_load(quadrant)
+  if quadrant_obj.level > 0
     return Cint(1)
   else
     return Cint(0)
@@ -99,12 +108,14 @@ end
     @test_nowarn p8est_connectivity_destroy(connectivity)
   end
 
-  @testset "p4est_refine" begin
+  @testset "p4est_refine_coarsen" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
     p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
 
     refine_fn_c = @cfunction(refine_fn, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
     @test_nowarn p4est_refine(p4est, true, refine_fn_c, C_NULL)
+    coarsen_fn_c = @cfunction(coarsen_fn, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
+    @test_nowarn p4est_coarsen(p4est, true, coarsen_fn_c, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
@@ -137,6 +148,36 @@ end
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_destroy(p4estF)
     @test_nowarn p4est_destroy(p4estC)
+    @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  @testset "p4est_save_load" begin
+    connectivity = @test_nowarn p4est_connectivity_new_periodic()
+    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+    filename = "temp"
+    p4est_save(filename, p4est, false)
+    conn_vec = Vector{Ptr{p4est_connectivity_t}}(undef, 1)
+    @test_nowarn p4est_load(filename, MPI.COMM_WORLD, 0, 0, C_NULL, pointer(conn_vec))
+    rm(filename, force=true)
+    @test_nowarn p4est_destroy(p4est)
+    @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  @testset "p4est_ghost" begin
+    connectivity = @test_nowarn p4est_connectivity_new_periodic()
+    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+    ghost_layer = @test_nowarn p4est_ghost_new(p4est, P4EST_CONNECT_FACE)
+    @test p4est_ghost_is_valid(p4est, ghost_layer) == 1
+    @test_nowarn p4est_ghost_destroy(ghost_layer)
+    @test_nowarn p4est_destroy(p4est)
+    @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  @testset "p4est_partition" begin
+    connectivity = @test_nowarn p4est_connectivity_new_star()
+    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+    @test_nowarn p4est_partition(p4est, 0, C_NULL)
+    @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
 end
