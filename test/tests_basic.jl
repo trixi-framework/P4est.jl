@@ -108,7 +108,7 @@ end
     @test_nowarn p8est_connectivity_destroy(connectivity)
   end
 
-  @testset "p4est_refine_coarsen" begin
+  @testset "p4est_refine and p4est_coarsen" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
     p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
 
@@ -130,7 +130,8 @@ end
   @testset "p4est_balance" begin
     connectivity = @test_nowarn p4est_connectivity_new_star()
     p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, 0, 0, C_NULL, C_NULL)
-  refine_fn_balance_c = @cfunction(refine_fn_balance, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
+    refine_fn_balance_c = @cfunction(refine_fn_balance, Cint, 
+                                     (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
     @test_nowarn p4est_refine(p4est, 1, refine_fn_balance_c, C_NULL)
     # face balance
     p4estF = @test_nowarn p4est_copy(p4est, 0)
@@ -151,10 +152,10 @@ end
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
 
-  @testset "p4est_save_load" begin
+  @testset "p4est_save and p4est_load" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
     p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
-    filename = "temp"
+    filename = joinpath(@__DIR__, "temp")
     p4est_save(filename, p4est, false)
     conn_vec = Vector{Ptr{p4est_connectivity_t}}(undef, 1)
     @test_nowarn p4est_load(filename, MPI.COMM_WORLD, 0, 0, C_NULL, pointer(conn_vec))
