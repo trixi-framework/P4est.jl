@@ -114,8 +114,10 @@ end
 
     refine_fn_c = @cfunction(refine_fn, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
     @test_nowarn p4est_refine(p4est, true, refine_fn_c, C_NULL)
+    @test unsafe_load(p4est).global_num_quadrants == 16
     coarsen_fn_c = @cfunction(coarsen_fn, Cint, (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
     @test_nowarn p4est_coarsen(p4est, true, coarsen_fn_c, C_NULL)
+    @info unsafe_load(p4est).global_num_quadrants
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
@@ -137,6 +139,7 @@ end
     p4estF = @test_nowarn p4est_copy(p4est, 0)
     @test_nowarn p4est_balance(p4estF, P4EST_CONNECT_FACE, C_NULL)
     crcF = @test_nowarn p4est_checksum(p4estF)
+    @test unsafe_load(p4estF).global_num_quadrants == 6
     println("Face balance with ", unsafe_load(p4estF).global_num_quadrants, " quadrants and crc ", crcF)
     # corner balance
     p4estC = @test_nowarn p4est_copy(p4est, 1)
@@ -144,6 +147,7 @@ end
     @test_nowarn p4est_balance(p4estC, P4EST_CONNECT_CORNER, C_NULL)
     crcC = @test_nowarn p4est_checksum(p4estC)
     @test crcC == p4est_checksum(p4estF)
+    @test unsafe_load(p4estC).global_num_quadrants == 6
     println("Corner balance with ", unsafe_load(p4estC).global_num_quadrants, " quadrants and crc ", crcC)
 
     @test_nowarn p4est_destroy(p4est)
