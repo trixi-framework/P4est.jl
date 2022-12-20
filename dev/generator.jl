@@ -3,7 +3,6 @@ Pkg.activate(@__DIR__)
 Pkg.instantiate()
 
 using Artifacts
-tarball = artifact"P4est"
 cp(joinpath(artifact"P4est", "include"), "p4est_include"; force = true)
 
 using Clang.Generators
