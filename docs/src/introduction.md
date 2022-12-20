@@ -41,7 +41,7 @@ p4est_connectivity_t *p4est_connectivity_new_periodic (void);
 functions accordingly and works with pointers. We also follow the naming
 scheme of [`p4est`](https://github.com/cburstedde/p4est). For example,
 we use `connectivity::Ptr{p4est_connectivity}`. However, it is sometimes
-useful/required to also load the wrappers of the C `struct`s froom their
+useful/required to also load the wrappers of the C `struct`s from their
 pointers. In this case, we use the naming convention to append `_obj`, e.g.,
 `connectivity_obj = unsafe_load(connectivity)`. A full example is
 
