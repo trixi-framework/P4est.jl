@@ -19,7 +19,9 @@ include("LibP4est_v2.jl")
 """
     P4est.uses_mpi()
 
-Returns true if the `p4est` library was compiled with MPI enabled.
+Is intended to return `true`` if the `p4est` library was compiled with MPI
+enabled. Since P4est.jl currently only supports `p4est` with MPI enabled,
+this may always return `true`.
 """
 uses_mpi() = isdefined(@__MODULE__, :P4EST_ENABLE_MPI)
 
