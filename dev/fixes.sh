@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script should be executed after generating a new `LibP4est.jl` bindings file using Clang.jl
+# via `generator.jl`. It corrects a number of issues that are not (easily) fixable through Clang.jl alone.
+
 set -euxo pipefail
 
 # Remove Fortran macros
