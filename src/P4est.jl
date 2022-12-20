@@ -28,7 +28,7 @@ uses_mpi() = isdefined(@__MODULE__, :P4EST_ENABLE_MPI)
 """
     P4est.version()
 
-Returns the version of the unterlying `p4est` library.
+Returns the version of the underlying `p4est` library (*not* of P4est.jl).
 """
 version() = VersionNumber(p4est_version_major(), p4est_version_minor())
 
