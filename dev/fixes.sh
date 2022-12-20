@@ -11,6 +11,9 @@ sed -i "/P4EST_GLOBAL_NOTICE/d" LibP4est.jl
 
 # Fix MPI types that have been wrongly converted to Julia types
 sed -i "s/mpicomm::Cint/mpicomm::MPI_Comm/g" LibP4est.jl
+sed -i "s/\bcomm::Cint/comm::MPI_Comm/g" LibP4est.jl
+sed -i "s/\bintranode::Ptr{Cint}/intranode::Ptr{MPI_Comm}/g" LibP4est.jl
+sed -i "s/\binternode::Ptr{Cint}/internode::Ptr{MPI_Comm}/g" LibP4est.jl
 sed -i "s/mpifile::Cint/mpifile::MPI_File/g" LibP4est.jl
 sed -i "s/mpidatatype::Cint/mpidatatype::MPI_Datatype/g" LibP4est.jl
 sed -i "s/\bt::Cint/t::MPI_Datatype/g" LibP4est.jl

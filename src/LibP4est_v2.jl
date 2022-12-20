@@ -341,7 +341,7 @@ void sc_mpi_comm_attach_node_comms (sc_MPI_Comm comm, int processes_per_node);
 ```
 """
 function sc_mpi_comm_attach_node_comms(comm, processes_per_node)
-    @ccall libp4est.sc_mpi_comm_attach_node_comms(comm::Cint, processes_per_node::Cint)::Cvoid
+    @ccall libp4est.sc_mpi_comm_attach_node_comms(comm::MPI_Comm, processes_per_node::Cint)::Cvoid
 end
 
 """
@@ -353,7 +353,7 @@ void sc_mpi_comm_detach_node_comms (sc_MPI_Comm comm);
 ```
 """
 function sc_mpi_comm_detach_node_comms(comm)
-    @ccall libp4est.sc_mpi_comm_detach_node_comms(comm::Cint)::Cvoid
+    @ccall libp4est.sc_mpi_comm_detach_node_comms(comm::MPI_Comm)::Cvoid
 end
 
 """
@@ -365,7 +365,7 @@ void sc_mpi_comm_get_node_comms (sc_MPI_Comm comm, sc_MPI_Comm * intranode, sc_M
 ```
 """
 function sc_mpi_comm_get_node_comms(comm, intranode, internode)
-    @ccall libp4est.sc_mpi_comm_get_node_comms(comm::Cint, intranode::Ptr{Cint}, internode::Ptr{Cint})::Cvoid
+    @ccall libp4est.sc_mpi_comm_get_node_comms(comm::MPI_Comm, intranode::Ptr{MPI_Comm}, internode::Ptr{MPI_Comm})::Cvoid
 end
 
 """
@@ -377,7 +377,7 @@ int sc_mpi_comm_get_and_attach (sc_MPI_Comm comm);
 ```
 """
 function sc_mpi_comm_get_and_attach(comm)
-    @ccall libp4est.sc_mpi_comm_get_and_attach(comm::Cint)::Cint
+    @ccall libp4est.sc_mpi_comm_get_and_attach(comm::MPI_Comm)::Cint
 end
 
 # typedef void ( * sc_handler_t ) ( void * data )
@@ -3515,7 +3515,7 @@ p4est_connectivity_t *p4est_connectivity_bcast (p4est_connectivity_t * conn_in, 
 ```
 """
 function p4est_connectivity_bcast(conn_in, root, comm)
-    @ccall libp4est.p4est_connectivity_bcast(conn_in::Ptr{p4est_connectivity_t}, root::Cint, comm::Cint)::Ptr{p4est_connectivity_t}
+    @ccall libp4est.p4est_connectivity_bcast(conn_in::Ptr{p4est_connectivity_t}, root::Cint, comm::MPI_Comm)::Ptr{p4est_connectivity_t}
 end
 
 """
@@ -7526,7 +7526,7 @@ p8est_connectivity_t *p8est_connectivity_bcast (p8est_connectivity_t * conn_in, 
 ```
 """
 function p8est_connectivity_bcast(conn_in, root, comm)
-    @ccall libp4est.p8est_connectivity_bcast(conn_in::Ptr{p8est_connectivity_t}, root::Cint, comm::Cint)::Ptr{p8est_connectivity_t}
+    @ccall libp4est.p8est_connectivity_bcast(conn_in::Ptr{p8est_connectivity_t}, root::Cint, comm::MPI_Comm)::Ptr{p8est_connectivity_t}
 end
 
 """
