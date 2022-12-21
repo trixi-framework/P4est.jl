@@ -13063,8 +13063,6 @@ const P4EST_QCOORD_MAX = INT32_MAX
 
 const P4EST_QCOORD_1 = p4est_qcoord_t(1)
 
-P4EST_QCOORD_ABS(x) = (p4est_qcoord_t(labs))(Clong(x))
-
 const p4est_topidx_compare = sc_int32_compare
 
 const P4EST_TOPIDX_BITS = 32
@@ -13082,8 +13080,6 @@ const P4EST_TOPIDX_FITS_32 = 1
 
 const P4EST_TOPIDX_1 = p4est_topidx_t(1)
 
-P4EST_TOPIDX_ABS(x) = (p4est_topidx_t(labs))(Clong(x))
-
 const p4est_locidx_compare = sc_int32_compare
 
 const P4EST_LOCIDX_BITS = 32
@@ -13099,8 +13095,6 @@ const P4EST_LOCIDX_MAX = INT32_MAX
 
 const P4EST_LOCIDX_1 = p4est_locidx_t(1)
 
-P4EST_LOCIDX_ABS(x) = (p4est_locidx_t(labs))(Clong(x))
-
 const p4est_gloidx_compare = sc_int64_compare
 
 const P4EST_GLOIDX_BITS = 64
@@ -13115,8 +13109,6 @@ const P4EST_GLOIDX_MIN = INT64_MIN
 const P4EST_GLOIDX_MAX = INT64_MAX
 
 const P4EST_GLOIDX_1 = p4est_gloidx_t(1)
-
-P4EST_GLOIDX_ABS(x) = (p4est_gloidx_t(llabs))(Clonglong(x))
 
 
 
