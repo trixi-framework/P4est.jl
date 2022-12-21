@@ -16,7 +16,7 @@ multiple connected adaptive quadtrees or octrees in parallel.
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/).
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) works with Julia v1.6
-and up.
+and later.
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) is a registered Julia
 package. Hence, you can install it by executing the following commands in the
