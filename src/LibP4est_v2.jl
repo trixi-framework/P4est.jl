@@ -237,7 +237,7 @@ function Base.getproperty(x::Ptr{p4est_quadrant_data}, f::Symbol)
     f === :user_long && return Ptr{Clong}(x + 0)
     f === :user_int && return Ptr{Cint}(x + 0)
     f === :which_tree && return Ptr{p4est_topidx_t}(x + 0)
-    f === :piggy1 && return Ptr{__JL_Ctag_314}(x + 0)
+    f === :piggy1 && return Ptr{__JL_Ctag_320}(x + 0)
     f === :piggy2 && return Ptr{__JL_Ctag_315}(x + 0)
     f === :piggy3 && return Ptr{__JL_Ctag_316}(x + 0)
     return getfield(x, f)
@@ -7080,9 +7080,9 @@ function Base.getproperty(x::Ptr{p6est_quadrant_data}, f::Symbol)
     f === :user_long && return Ptr{Clong}(x + 0)
     f === :user_int && return Ptr{Cint}(x + 0)
     f === :which_tree && return Ptr{p4est_topidx_t}(x + 0)
-    f === :piggy1 && return Ptr{__JL_Ctag_317}(x + 0)
-    f === :piggy2 && return Ptr{__JL_Ctag_318}(x + 0)
-    f === :piggy3 && return Ptr{__JL_Ctag_319}(x + 0)
+    f === :piggy1 && return Ptr{__JL_Ctag_320}(x + 0)
+    f === :piggy2 && return Ptr{__JL_Ctag_315}(x + 0)
+    f === :piggy3 && return Ptr{__JL_Ctag_316}(x + 0)
     return getfield(x, f)
 end
 
@@ -9076,8 +9076,8 @@ function Base.getproperty(x::Ptr{p8est_quadrant_data}, f::Symbol)
     f === :user_int && return Ptr{Cint}(x + 0)
     f === :which_tree && return Ptr{p4est_topidx_t}(x + 0)
     f === :piggy1 && return Ptr{__JL_Ctag_320}(x + 0)
-    f === :piggy2 && return Ptr{__JL_Ctag_321}(x + 0)
-    f === :piggy3 && return Ptr{__JL_Ctag_322}(x + 0)
+    f === :piggy2 && return Ptr{__JL_Ctag_315}(x + 0)
+    f === :piggy3 && return Ptr{__JL_Ctag_316}(x + 0)
     return getfield(x, f)
 end
 
@@ -13063,6 +13063,8 @@ const P4EST_QCOORD_MAX = INT32_MAX
 
 const P4EST_QCOORD_1 = p4est_qcoord_t(1)
 
+P4EST_QCOORD_ABS(x) = (p4est_qcoord_t(labs))(Clong(x))
+
 const p4est_topidx_compare = sc_int32_compare
 
 const P4EST_TOPIDX_BITS = 32
@@ -13080,6 +13082,8 @@ const P4EST_TOPIDX_FITS_32 = 1
 
 const P4EST_TOPIDX_1 = p4est_topidx_t(1)
 
+P4EST_TOPIDX_ABS(x) = (p4est_topidx_t(labs))(Clong(x))
+
 const p4est_locidx_compare = sc_int32_compare
 
 const P4EST_LOCIDX_BITS = 32
@@ -13095,6 +13099,8 @@ const P4EST_LOCIDX_MAX = INT32_MAX
 
 const P4EST_LOCIDX_1 = p4est_locidx_t(1)
 
+P4EST_LOCIDX_ABS(x) = (p4est_locidx_t(labs))(Clong(x))
+
 const p4est_gloidx_compare = sc_int64_compare
 
 const P4EST_GLOIDX_BITS = 64
@@ -13109,6 +13115,8 @@ const P4EST_GLOIDX_MIN = INT64_MIN
 const P4EST_GLOIDX_MAX = INT64_MAX
 
 const P4EST_GLOIDX_1 = p4est_gloidx_t(1)
+
+P4EST_GLOIDX_ABS(x) = (p4est_gloidx_t(llabs))(Clonglong(x))
 
 
 
@@ -13140,6 +13148,12 @@ const P4EST_QMAXLEVEL = 29
 
 const P4EST_ROOT_LEN = p4est_qcoord_t(1) << P4EST_MAXLEVEL
 
+P4EST_QUADRANT_LEN(l) = p4est_qcoord_t(1) << (P4EST_MAXLEVEL - l)
+
+P4EST_QUADRANT_MASK(l) = ~(P4EST_QUADRANT_LEN(l) - 1)
+
+P4EST_LAST_OFFSET(l) = P4EST_ROOT_LEN - P4EST_QUADRANT_LEN(l)
+
 const P8EST_DIM = 3
 
 const P8EST_FACES = 2P8EST_DIM
@@ -13167,6 +13181,12 @@ const P8EST_OLD_QMAXLEVEL = 18
 const P8EST_QMAXLEVEL = 29
 
 const P8EST_ROOT_LEN = p4est_qcoord_t(1) << P8EST_MAXLEVEL
+
+P8EST_QUADRANT_LEN(l) = p4est_qcoord_t(1) << (P8EST_MAXLEVEL - l)
+
+P8EST_QUADRANT_MASK(l) = ~(P8EST_QUADRANT_LEN(l) - 1)
+
+P8EST_LAST_OFFSET(l) = P8EST_ROOT_LEN - P8EST_QUADRANT_LEN(l)
 
 
 
