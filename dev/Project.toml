@@ -7,6 +7,6 @@ P4est_jll = "6b5a15aa-cf52-5330-8376-5e5d90283449"
 
 [compat]
 CEnum = "0.4"
-Clang = "0.15, 0.16.0 - 0.16.5" # see https://github.com/JuliaInterop/Clang.jl/issues/405
+Clang = "0.15, 0.16.0 - 0.16.5, 0.17" # see https://github.com/JuliaInterop/Clang.jl/issues/405
 MPI = "0.20"
 P4est_jll = "2.8"

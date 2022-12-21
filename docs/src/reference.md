@@ -1,7 +1,5 @@
-# P4est.jl API
+# API Reference
 
-Here is an overview of the API of
-[P4est.jl](https://github.com/trixi-framework/P4est.jl).
 
 ```@meta
 CurrentModule = P4est
