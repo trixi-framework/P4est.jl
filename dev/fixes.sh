@@ -2,6 +2,8 @@
 
 # This script should be executed after generating a new `LibP4est.jl` bindings file using Clang.jl
 # via `generator.jl`. It corrects a number of issues that are not (easily) fixable through Clang.jl alone.
+# Note for macOS users: This script needs to be run on a Linux machine, since `sed` cannot be
+#                       used in a portable manner with `-i` on Linux and macOS systems. Sorry!
 
 set -euxo pipefail
 
