@@ -297,6 +297,12 @@ macro_mode = "basic"
 
 # function-like macros in the following list will always be translated.
 functionlike_macro_includelist = [
+    "P4EST_QUADRANT_LEN",
+    "P4EST_QUADRANT_MASK",
+    "P4EST_LAST_OFFSET",
+    "P8EST_QUADRANT_LEN",
+    "P8EST_QUADRANT_MASK",
+    "P8EST_LAST_OFFSET"
     # "CINDEX_VERSION_ENCODE",
 ]
 
