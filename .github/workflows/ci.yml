@@ -62,6 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Set p4est release to run tests against
+        # We use an older release of `p4est` on purpose than the version
+        # provided by P4est_jll.jl to check whether everything still works
+        # in another version of `p4est` than the version used to generate the
+        # bindings.
         run: |
           P4EST_RELEASE=2.3.1
           echo "P4EST_RELEASE=$P4EST_RELEASE" >> $GITHUB_ENV
