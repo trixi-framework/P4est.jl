@@ -40,9 +40,7 @@ which is available in the Julia package P4est\_jll.jl and which is automatically
 installed as a dependency. The binaries provided by P4est\_jll.jl support MPI
 and are compiled against the default MPI binaries of MPI.jl. At the time of
 writing, these are the binaries provided by MicrosoftMPI\_jll.jl on Windows and
-MPICH\_jll.jl on all other platforms. Note that the Julia MPI wrapper
-[MPI.jl](https://github.com/JuliaParallel/MPI.jl) has to be configured to use
-the same MPI binaries.
+MPICH\_jll.jl on all other platforms.
 
 By default, [P4est.jl](https://github.com/trixi-framework/P4est.jl) provides
 pre-generated Julia bindings to all exported C functions of the underlying
