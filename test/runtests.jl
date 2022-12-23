@@ -1,32 +1,39 @@
 using Test
+
+# Assume that everything has been configured correctly via environment
+# variables in CI and `configure_packages.jl`.
+# From here on, all packages should be configured as desired and we can load
+# everything and perform the tests.
+using MPI: MPI, mpiexec
 using P4est
 
-const P4EST_TEST = get(ENV, "P4EST_TEST", "")
+import MPIPreferences
+@info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
 
-@testset "P4est.jl tests" begin
-  @testset "p4est_connectivity_new_periodic" begin
-    @test p4est_connectivity_new_periodic() isa Ptr{p4est_connectivity}
-  end
 
-  connectivity = p4est_connectivity_new_periodic()
-  @testset "p4est_connectivity_is_valid" begin
-    @test p4est_connectivity_is_valid(connectivity) == 1
-  end
+@time @testset "P4est.jl tests" begin
+  # For some weird reason, the MPI tests must come first since they fail
+  # otherwise with a custom MPI installation.
+  @time @testset "MPI" begin
+    # Do a dummy `@test true`:
+    # If the process errors out the testset would error out as well,
+    # cf. https://github.com/JuliaParallel/MPI.jl/pull/391
+    @test true
 
-  @testset "unsafe_wrap" begin
-    obj = unsafe_wrap(connectivity)
-    @test obj.num_vertices == 4
-  end
-  
-  @testset "uses_mpi" begin
-    if P4EST_TEST == "P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS"
-      @test P4est.uses_mpi() == true
-    elseif P4EST_TEST == "P4EST_JLL_USES_MPI"
-      @test P4est.uses_mpi() == true
-    elseif P4EST_TEST == "P4EST_CUSTOM_NON_MPI"
-      @test P4est.uses_mpi() == false
-    elseif P4EST_TEST == "P4EST_CUSTOM_USES_MPI"
-      @test P4est.uses_mpi() == true
+    @info "Starting parallel tests"
+
+    mpiexec() do cmd
+      run(`$cmd -n 2 $(Base.julia_cmd()) --threads=1 --check-bounds=yes --project=$(dirname(@__DIR__)) $(abspath("tests_basic.jl"))`)
     end
+
+    @info "Finished parallel tests"
+  end
+
+  @time @testset "serial" begin
+    @info "Starting serial tests"
+
+    include("tests_basic.jl")
+
+    @info "Finished serial tests"
   end
 end

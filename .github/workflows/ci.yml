@@ -27,55 +27,45 @@ concurrency:
 jobs:
   test:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    name: ${{ matrix.os }} - ${{ matrix.p4est_test }} - Julia ${{ matrix.version }}
+    name: ${{ matrix.os }} - ${{ matrix.JULIA_P4EST_TEST }} - Julia ${{ matrix.version }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         version:
           - '1.6'
+          - '1'
           # - 'nightly'
         os:
           - ubuntu-latest
-          # - macos-latest
-          # - windows-latest
+          - macos-latest
+          - windows-latest
         arch:
           - x64
-        p4est_test:
-          - P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
-          - P4EST_JLL_USES_MPI
-          - P4EST_CUSTOM_NON_MPI
-          - P4EST_CUSTOM_USES_MPI
-        # Only selected tests on macOS and Windows, since not everything works everywhere yet
-        include:
+        JULIA_P4EST_TEST:
+          - P4EST_JLL_MPI_DEFAULT
+          - P4EST_CUSTOM_MPI_CUSTOM
+        exclude:
+          # Some preferences are not loaded in package tests in older versions
+          # of Julia, see
+          # https://github.com/JuliaPackaging/Preferences.jl/issues/40
+          # Thus, we need to disable this setup in CI.
           - version: '1.6'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
-          - version: '1.6'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI
-          - version: '1.6'
-            os: windows-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
-          # Additional tests on Julia v1.7
-          - version: '^1.7.0-0'
-            os: ubuntu-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
-          - version: '^1.7.0-0'
-            os: macOS-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
-          - version: '^1.7.0-0'
-            os: windows-latest
-            arch: x64
-            p4est_test: P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS
+            JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
+          # Run only selected tests on macOS and Windows, since not everything
+          # works everywhere yet and we are most familiar with setting up custom
+          # p4est and MPI builds on Linux.
+          - os: macos-latest
+            JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
+          - os: windows-latest
+            JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
     steps:
       - uses: actions/checkout@v3
       - name: Set p4est release to run tests against
+        # We use an older release of `p4est` on purpose than the version
+        # provided by P4est_jll.jl to check whether everything still works
+        # in another version of `p4est` than the version used to generate the
+        # bindings.
         run: |
           P4EST_RELEASE=2.3.1
           echo "P4EST_RELEASE=$P4EST_RELEASE" >> $GITHUB_ENV
@@ -83,50 +73,24 @@ jobs:
         shell: bash
       - name: Set environment variables
         run: |
-          echo "Setting variables for '${{ matrix.p4est_test }}'..."
-          echo "P4EST_TEST=${{ matrix.p4est_test }}" >> $GITHUB_ENV
-          echo "P4EST_TEST=${{ matrix.p4est_test }}"
-          if [[ ${{ matrix.p4est_test }} == "P4EST_JLL_USES_MPI_PRE_GENERATED_BINDINGS" ]]; then
+          echo "Setting variables for '${{ matrix.JULIA_P4EST_TEST }}'..."
+          echo "JULIA_P4EST_TEST=${{ matrix.JULIA_P4EST_TEST }}" >> $GITHUB_ENV
+          echo "JULIA_P4EST_TEST=${{ matrix.JULIA_P4EST_TEST }}"
+          if [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_JLL_MPI_DEFAULT" ]]
+          then
             echo "(no additional environment variables required)"
-          elif [[ ${{ matrix.p4est_test }} == "P4EST_JLL_USES_MPI" ]]; then
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
-          elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_NON_MPI" ]]; then
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
-            P4EST_TMP=`pwd`/libp4est_tmp_non_mpi
+          elif [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
+          then
+            P4EST_TMP=`pwd`/libp4est_tmp
             echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
             echo "P4EST_TMP=$P4EST_TMP"
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so"
-            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
-            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
-          elif [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes" >> $GITHUB_ENV
-            echo "JULIA_P4EST_GENERATE_BINDINGS=yes"
-            P4EST_TMP=`pwd`/libp4est_tmp_uses_mpi
-            echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
-            echo "P4EST_TMP=$P4EST_TMP"
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
-            echo "JULIA_P4EST_LIBRARY=$P4EST_TMP/prefix/lib/libp4est.so"
-            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include" >> $GITHUB_ENV
-            echo "JULIA_P4EST_INCLUDE=$P4EST_TMP/prefix/include"
-            echo "JULIA_P4EST_USES_MPI=yes" >> $GITHUB_ENV
-            echo "JULIA_P4EST_USES_MPI=yes"
-            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich" >> $GITHUB_ENV
-            echo "JULIA_P4EST_MPI_INCLUDE=/usr/include/x86_64-linux-gnu/mpich"
+            echo "JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
+            echo "$JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so"
           else
-            echo "ERROR: unknown test type ${{ matrix.p4est_test }}" >&2
+            echo "ERROR: unknown test type ${{ matrix.JULIA_P4EST_TEST }}" >&2
             exit 1
           fi
           echo "Done."
-        shell: bash
-      - name: Install custom p4est libraries for testing
-        run: |
-          if [[ ${{ matrix.p4est_test }} == "P4EST_CUSTOM_USES_MPI" ]]; then
-            sudo apt-get install -y mpich libmpich-dev
-          fi
-          ./.ci_install_p4est.sh
         shell: bash
       - uses: julia-actions/setup-julia@v1
         with:
@@ -134,6 +98,22 @@ jobs:
           arch: ${{ matrix.arch }}
           show-versioninfo: true
       - uses: julia-actions/cache@v1
+      - name: Install custom MPI library for testing
+        run: |
+          if [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
+          then
+            sudo apt-get install -y openmpi-bin libopenmpi-dev
+          fi
+        shell: bash
+      - name: Install custom p4est library for testing
+        run: |
+          ./.ci_install_p4est.sh
+        shell: bash
+      - name: Configure MPI.jl
+        shell: julia --color=yes {0}
+        run: |
+          @show pwd()
+          include(joinpath(pwd(), "test", "configure_packages.jl"))
       - uses: julia-actions/julia-buildpkg@v1
         env:
           PYTHON: ""
@@ -141,12 +121,6 @@ jobs:
         env:
           PYTHON: ""
       - uses: julia-actions/julia-processcoverage@v1
-      - uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}
-          parallel: true
-          path-to-lcov: ./lcov.info
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
@@ -155,13 +129,73 @@ jobs:
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
           # verbose: true # optional (default = false)
+      # The standard setup of Coveralls is just annoying for parallel builds, see, e.g.,
+      # https://github.com/trixi-framework/Trixi.jl/issues/691
+      # https://github.com/coverallsapp/github-action/issues/47
+      # https://github.com/coverallsapp/github-action/issues/67
+      # This standard setup is reproduced below for completeness.
+      # - uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     flag-name: run-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_id }}
+      #     parallel: true
+      #     path-to-lcov: ./lcov.info
+      # Instead, we use a more tedious approach:
+      # - Store all individual coverage files as artifacts (directly below)
+      # - Download and merge individual coverage reports in another step
+      # - Upload only the merged coverage report to Coveralls
+      - shell: bash
+        run: |
+          cp ./lcov.info ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
+      - uses: actions/upload-artifact@v3
+        with:
+          name: lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}
+          path: ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
 
   finish:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Coveralls Finished
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        parallel-finished: true
+      # The standard setup of Coveralls is just annoying for parallel builds, see, e.g.,
+      # https://github.com/trixi-framework/Trixi.jl/issues/691
+      # https://github.com/coverallsapp/github-action/issues/47
+      # https://github.com/coverallsapp/github-action/issues/67
+      # This standard setup is reproduced below for completeness.
+      # - name: Coveralls Finished
+      #   uses: coverallsapp/github-action@master
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     parallel-finished: true
+      # Instead, we use the more tedious approach described above.
+      # At first, we check out the repository and download all artifacts
+      # (and list files for debugging).
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+      - run: ls -R
+      # Next, we merge the individual coverage files and upload
+      # the combined results to Coveralls.
+      - name: Merge lcov files using Coverage.jl
+        shell: julia --color=yes {0}
+        run: |
+          using Pkg
+          Pkg.activate(temp=true)
+          Pkg.add("Coverage")
+          using Coverage
+          coverage = LCOV.readfolder(".")
+          for cov in coverage
+            cov.filename = replace(cov.filename, "\\" => "/")
+          end
+          coverage = merge_coverage_counts(coverage)
+          @show covered_lines, total_lines = get_summary(coverage)
+          LCOV.writefile("./lcov.info", coverage)
+      - uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./lcov.info
+      # Upload merged coverage data as artifact for debugging
+      - uses: actions/upload-artifact@v3
+        with:
+          name: lcov
+          path: ./lcov.info
+      # That's it
+      - run: echo "Finished testing P4est"
