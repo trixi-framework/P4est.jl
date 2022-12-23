@@ -1,6 +1,7 @@
 *.mem
 **/Manifest.toml
 dev/p4est_include
+dev/LibP4est.jl
 docs/build
 docs/src/authors.md
 docs/src/contributing.md
