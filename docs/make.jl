@@ -101,8 +101,7 @@ makedocs(
     "API reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",
-    "License" => "license.md",
-    "Index" => "refindex.md"
+    "License" => "license.md"
   ],
   strict = false, # `true` lets Documenter CI fail when doctests fail
   checkdocs = :exports, # complain only about non-included docstrings for exported names
