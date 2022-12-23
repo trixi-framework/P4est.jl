@@ -7,9 +7,6 @@ fi
 if [ "${JULIA_P4EST_TEST}" = "P4EST_JLL_MPI_DEFAULT" ]; then
   echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Nothing to do here."
 fi
-if [ "${JULIA_P4EST_TEST}" = "P4EST_JLL_MPI_OPENMPIJLL" ]; then
-  echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Nothing to do here."
-fi
 if [ "${JULIA_P4EST_TEST}" = "P4EST_CUSTOM_MPI_CUSTOM" ]; then
   echo "Found 'JULIA_P4EST_TEST=${JULIA_P4EST_TEST}'. Installing custom `p4est` with MPI support from the default MPI installation on the system."
   pushd `pwd`
