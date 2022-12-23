@@ -74,7 +74,7 @@ julia> _connectivity.num_trees
 1
 ```
 
-The generated file `LibP4est.jl` is used in `P4est/src/LibP4est_v2.jl`.
+The generated file `LibP4est.jl` is used in `P4est/src/LibP4est.jl`.
 
 
 ## Types are missing
