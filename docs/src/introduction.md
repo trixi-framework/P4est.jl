@@ -2,7 +2,7 @@
 
 Installation instructions and first usage examples are shown on the
 [main page](@ref P4est.jl). This page collects some additional examples and
-translation rules from the C library
+translation guidelines from the C library
 [`p4est`](https://github.com/cburstedde/p4est) to its Julia wrapper
 [P4est.jl](https://github.com/trixi-framework/P4est.jl).
 
@@ -22,7 +22,7 @@ New bindings only need to be generated for a new version of
 API. We will probably provide some new bindings when we learn about this.
 
 
-## Translation rules
+## Translation guidelines
 
 Many functions of [`p4est`](https://github.com/cburstedde/p4est) work with
 pointers, e.g.,
