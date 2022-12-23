@@ -79,7 +79,7 @@ jobs:
           if [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_JLL_MPI_DEFAULT" ]]
           then
             echo "(no additional environment variables required)"
-          elif [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_DEFAULT" ]] || [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
+          elif [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
           then
             P4EST_TMP=`pwd`/libp4est_tmp
             echo "P4EST_TMP=$P4EST_TMP" >> $GITHUB_ENV
