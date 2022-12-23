@@ -1,5 +1,4 @@
-# API Reference
-
+# API reference
 
 ```@meta
 CurrentModule = P4est

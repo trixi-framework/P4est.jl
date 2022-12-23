@@ -98,7 +98,7 @@ makedocs(
   pages = [
     "Home" => "index.md",
     "Introduction" => "introduction.md",
-    "API Reference" => "reference.md",
+    "API reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",
     "License" => "license.md",
