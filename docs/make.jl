@@ -58,6 +58,7 @@ open(joinpath(@__DIR__, "src", "index.md"), "w") do io
   for line in eachline(joinpath(dirname(@__DIR__), "README.md"))
     line = replace(line, "[LICENSE.md](LICENSE.md)" => "[License](@ref)")
     line = replace(line, "[AUTHORS.md](AUTHORS.md)" => "[Authors](@ref authors_separate_page)")
+    line = replace(line, "[Usage](#usage)" => "[Usage](#Usage)")
     println(io, line)
   end
 end

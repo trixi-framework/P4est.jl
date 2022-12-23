@@ -32,7 +32,7 @@ With this command, you install both
 Currently, [P4est.jl](https://github.com/trixi-framework/P4est.jl) supports
 only builds of the C library [`p4est`](https://github.com/cburstedde/p4est)
 with MPI support, so you need to initialize MPI appropriately as described
-in the "Usage" section below.
+in the [Usage](#usage) section below.
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) depends on the binary
 distribution of the [`p4est`](https://github.com/cburstedde/p4est) library,

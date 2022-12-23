@@ -11,7 +11,8 @@ translation guidelines from the C library
 
 The Julia bindings of [`p4est`](https://github.com/cburstedde/p4est) are
 generated using [Clang.jl](https://github.com/JuliaInterop/Clang.jl). This
-process is described in the [`dev`](https://github.com/trixi-framework/P4est.jl/tree/main/dev) folder of
+process is described in the
+[`dev`](https://github.com/trixi-framework/P4est.jl/tree/main/dev) folder of
 [P4est.jl](https://github.com/trixi-framework/P4est.jl). Since all MPI datatypes
 are mapped to types from MPI.jl, the generated bindings are agnostic of the
 local MPI installation. Hence, there should be no need to generate new bindings
