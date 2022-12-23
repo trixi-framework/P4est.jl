@@ -127,7 +127,7 @@ end
   @testset "p4est_balance" begin
     connectivity = @test_nowarn p4est_connectivity_new_star()
     p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, 0, 0, C_NULL, C_NULL)
-    refine_fn_balance_c = @cfunction(refine_fn_balance, Cint, 
+    refine_fn_balance_c = @cfunction(refine_fn_balance, Cint,
                                      (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
     @test_nowarn p4est_refine(p4est, 1, refine_fn_balance_c, C_NULL)
     # face balance
@@ -158,7 +158,19 @@ end
     p4est_save(filename, p4est, false)
     conn_vec = Vector{Ptr{p4est_connectivity_t}}(undef, 1)
     @test_nowarn p4est_load(filename, MPI.COMM_WORLD, 0, 0, C_NULL, pointer(conn_vec))
-    rm(filename, force=true)
+    try
+      rm(filename, force=true)
+    catch e
+      # On our CI systems with Windows, this sometimes throws an error
+      # IOError: stat("D:\\a\\P4est.jl\\P4est.jl\\test\\temp"): permission denied (EACCES)
+      # see, e.g.,
+      # https://github.com/trixi-framework/P4est.jl/actions/runs/3765210932/jobs/6400451653
+      if get(ENV, "CI", nothing) == "true" && Sys.iswindows()
+        @warn "Exception occurred" e
+      else
+        throw(e)
+      end
+    end
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
