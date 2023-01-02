@@ -28,11 +28,11 @@ function Base.getproperty(pw::PointerWrapper{T}, name::Symbol) where T
 end
 
 # `[]` allows one to access the actual underlying data
-Base.getindex(pw::PointerWrapper{T}) where T = unsafe_load(pw)
-Base.setindex!(pw::PointerWrapper{T}, value) where T = unsafe_store!(pw, value)
+Base.getindex(pw::PointerWrapper) = unsafe_load(pw)
+Base.setindex!(pw::PointerWrapper, value) = unsafe_store!(pw, value)
 
 # When `unsafe_load`ing a PointerWrapper object, we really want to load the underlying object
-Base.unsafe_load(pw::PointerWrapper{T}) where T = unsafe_load(pointer(pw))
+Base.unsafe_load(pw::PointerWrapper) = unsafe_load(pointer(pw))
 
 # If value is of the wrong type, try to convert it
 Base.unsafe_store!(pw::PointerWrapper{T}, value) where T = unsafe_store!(pw, convert(T, value))
