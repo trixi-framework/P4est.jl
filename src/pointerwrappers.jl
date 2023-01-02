@@ -13,6 +13,8 @@ PointerWrapper(::Type{Ptr{T}}, pointer) where T = PointerWrapper{T}(unsafe_load(
 
 # Cannot use `pw.pointer` since we implement `getproperty` to return the fields of `T` itself
 Base.pointer(pw::PointerWrapper{T}) where T = getfield(pw, :pointer)
+# Allow passing a `PointerWrapper` to wrapped C functions
+Base.unsafe_convert(::Type{Ptr{T}}, pw::PointerWrapper{T}) where {T} = Base.unsafe_convert(Ptr{T}, pointer(pw))
 
 # Syntactic sugar
 Base.propertynames(::PointerWrapper{T}) where T = fieldnames(T)
