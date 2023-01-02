@@ -14,6 +14,10 @@ const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
 include("LibP4est.jl")
 @reexport using .LibP4est
 
+# Include pointer wrapper
+include("pointerwrappers.jl")
+using .PointerWrappers: PointerWrapper
+
 
 # Higher-level API defined in P4est.jl
 """
