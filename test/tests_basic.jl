@@ -63,10 +63,15 @@ function unsafe_load_side(info::Ptr{p4est_iter_face_info_t}, i=1)
 end
 
 function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_data)
-  if @test_nowarn unsafe_load(info).sides.elem_count == 2
+  @test unsafe_load(info).sides.elem_count isa Integer
+  if unsafe_load(info).sides.elem_count == 2
     sides = (unsafe_load_side(info, 1), unsafe_load_side(info, 2))
-    if @test_nowarn sides[1].is_hanging == false && @test_nowarn sides[2].is_hanging == false
-      if @test_nowarn sides[1].is.full.is_ghost == true
+    @test sides[1].is_hanging isa Integer
+    @test sides[1].is_hanging isa Integer
+    @test sides[1].is.full.is_ghost isa Integer
+    @test sides[2].is.full.is_ghost isa Integer
+    if sides[1].is_hanging == false && sides[2].is_hanging == false
+      if sides[1].is.full.is_ghost == true
         remote_side = 1
         local_side = 2
       elseif @test_nowarn sides[2].is.full.is_ghost == true
@@ -76,15 +81,15 @@ function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_dat
         return nothing
       end
       # test nested attributes
-      @test_nowarn sides[local_side].treeid
-      @test_nowarn sides[local_side].is.full.quadid
-      @test_nowarn unsafe_wrap(Array,
-                               unsafe_load(unsafe_load(info).ghost_layer).proc_offsets,
-                               MPI.Comm_size(MPI.COMM_WORLD) + 1)
-      @test_nowarn sides[remote_side].is.full.quadid
+      @test sides[local_side].treeid isa Integer
+      @test sides[local_side].is.full.quadid isa Integer
+      @test unsafe_wrap(Array,
+                        unsafe_load(unsafe_load(info).ghost_layer).proc_offsets,
+                        MPI.Comm_size(MPI.COMM_WORLD) + 1) isa Vector{Int32}
+      @test sides[remote_side].is.full.quadid isa Integer
       if local_side == 2
-        # @test_nowarn unsafe_load(sides[1].is.full.quad.p.piggy3.local_num) # TODO: does not work
-        @test_nowarn unsafe_load(sides[2].is.full.quad.p.piggy3.local_num)
+        # @test unsafe_load(sides[1].is.full.quad.p.piggy3.local_num) isa Integer # TODO: does not work
+        @test unsafe_load(sides[2].is.full.quad.p.piggy3.local_num) isa Integer
       end
     end
   end
