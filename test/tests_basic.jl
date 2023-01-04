@@ -44,6 +44,56 @@ function refine_fn_balance(p4est, which_tree, quadrant)
   return Cint(0)
 end
 
+# This function belongs to the testset "nested attributes" below
+# first, some auxiliary functions
+function unsafe_load_sc(::Type{T}, sc_array::Ptr{sc_array}, i=1) where T
+  sc_array_obj = unsafe_load(sc_array)
+  return unsafe_load_sc(T, sc_array_obj, i)
+end
+
+function unsafe_load_sc(::Type{T}, sc_array_obj::sc_array, i=1) where T
+  element_size = sc_array_obj.elem_size
+  @assert element_size == sizeof(T)
+
+  return unsafe_load(Ptr{T}(sc_array_obj.array), i)
+end
+
+function unsafe_load_side(info::Ptr{p4est_iter_face_info_t}, i=1)
+  return unsafe_load_sc(p4est_iter_face_side_t, unsafe_load(info).sides, i)
+end
+
+function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_data)
+  ptr = Ptr{Bool}(user_data)
+  # TODO: How to test if error occures on C side?
+  no_test_fail = unsafe_load(ptr, 1)
+  if @test_nowarn unsafe_load(info).sides.elem_count == 2
+    sides = (unsafe_load_side(info, 1), unsafe_load_side(info, 2))
+    if @test_nowarn sides[1].is_hanging == false && @test_nowarn sides[2].is_hanging == false
+      if @test_nowarn sides[1].is.full.is_ghost == true
+        remote_side = 1
+        local_side = 2
+      elseif @test_nowarn sides[2].is.full.is_ghost == true
+        remote_side = 2
+        local_side = 1
+      else
+        return nothing
+      end
+      # test nested attributes
+      @test_nowarn sides[local_side].treeid
+      @test_nowarn sides[local_side].is.full.quadid
+      @test_nowarn unsafe_wrap(Array,
+                               unsafe_load(unsafe_load(info).ghost_layer).proc_offsets,
+                               MPI.Comm_size(MPI.COMM_WORLD) + 1)
+      @test_nowarn sides[remote_side].is.full.quadid
+      if local_side == 2
+        # @test_nowarn unsafe_load(sides[1].is.full.quad.p.piggy3.local_num) # TODO: does not work
+        @test_nowarn unsafe_load(sides[2].is.full.quad.p.piggy3.local_num)
+      end
+    end
+  end
+  return nothing
+end
+
 @testset "basic tests" begin
   @test_nowarn MPI.Init()
 
@@ -58,6 +108,7 @@ end
     @test_nowarn P4est.init(C_NULL, SC_LP_DEFAULT)
   end
 
+  # 2D tests
   @testset "p4est_connectivity_new_periodic" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
     @test p4est_connectivity_new_periodic() isa Ptr{p4est_connectivity}
@@ -96,11 +147,6 @@ end
     p4est_iterate(p4est, C_NULL, C_NULL, iter_volume_c, C_NULL, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
-  end
-
-  @testset "p8est_connectivity_new_unitcube" begin
-    connectivity = @test_nowarn p8est_connectivity_new_unitcube()
-    @test_nowarn p8est_connectivity_destroy(connectivity)
   end
 
   @testset "p4est_refine and p4est_coarsen" begin
@@ -191,6 +237,24 @@ end
     @test_nowarn p4est_partition(p4est, 0, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  # This test is based on init_neighbor_rank_connectivity_iter_face_inner from Trixi.jl
+  # See https://github.com/trixi-framework/Trixi.jl/blob/main/src/solvers/dgsem_p4est/dg_parallel.jl
+  @testset "nested attributes" begin
+    iter_face_nested_attributes_c = @cfunction(iter_face_nested_attributes, Cvoid,
+                                               (Ptr{p4est_iter_face_info_t}, Ptr{Cvoid}))
+    connectivity = @test_nowarn p4est_connectivity_new_brick(2, 2, 0, 0)
+    p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
+    p4est_iterate(p4est, C_NULL, pointer([true]), C_NULL, iter_face_nested_attributes_c, C_NULL)
+    @test_nowarn p4est_destroy(p4est)
+    @test_nowarn p4est_connectivity_destroy(connectivity)
+  end
+
+  # 3D tests
+  @testset "p8est_connectivity_new_unitcube" begin
+    connectivity = @test_nowarn p8est_connectivity_new_unitcube()
+    @test_nowarn p8est_connectivity_destroy(connectivity)
   end
 end
 
