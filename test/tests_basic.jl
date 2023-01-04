@@ -63,9 +63,6 @@ function unsafe_load_side(info::Ptr{p4est_iter_face_info_t}, i=1)
 end
 
 function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_data)
-  ptr = Ptr{Bool}(user_data)
-  # TODO: How to test if error occures on C side?
-  no_test_fail = unsafe_load(ptr, 1)
   if @test_nowarn unsafe_load(info).sides.elem_count == 2
     sides = (unsafe_load_side(info, 1), unsafe_load_side(info, 2))
     if @test_nowarn sides[1].is_hanging == false && @test_nowarn sides[2].is_hanging == false
@@ -246,7 +243,7 @@ end
                                                (Ptr{p4est_iter_face_info_t}, Ptr{Cvoid}))
     connectivity = @test_nowarn p4est_connectivity_new_brick(2, 2, 0, 0)
     p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
-    p4est_iterate(p4est, C_NULL, pointer([true]), C_NULL, iter_face_nested_attributes_c, C_NULL)
+    p4est_iterate(p4est, C_NULL, C_NULL, C_NULL, iter_face_nested_attributes_c, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
   end
