@@ -62,6 +62,15 @@ function unsafe_load_side(info::Ptr{p4est_iter_face_info_t}, i=1)
   return unsafe_load_sc(p4est_iter_face_side_t, unsafe_load(info).sides, i)
 end
 
+function refine_fn_nested_attributes(p4est, which_tree, quadrant)
+  quadrant_obj = unsafe_load(quadrant)
+  if quadrant_obj.x == 0 && quadrant_obj.y == 0 && quadrant_obj.level < 4
+    return Cint(1)
+  else
+    return Cint(0)
+  end
+end
+
 function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_data)
   @test unsafe_load(info).sides.elem_count isa Integer
   if unsafe_load(info).sides.elem_count == 2
@@ -70,7 +79,7 @@ function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_dat
     @test sides[1].is_hanging isa Integer
     @test sides[1].is.full.is_ghost isa Integer
     @test sides[2].is.full.is_ghost isa Integer
-    if sides[1].is_hanging == false && sides[2].is_hanging == false
+    if sides[1].is_hanging == false && sides[2].is_hanging == false # no hanging nodes
       if sides[1].is.full.is_ghost == true
         remote_side = 1
         local_side = 2
@@ -90,6 +99,20 @@ function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_dat
       if local_side == 2
         # @test unsafe_load(sides[1].is.full.quad.p.piggy3.local_num) isa Integer # TODO: does not work
         @test unsafe_load(sides[2].is.full.quad.p.piggy3.local_num) isa Integer
+      end
+    else # hanging node
+      if sides[1].is_hanging == true
+        hanging_side = 1
+        full_side = 2
+      else
+        hanging_side = 2
+        full_side = 1
+      end
+      @test sides[hanging_side].is_hanging == true && sides[full_side].is_hanging == false
+      @test sides[full_side].is.full.is_ghost isa Integer
+      @test sides[hanging_side].is.hanging.is_ghost isa Tuple{Int8, Int8}
+      if sides[full_side].is.full.is_ghost == false && all(sides[hanging_side].is.hanging.is_ghost .== false)
+        return nothing
       end
     end
   end
@@ -248,6 +271,9 @@ end
                                                (Ptr{p4est_iter_face_info_t}, Ptr{Cvoid}))
     connectivity = @test_nowarn p4est_connectivity_new_brick(2, 2, 0, 0)
     p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
+    refine_fn_nested_attributes_c = @cfunction(refine_fn_nested_attributes, Cint,
+                                               (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
+    p4est_refine(p4est, true, refine_fn_nested_attributes_c, C_NULL)
     p4est_iterate(p4est, C_NULL, C_NULL, C_NULL, iter_face_nested_attributes_c, C_NULL)
     @test_nowarn p4est_destroy(p4est)
     @test_nowarn p4est_connectivity_destroy(connectivity)
