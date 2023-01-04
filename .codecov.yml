@@ -1,0 +1,17 @@
+# https://docs.codecov.io/docs/codecovyml-reference
+
+# We currently have7 parallel jobs in ci.yml
+codecov:
+  branch: main
+  notify:
+    after_n_builds: 7
+comment:
+  after_n_builds: 7
+
+coverage:
+  range: 80..95 # set 95% and above as solid green, everything below 80% as red
+  round: nearest
+  precision: 2
+
+github_checks:
+  annotations: false
