@@ -6591,7 +6591,7 @@ Refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p4est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est.h`.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -8947,7 +8947,7 @@ Horizontally refine a forest with a bounded refinement level and a replace optio
 ### Parameters
 * `p6est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est.h`.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -8968,7 +8968,7 @@ Vertically refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p6est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est.h`.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -11911,7 +11911,7 @@ Refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p8est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p8est`.h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p8est.h`.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
