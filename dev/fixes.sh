@@ -25,3 +25,26 @@ sed -i "s/\bt::Cint/t::MPI_Datatype/g" LibP4est.jl
 
 # Fix type of `sc_array` field `array`
 sed -i "s/array::Cstring/array::Ptr{Int8}/g" LibP4est.jl
+
+# Remove cross references that are not found
+sed -i "s/\[\`p4est\`](@ref)/\`p4est\`/g" LibP4est.jl
+sed -i "s/\[\`p6est\`](@ref)/\`p6est\`/g" LibP4est.jl
+sed -i "s/\[\`p8est\`](@ref)/\`p8est\`/g" LibP4est.jl
+sed -i "s/\[\`P4EST_QMAXLEVEL\`](@ref)/\`P4EST_QMAXLEVEL\`/g" LibP4est.jl
+sed -i "s/\[\`P8EST_QMAXLEVEL\`](@ref)/\`p8est\`/g" LibP4est.jl
+sed -i "s/\[\`P4EST_CONN_DISK_PERIODIC\`](@ref)/\`P4EST_CONN_DISK_PERIODIC\`/g" LibP4est.jl
+sed -i "s/\[\`p8est_iter_corner_side_t\`](@ref)/\`p8est_iter_corner_side_t\`/g" LibP4est.jl
+sed -i "s/\[\`p8est_iter_edge_side_t\`](@ref)/\`p8est_iter_edge_side_t\`/g" LibP4est.jl
+sed -i "s/\[\`p4est_corner_info_t\`](@ref)/\`p4est_corner_info_t\`/g" LibP4est.jl
+sed -i "s/\[\`p8est_corner_info_t\`](@ref)/\`p8est_corner_info_t\`/g" LibP4est.jl
+sed -i "s/\[\`p8est_edge_info_t\`](@ref)/\`p8est_edge_info_t\`/g" LibP4est.jl
+sed -i "s/\[\`sc_MPI_Barrier\`](@ref)/\`sc_MPI_Barrier\`/g" LibP4est.jl
+sed -i "s/\[\`sc_MPI_COMM_NULL\`](@ref)/\`sc_MPI_COMM_NULL\`/g" LibP4est.jl
+sed -i "s/\[\`SC_CHECK_ABORT\`](@ref)/\`SC_CHECK_ABORT\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LP_DEFAULT\`](@ref)/\`SC_LP_DEFAULT\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LC_NORMAL\`](@ref)/\`SC_LC_NORMAL\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LC_GLOBAL\`](@ref)/\`SC_LC_GLOBAL\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LP_ALWAYS\`](@ref)/\`SC_LP_ALWAYS\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LP_SILENT\`](@ref)/\`SC_LP_SILENT\`/g" LibP4est.jl
+sed -i "s/\[\`SC_LP_THRESHOLD\`](@ref)/\`SC_LP_THRESHOLD\`/g" LibP4est.jl
+sed -i "s/\[\`sc_logf\`](@ref)/\`sc_logf\`/g" LibP4est.jl
