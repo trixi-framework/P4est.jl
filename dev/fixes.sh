@@ -48,3 +48,7 @@ sed -i "s/\[\`SC_LP_ALWAYS\`](@ref)/\`SC_LP_ALWAYS\`/g" LibP4est.jl
 sed -i "s/\[\`SC_LP_SILENT\`](@ref)/\`SC_LP_SILENT\`/g" LibP4est.jl
 sed -i "s/\[\`SC_LP_THRESHOLD\`](@ref)/\`SC_LP_THRESHOLD\`/g" LibP4est.jl
 sed -i "s/\[\`sc_logf\`](@ref)/\`sc_logf\`/g" LibP4est.jl
+
+# For nicer docstrings
+sed -i "s/\`p4est\`.h/\`p4est.h\`/g" LibP4est.jl
+sed -i "s/\`p8est\`.h/\`p8est.h\`/g" LibP4est.jl
