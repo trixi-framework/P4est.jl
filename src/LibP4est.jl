@@ -135,8 +135,8 @@ The central log function to be called by all packages. Dispatches the log calls 
 
 ### Parameters
 * `package`:\\[in\\] Must be a registered package id or -1.
-* `category`:\\[in\\] Must be [`SC_LC_NORMAL`](@ref) or [`SC_LC_GLOBAL`](@ref).
-* `priority`:\\[in\\] Must be > [`SC_LP_ALWAYS`](@ref) and < [`SC_LP_SILENT`](@ref).
+* `category`:\\[in\\] Must be `SC_LC_NORMAL` or `SC_LC_GLOBAL`.
+* `priority`:\\[in\\] Must be > `SC_LP_ALWAYS` and < `SC_LP_SILENT`.
 ### Prototype
 ```c
 void sc_log (const char *filename, int lineno, int package, int category, int priority, const char *msg);
@@ -517,9 +517,9 @@ end
 Controls the default SC log behavior.
 
 ### Parameters
-* `log_stream`:\\[in\\] Set stream to use by [`sc_logf`](@ref) (or NULL for stdout).
+* `log_stream`:\\[in\\] Set stream to use by `sc_logf` (or NULL for stdout).
 * `log_handler`:\\[in\\] Set default SC log handler (NULL selects builtin).
-* `log_threshold`:\\[in\\] Set default SC log threshold (or [`SC_LP_DEFAULT`](@ref)). May be [`SC_LP_ALWAYS`](@ref) or [`SC_LP_SILENT`](@ref).
+* `log_threshold`:\\[in\\] Set default SC log threshold (or `SC_LP_DEFAULT`). May be `SC_LP_ALWAYS` or `SC_LP_SILENT`.
 ### Prototype
 ```c
 void sc_set_log_defaults (FILE * log_stream, sc_log_handler_t log_handler, int log_thresold);
@@ -698,7 +698,7 @@ end
 """
     sc_package_set_verbosity(package_id, log_priority)
 
-Set the logging verbosity of a registered package. This can be called at any point in the program, any number of times. It can only lower the verbosity at and below the value of [`SC_LP_THRESHOLD`](@ref).
+Set the logging verbosity of a registered package. This can be called at any point in the program, any number of times. It can only lower the verbosity at and below the value of `SC_LP_THRESHOLD`.
 
 ### Parameters
 * `package_id`:\\[in\\] Must be a registered package identifier.
@@ -745,7 +745,7 @@ end
 """
     sc_package_print_summary(log_priority)
 
-Print a summary of all packages registered with SC. Uses the [`SC_LC_GLOBAL`](@ref) log category which by default only prints on rank 0.
+Print a summary of all packages registered with SC. Uses the `SC_LC_GLOBAL` log category which by default only prints on rank 0.
 
 ### Parameters
 * `log_priority`:\\[in\\] Priority passed to sc log functions.
@@ -803,7 +803,7 @@ end
 """
     sc_is_root()
 
-Identify the root process. Only meaningful between [`sc_init`](@ref) and [`sc_finalize`](@ref) and with a communicator that is not [`sc_MPI_COMM_NULL`](@ref) (otherwise always true).
+Identify the root process. Only meaningful between [`sc_init`](@ref) and [`sc_finalize`](@ref) and with a communicator that is not `sc_MPI_COMM_NULL` (otherwise always true).
 
 ### Returns
 Return true for the root process and false otherwise.
@@ -2982,7 +2982,7 @@ Write memory content to a file.
 * `size`:\\[in\\] Size of one array member.
 * `nmemb`:\\[in\\] Number of array members.
 * `file`:\\[in,out\\] File pointer, must be opened for writing.
-* `errmsg`:\\[in\\] Error message passed to [`SC_CHECK_ABORT`](@ref).
+* `errmsg`:\\[in\\] Error message passed to `SC_CHECK_ABORT`.
 ### Prototype
 ```c
 void sc_fwrite (const void *ptr, size_t size, size_t nmemb, FILE * file, const char *errmsg);
@@ -3006,7 +3006,7 @@ Read file content into memory.
 * `size`:\\[in\\] Size of one array member.
 * `nmemb`:\\[in\\] Number of array members.
 * `file`:\\[in,out\\] File pointer, must be opened for reading.
-* `errmsg`:\\[in\\] Error message passed to [`SC_CHECK_ABORT`](@ref).
+* `errmsg`:\\[in\\] Error message passed to `SC_CHECK_ABORT`.
 ### Prototype
 ```c
 void sc_fread (void *ptr, size_t size, size_t nmemb, FILE * file, const char *errmsg);
@@ -3122,7 +3122,7 @@ end
 """
     p4est_init(log_handler, log_threshold)
 
-Registers [`p4est`](@ref) with the SC Library and sets the logging behavior. This function is optional. This function must only be called before additional threads are created. If this function is not called or called with log\\_handler == NULL, the default SC log handler will be used. If this function is not called or called with log\\_threshold == [`SC_LP_DEFAULT`](@ref), the default SC log threshold will be used. The default SC log settings can be changed with [`sc_set_log_defaults`](@ref) ().
+Registers `p4est` with the SC Library and sets the logging behavior. This function is optional. This function must only be called before additional threads are created. If this function is not called or called with log\\_handler == NULL, the default SC log handler will be used. If this function is not called or called with log\\_threshold == `SC_LP_DEFAULT`, the default SC log threshold will be used. The default SC log settings can be changed with [`sc_set_log_defaults`](@ref) ().
 
 ### Prototype
 ```c
@@ -3220,10 +3220,10 @@ end
 """
     p4est_version()
 
-Return the full version of [`p4est`](@ref).
+Return the full version of `p4est`.
 
 ### Returns
-Return the version of [`p4est`](@ref) using the format `VERSION\\_MAJOR.VERSION\\_MINOR.VERSION\\_POINT`, where `VERSION_POINT` can contain dots and characters, e.g. to indicate the additional number of commits and a git commit hash.
+Return the version of `p4est` using the format `VERSION\\_MAJOR.VERSION\\_MINOR.VERSION\\_POINT`, where `VERSION_POINT` can contain dots and characters, e.g. to indicate the additional number of commits and a git commit hash.
 ### Prototype
 ```c
 const char *p4est_version (void);
@@ -3236,10 +3236,10 @@ end
 """
     p4est_version_major()
 
-Return the major version of [`p4est`](@ref).
+Return the major version of `p4est`.
 
 ### Returns
-Return the major version of [`p4est`](@ref).
+Return the major version of `p4est`.
 ### Prototype
 ```c
 int p4est_version_major (void);
@@ -3252,10 +3252,10 @@ end
 """
     p4est_version_minor()
 
-Return the minor version of [`p4est`](@ref).
+Return the minor version of `p4est`.
 
 ### Returns
-Return the minor version of [`p4est`](@ref).
+Return the minor version of `p4est`.
 ### Prototype
 ```c
 int p4est_version_minor (void);
@@ -3353,7 +3353,7 @@ The *\\_to\\_attr arrays may have arbitrary contents defined by the user.
 | vertices             | an array of size (3 * *num_vertices*)                                                |
 | tree\\_to\\_vertex   | embed each tree into  ```c++ R^3 ```  for e.g. visualization (see p4est\\_vtk.h)     |
 | tree\\_attr\\_bytes  | bytes per tree in tree\\_to\\_attr                                                   |
-| tree\\_to\\_attr     | not touched by [`p4est`](@ref)                                                       |
+| tree\\_to\\_attr     | not touched by `p4est`                                                       |
 | tree\\_to\\_tree     | (4 * *num_trees*) neighbors across faces                                             |
 | tree\\_to\\_face     | (4 * *num_trees*) face to face+orientation (see description)                         |
 | tree\\_to\\_corner   | (4 * *num_trees*) or NULL (see description)                                          |
@@ -3846,7 +3846,7 @@ Create a connectivity structure for a five-tree flat spherical disk. This disk c
 
 !!! note
 
-    The API of this function has changed to accept two arguments. You can query the #define [`P4EST_CONN_DISK_PERIODIC`](@ref) to check whether the new version with the argument is in effect.
+    The API of this function has changed to accept two arguments. You can query the #define `P4EST_CONN_DISK_PERIODIC` to check whether the new version with the argument is in effect.
 
 The ordering of the trees is as follows: 4 1 2 3 0.
 
@@ -3874,7 +3874,7 @@ end
 
 Create a connectivity for mapping the sphere using an icosahedron.
 
-The regular icosadron is a polyhedron with 20 faces, each of which is an equilateral triangle. To build the [`p4est`](@ref) connectivity, we group faces 2 by 2 to from 10 quadrangles, and thus 10 trees.
+The regular icosadron is a polyhedron with 20 faces, each of which is an equilateral triangle. To build the `p4est` connectivity, we group faces 2 by 2 to from 10 quadrangles, and thus 10 trees.
 
 This connectivity is meant to be used together with p4est_geometry_new_icosahedron to map the sphere.
 
@@ -4024,7 +4024,7 @@ Fills an array with information about corner neighbors.
 ### Parameters
 * `itree`:\\[in\\] The number of the originating tree.
 * `icorner`:\\[in\\] The number of the originating corner.
-* `ci`:\\[in,out\\] A [`p4est_corner_info_t`](@ref) structure with initialized array.
+* `ci`:\\[in,out\\] A `p4est_corner_info_t` structure with initialized array.
 ### Prototype
 ```c
 void p4est_find_corner_transform (p4est_connectivity_t * connectivity, p4est_topidx_t itree, int icorner, p4est_corner_info_t * ci);
@@ -4195,7 +4195,7 @@ end
 """
     p4est_connectivity_read_inp(filename)
 
-Create a [`p4est`](@ref) connectivity from an ABAQUS input file.
+Create a `p4est` connectivity from an ABAQUS input file.
 
 This utility function reads a basic ABAQUS file supporting element type with the prefix C2D4, CPS4, and S4 in 2D and of type C3D8 reading them as bilinear quadrilateral and trilinear hexahedral trees respectively.
 
@@ -4231,7 +4231,7 @@ and in 3D they are given as:
  6,  2,  6, 9,  5
 ```
 
-This function reads a mesh from *filename* and returns an associated [`p4est`](@ref) connectivity.
+This function reads a mesh from *filename* and returns an associated `p4est` connectivity.
 
 ### Parameters
 * `filename`:\\[in\\] file to read the connectivity from
@@ -4249,7 +4249,7 @@ end
 """
     p4est_tree
 
-The [`p4est`](@ref) tree datatype
+The `p4est` tree datatype
 
 | Field              | Note                                                               |
 | :----------------- | :----------------------------------------------------------------- |
@@ -4268,15 +4268,15 @@ struct p4est_tree
     maxlevel::Int8
 end
 
-"""The [`p4est`](@ref) tree datatype"""
+"""The `p4est` tree datatype"""
 const p4est_tree_t = p4est_tree
 
 """
     p4est_inspect
 
-Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the [`p4est`](@ref) main structure.
+Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the `p4est` main structure.
 
-The balance\\_ranges and balance\\_notify* times are collected whenever an inspect structure is present in [`p4est`](@ref).
+The balance\\_ranges and balance\\_notify* times are collected whenever an inspect structure is present in `p4est`.
 
 | Field                           | Note                                                                                                                                        |
 | :------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -4310,7 +4310,7 @@ struct p4est_inspect
     use_B::Cint
 end
 
-"""Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the [`p4est`](@ref) main structure. Declared in p4est\\_extended.h. Used to profile important algorithms."""
+"""Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the `p4est` main structure. Declared in p4est\\_extended.h. Used to profile important algorithms."""
 const p4est_inspect_t = p4est_inspect
 
 """
@@ -4322,7 +4322,7 @@ const p4est_inspect_t = p4est_inspect
 | mpirank                   | this process's MPI rank                                                                                          |
 | mpicomm\\_owned           | flag if communicator is owned                                                                                    |
 | data\\_size               | size of per-quadrant p.user\\_data (see [`p4est_quadrant_t`](@ref)::[`p4est_quadrant_data`](@ref)::user\\_data)  |
-| user\\_pointer            | convenience pointer for users, never touched by [`p4est`](@ref)                                                  |
+| user\\_pointer            | convenience pointer for users, never touched by `p4est`                                                  |
 | revision                  | Gets bumped on mesh change                                                                                       |
 | first\\_local\\_tree      | 0-based index of first local tree, must be -1 for an empty processor                                             |
 | last\\_local\\_tree       | 0-based index of last local tree, must be -2 for an empty processor                                              |
@@ -4357,13 +4357,13 @@ struct p4est
     inspect::Ptr{p4est_inspect_t}
 end
 
-"""The [`p4est`](@ref) forest datatype"""
+"""The `p4est` forest datatype"""
 const p4est_t = p4est
 
 """
     p4est_memory_used(p4est_)
 
-Calculate local memory usage of a forest structure. Not collective. The memory used on the current rank is returned. The connectivity structure is not counted since it is not owned; use p4est\\_connectivity\\_memory\\_usage ([`p4est`](@ref)->connectivity).
+Calculate local memory usage of a forest structure. Not collective. The memory used on the current rank is returned. The connectivity structure is not counted since it is not owned; use p4est\\_connectivity\\_memory\\_usage (`p4est`->connectivity).
 
 ### Parameters
 * `p4est`:\\[in\\] Valid forest structure.
@@ -4483,11 +4483,11 @@ end
 """
     p4est_destroy(p4est_)
 
-Destroy a [`p4est`](@ref).
+Destroy a `p4est`.
 
 !!! note
 
-    The connectivity structure is not destroyed with the [`p4est`](@ref).
+    The connectivity structure is not destroyed with the `p4est`.
 
 ### Prototype
 ```c
@@ -4501,12 +4501,12 @@ end
 """
     p4est_copy(input, copy_data)
 
-Make a deep copy of a [`p4est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
+Make a deep copy of a `p4est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 ### Returns
-Returns a valid [`p4est`](@ref) that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
+Returns a valid `p4est` that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
 ### Prototype
 ```c
 p4est_t *p4est_copy (p4est_t * input, int copy_data);
@@ -4524,7 +4524,7 @@ Reset user pointer and element data. When the data size is changed the quadrant 
 ### Parameters
 * `data_size`:\\[in\\] This is the size of data for each quadrant which can be zero. Then user\\_data\\_pool is set to NULL.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically. May be NULL.
-* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the [`p4est`](@ref) before init\\_fn is called the first time.
+* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the `p4est` before init\\_fn is called the first time.
 ### Prototype
 ```c
 void p4est_reset_data (p4est_t * p4est, size_t data_size, p4est_init_t init_fn, void *user_pointer);
@@ -4578,7 +4578,7 @@ end
 2:1 balance the size differences of neighboring elements in a forest.
 
 ### Parameters
-* `p4est`:\\[in,out\\] The [`p4est`](@ref) to be worked on.
+* `p4est`:\\[in,out\\] The `p4est` to be worked on.
 * `btype`:\\[in\\] Balance type (face or corner/full). Corner balance is almost never required when discretizing a PDE; just causes smoother mesh grading.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
 ### Prototype
@@ -4647,7 +4647,7 @@ end
 """
     p4est_save(filename, p4est_, save_data)
 
-Save the complete connectivity/[`p4est`](@ref) data to disk.
+Save the complete connectivity/`p4est` data to disk.
 
 This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations.
 
@@ -4661,7 +4661,7 @@ The revision counter is not saved to the file, since that would make files diffe
 
 !!! note
 
-    If [`p4est`](@ref) is not configured to use MPI-IO, some processes return from this function before the file is complete, in which case immediate read-access to the file may require a call to [`sc_MPI_Barrier`](@ref).
+    If `p4est` is not configured to use MPI-IO, some processes return from this function before the file is complete, in which case immediate read-access to the file may require a call to `sc_MPI_Barrier`.
 
 ### Parameters
 * `filename`:\\[in\\] Name of the file to write.
@@ -4982,7 +4982,7 @@ Check a forest to see if it is balanced.
 This function builds the ghost layer and discards it when done.
 
 ### Parameters
-* `p4est`:\\[in\\] The [`p4est`](@ref) to be tested.
+* `p4est`:\\[in\\] The `p4est` to be tested.
 * `btype`:\\[in\\] Balance type (face, corner or default, full).
 ### Returns
 Returns true if balanced, false otherwise.
@@ -5001,8 +5001,8 @@ end
 Compute the parallel checksum of a ghost layer.
 
 ### Parameters
-* `p4est`:\\[in\\] The MPI information of this [`p4est`](@ref) will be used.
-* `ghost`:\\[in\\] A ghost layer obtained from the [`p4est`](@ref).
+* `p4est`:\\[in\\] The MPI information of this `p4est` will be used.
+* `ghost`:\\[in\\] A ghost layer obtained from the `p4est`.
 ### Returns
 Parallel checksum on rank 0, 0 otherwise.
 ### Prototype
@@ -5017,12 +5017,12 @@ end
 """
     p4est_ghost_exchange_data(p4est_, ghost, ghost_data)
 
-Transfer data for local quadrants that are ghosts to other processors. Send the data stored in the quadrant's user\\_data. This is either the pointer variable itself if [`p4est`](@ref)->data_size is 0, or the content of the referenced memory field if [`p4est`](@ref)->data\\_size is positive.
+Transfer data for local quadrants that are ghosts to other processors. Send the data stored in the quadrant's user\\_data. This is either the pointer variable itself if `p4est`->data_size is 0, or the content of the referenced memory field if `p4est`->data\\_size is positive.
 
 ### Parameters
 * `p4est`:\\[in\\] The forest used for reference.
 * `ghost`:\\[in\\] The ghost layer used for reference.
-* `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghost quadrants in sequence. If [`p4est`](@ref)->data\\_size is 0, must at least hold sizeof (void *) bytes for each, otherwise [`p4est`](@ref)->data\\_size each.
+* `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghost quadrants in sequence. If `p4est`->data\\_size is 0, must at least hold sizeof (void *) bytes for each, otherwise `p4est`->data\\_size each.
 ### Prototype
 ```c
 void p4est_ghost_exchange_data (p4est_t * p4est, p4est_ghost_t * ghost, void *ghost_data);
@@ -5162,7 +5162,7 @@ Transfer data for local quadrants that are ghosts to other processors. The data 
 * `p4est`:\\[in\\] The forest used for reference.
 * `ghost`:\\[in\\] The ghost layer used for reference.
 * `minlevel`:\\[in\\] Level of the largest quads to be exchanged. Use <= 0 for no restriction.
-* `maxlevel`:\\[in\\] Level of the smallest quads to be exchanged. Use >= [`P4EST_QMAXLEVEL`](@ref) for no restriction.
+* `maxlevel`:\\[in\\] Level of the smallest quads to be exchanged. Use >= `P4EST_QMAXLEVEL` for no restriction.
 * `data_size`:\\[in\\] The data size to transfer per quadrant.
 * `mirror_data`:\\[in\\] One data pointer per mirror quadrant as input.
 * `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghosts in sequence, which must hold at least `data_size` for each ghost.
@@ -5255,7 +5255,7 @@ TODO: In case of an inter-tree corner neighbor relation in a brick-like situatio
 | quad\\_to\\_quad  | one index for each of the 4 faces                                                                                                                                                                              |
 | quad\\_to\\_face  | encodes orientation/2:1 status                                                                                                                                                                                 |
 | quad\\_to\\_half  | stores half-size neighbors                                                                                                                                                                                     |
-| quad\\_level      | Stores lists of per-level quads. The array has entries indexed by 0..[`P4EST_QMAXLEVEL`](@ref) inclusive that are arrays of local quadrant ids. Is NULL by default, but may be enabled by p4est_mesh_new_ext.  |
+| quad\\_level      | Stores lists of per-level quads. The array has entries indexed by 0..`P4EST_QMAXLEVEL` inclusive that are arrays of local quadrant ids. Is NULL by default, but may be enabled by p4est_mesh_new_ext.  |
 """
 struct p4est_mesh_t
     local_num_quadrants::p4est_locidx_t
@@ -5315,7 +5315,7 @@ Create a p4est\\_mesh structure. This function does not populate the quad\\_to\\
 
 ### Parameters
 * `p4est`:\\[in\\] A forest that is fully 2:1 balanced.
-* `ghost`:\\[in\\] The ghost layer created from the provided [`p4est`](@ref).
+* `ghost`:\\[in\\] The ghost layer created from the provided `p4est`.
 * `btype`:\\[in\\] Determines the highest codimension of neighbors.
 ### Returns
 A fully allocated mesh structure.
@@ -5491,7 +5491,7 @@ end
 
 The information that is available to the user-defined [`p4est_iter_volume_t`](@ref) callback function.
 
-*treeid* gives the index in [`p4est`](@ref)->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
+*treeid* gives the index in `p4est`->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
 
 | Field  | Note                                                    |
 | :----- | :------------------------------------------------------ |
@@ -5510,7 +5510,7 @@ end
 """
 The information that is available to the user-defined [`p4est_iter_volume_t`](@ref) callback function.
 
-*treeid* gives the index in [`p4est`](@ref)->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
+*treeid* gives the index in `p4est`->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
 """
 const p4est_iter_volume_info_t = p4est_iter_volume_info
 
@@ -5795,7 +5795,7 @@ end
 """
 Store a parallel numbering of Lobatto points of a given degree > 0.
 
-Each element has degree+1 nodes per face and vnodes = (degree+1)^2 nodes per volume. num\\_local\\_elements is the number of local quadrants in the [`p4est`](@ref). element\\_nodes is of dimension vnodes * num\\_local\\_elements and lists the nodes of each element in lexicographic yx-order (x varies fastest); so for degree == 2, this is the layout of nodes:
+Each element has degree+1 nodes per face and vnodes = (degree+1)^2 nodes per volume. num\\_local\\_elements is the number of local quadrants in the `p4est`. element\\_nodes is of dimension vnodes * num\\_local\\_elements and lists the nodes of each element in lexicographic yx-order (x varies fastest); so for degree == 2, this is the layout of nodes:
 
 f\\_3 c\\_2 c\\_3 6---7---8 | | f\\_0 3 4 5 f\\_1 | | 0---1---2 c\\_0 c\\_1 f\\_2
 
@@ -6124,15 +6124,15 @@ const p4est_lid_t = UInt64
 """
 Callback function prototype to replace one set of quadrants with another.
 
-This is used by extended routines when the quadrants of an existing, valid [`p4est`](@ref) are changed. The callback allows the user to make changes to newly initialized quadrants before the quadrants that they replace are destroyed.
+This is used by extended routines when the quadrants of an existing, valid `p4est` are changed. The callback allows the user to make changes to newly initialized quadrants before the quadrants that they replace are destroyed.
 
 If the mesh is being refined, num\\_outgoing will be 1 and num\\_incoming will be 4, and vice versa if the mesh is being coarsened.
 
 ### Parameters
 * `num_outgoing`:\\[in\\] The number of outgoing quadrants.
-* `outgoing`:\\[in\\] The outgoing quadrants: after the callback, the user\\_data, if [`p4est`](@ref)->data_size is nonzero, will be destroyed.
+* `outgoing`:\\[in\\] The outgoing quadrants: after the callback, the user\\_data, if `p4est`->data_size is nonzero, will be destroyed.
 * `num_incoming`:\\[in\\] The number of incoming quadrants.
-* `incoming`:\\[in,out\\] The incoming quadrants: prior to the callback, the user\\_data, if [`p4est`](@ref)->data_size is nonzero, is allocated, and the [`p4est_init_t`](@ref) callback, if it has been provided, will be called.
+* `incoming`:\\[in,out\\] The incoming quadrants: prior to the callback, the user\\_data, if `p4est`->data_size is nonzero, is allocated, and the [`p4est_init_t`](@ref) callback, if it has been provided, will be called.
 """
 const p4est_replace_t = Ptr{Cvoid}
 
@@ -6549,7 +6549,7 @@ Create a new mesh.
 
 ### Parameters
 * `p4est`:\\[in\\] A forest that is fully 2:1 balanced.
-* `ghost`:\\[in\\] The ghost layer created from the provided [`p4est`](@ref).
+* `ghost`:\\[in\\] The ghost layer created from the provided `p4est`.
 * `compute_tree_index`:\\[in\\] Boolean to decide whether to allocate and compute the quad\\_to\\_tree list.
 * `compute_level_lists`:\\[in\\] Boolean to decide whether to compute the level lists in quad\\_level.
 * `btype`:\\[in\\] Currently ignored, only face neighbors are stored.
@@ -6567,13 +6567,13 @@ end
 """
     p4est_copy_ext(input, copy_data, duplicate_mpicomm)
 
-Make a deep copy of a [`p4est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
+Make a deep copy of a `p4est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 * `duplicate_mpicomm`:\\[in\\] If true, MPI communicator is copied.
 ### Returns
-Returns a valid [`p4est`](@ref) that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
+Returns a valid `p4est` that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
 ### Prototype
 ```c
 p4est_t *p4est_copy_ext (p4est_t * input, int copy_data, int duplicate_mpicomm);
@@ -6591,7 +6591,7 @@ Refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p4est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in [`p4est`](@ref).h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -6631,7 +6631,7 @@ end
 2:1 balance the size differences of neighboring elements in a forest.
 
 ### Parameters
-* `p4est`:\\[in,out\\] The [`p4est`](@ref) to be worked on.
+* `p4est`:\\[in,out\\] The `p4est` to be worked on.
 * `btype`:\\[in\\] Balance type (face or corner/full). Corner balance is almost never required when discretizing a PDE; just causes smoother mesh grading.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace.
@@ -6714,7 +6714,7 @@ end
 """
     p4est_save_ext(filename, p4est_, save_data, save_partition)
 
-Save the complete connectivity/[`p4est`](@ref) data to disk. This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations. See [`p4est_load_ext`](@ref) for information on the autopartition parameter.
+Save the complete connectivity/`p4est` data to disk. This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations. See [`p4est_load_ext`](@ref) for information on the autopartition parameter.
 
 !!! note
 
@@ -6939,7 +6939,7 @@ Search through the local part of a forest. The search is especially efficient if
 
 The search runs over all local quadrants and proceeds recursively top-down. For each tree, it may start at the root of that tree, or further down at the root of the subtree that contains all of the tree's local quadrants. Likewise, some intermediate levels in the recursion may be skipped if the processor-local part is contained in a single deeper subtree. The outer loop is thus a depth-first, processor-local forest traversal. Each quadrant in that loop either is a leaf, or a (direct or indirect) strict ancestor of a leaf. On entering a new quadrant, a user-provided quadrant-callback is executed.
 
-As a convenience, the user may provide anonymous "points" that are tracked down the forest. This way one search call may be used for multiple targets. The set of points that potentially matches a given quadrant diminishes from the root down to the leaves: For each quadrant, an inner loop over the potentially matching points executes a point-callback for each candidate that determines whether the point may be a match. If not, it is discarded in the current branch, otherwise it is passed to the next deeper level. The callback is allowed to return true for the same point and more than one quadrant; in this case more than one matching quadrant may be identified. The callback is also allowed to return false for all children of a quadrant that it returned true for earlier. If the point callback returns false for all points relevant to a quadrant, the recursion stops. The points can really be anything, [`p4est`](@ref) does not perform any interpretation, just passes the pointer along to the callback function.
+As a convenience, the user may provide anonymous "points" that are tracked down the forest. This way one search call may be used for multiple targets. The set of points that potentially matches a given quadrant diminishes from the root down to the leaves: For each quadrant, an inner loop over the potentially matching points executes a point-callback for each candidate that determines whether the point may be a match. If not, it is discarded in the current branch, otherwise it is passed to the next deeper level. The callback is allowed to return true for the same point and more than one quadrant; in this case more than one matching quadrant may be identified. The callback is also allowed to return false for all children of a quadrant that it returned true for earlier. If the point callback returns false for all points relevant to a quadrant, the recursion stops. The points can really be anything, `p4est` does not perform any interpretation, just passes the pointer along to the callback function.
 
 If points are present and the first quadrant callback returned true, we execute it a second time after calling the point callback for all current points. This can be used to gather and postprocess information about the points more easily. If it returns false, the recursion stops.
 
@@ -7021,13 +7021,13 @@ Callback function for the top-down search through the whole forest.
 ### Parameters
 * `p4est`:\\[in\\] The forest to search. We recurse through the trees one after another.
 * `which_tree`:\\[in\\] The current tree number.
-* `quadrant`:\\[in\\] The current quadrant in the recursion. This quadrant is either a non-leaf tree branch or a leaf. If the quadrant is contained in the local partition, we know which, otherwise we don't. Let us first consider the situation when **quadrant** is local, which is indicated by both **pfirst** and **plast** being equal to [`p4est`](@ref)->mpirank. Then the parameter **local_num** is negative for non-leaves and the number of the quadrant as a leaf in local storage otherwise. Only if the quadrant is a local leaf, it points to the actual local storage and can be used to access user data etc., and the recursion terminates. The other possibility is that **pfirst** < **plast**, in which case we proceed with the recursion, or both are equal to the same remote rank, in which case the recursion terminates. Either way, the quadrant is not from local forest storage.
+* `quadrant`:\\[in\\] The current quadrant in the recursion. This quadrant is either a non-leaf tree branch or a leaf. If the quadrant is contained in the local partition, we know which, otherwise we don't. Let us first consider the situation when **quadrant** is local, which is indicated by both **pfirst** and **plast** being equal to `p4est`->mpirank. Then the parameter **local_num** is negative for non-leaves and the number of the quadrant as a leaf in local storage otherwise. Only if the quadrant is a local leaf, it points to the actual local storage and can be used to access user data etc., and the recursion terminates. The other possibility is that **pfirst** < **plast**, in which case we proceed with the recursion, or both are equal to the same remote rank, in which case the recursion terminates. Either way, the quadrant is not from local forest storage.
 * `pfirst`:\\[in\\] The lowest processor that owns part of **quadrant**. Guaranteed to be non-empty.
 * `plast`:\\[in\\] The highest processor that owns part of **quadrant**. Guaranteed to be non-empty.
 * `local_num`:\\[in\\] If **quadrant** is a local leaf, this number is the index of the leaf in local quadrant storage. Else, this is a negative value.
 * `point`:\\[in,out\\] User-defined representation of a point. This parameter distinguishes two uses of the callback. For each quadrant, the callback is first called with a NULL point, and if this callback returns true, once for each point tracked in this branch. The return value for a point determines whether it shall be tracked further down the branch or not, and has no effect on a local leaf. The call with a NULL point is intended to prepare quadrant-related search meta data that is common to all points, and/or to efficiently terminate the recursion for all points in the branch in one call.
 ### Returns
-If false, the recursion at **quadrant** terminates. If true, it continues if **pfirst** < **plast** or if they are both equal to [`p4est`](@ref)->mpirank and the recursion has not reached a leaf yet.
+If false, the recursion at **quadrant** terminates. If true, it continues if **pfirst** < **plast** or if they are both equal to `p4est`->mpirank and the recursion has not reached a leaf yet.
 """
 const p4est_search_all_t = Ptr{Cvoid}
 
@@ -7231,7 +7231,7 @@ The *\\_to\\_attr arrays may have arbitrary contents defined by the user.
 | vertices             | an array of size (3 * *num_vertices*)                                                |
 | tree\\_to\\_vertex   | embed each tree into  ```c++ R^3 ```  for e.g. visualization (see p8est\\_vtk.h)     |
 | tree\\_attr\\_bytes  | bytes per tree in tree\\_to\\_attr                                                   |
-| tree\\_to\\_attr     | not touched by [`p4est`](@ref)                                                       |
+| tree\\_to\\_attr     | not touched by `p4est`                                                       |
 | tree\\_to\\_tree     | (6 * *num_trees*) neighbors across faces                                             |
 | tree\\_to\\_face     | (6 * *num_trees*) face to face+orientation (see description)                         |
 | tree\\_to\\_edge     | (12 * *num_trees*) or NULL (see description)                                         |
@@ -7953,7 +7953,7 @@ Fills an array with information about edge neighbors.
 ### Parameters
 * `itree`:\\[in\\] The number of the originating tree.
 * `iedge`:\\[in\\] The number of the originating edge.
-* `ei`:\\[in,out\\] A [`p8est_edge_info_t`](@ref) structure with initialized array.
+* `ei`:\\[in,out\\] A `p8est_edge_info_t` structure with initialized array.
 ### Prototype
 ```c
 void p8est_find_edge_transform (p8est_connectivity_t * connectivity, p4est_topidx_t itree, int iedge, p8est_edge_info_t * ei);
@@ -7971,7 +7971,7 @@ Fills an array with information about corner neighbors.
 ### Parameters
 * `itree`:\\[in\\] The number of the originating tree.
 * `icorner`:\\[in\\] The number of the originating corner.
-* `ci`:\\[in,out\\] A [`p8est_corner_info_t`](@ref) structure with initialized array.
+* `ci`:\\[in,out\\] A `p8est_corner_info_t` structure with initialized array.
 ### Prototype
 ```c
 void p8est_find_corner_transform (p8est_connectivity_t * connectivity, p4est_topidx_t itree, int icorner, p8est_corner_info_t * ci);
@@ -8172,7 +8172,7 @@ end
 """
     p8est_connectivity_read_inp(filename)
 
-Create a [`p4est`](@ref) connectivity from an ABAQUS input file.
+Create a `p4est` connectivity from an ABAQUS input file.
 
 This utility function reads a basic ABAQUS file supporting element type with the prefix C2D4, CPS4, and S4 in 2D and of type C3D8 reading them as bilinear quadrilateral and trilinear hexahedral trees respectively.
 
@@ -8226,7 +8226,7 @@ and in 3D they are given as:
      8,      27,      18,      17,      25,      26,      12,      10,      24
 ```
 
-This function reads a mesh from *filename* and returns an associated [`p4est`](@ref) connectivity.
+This function reads a mesh from *filename* and returns an associated `p4est` connectivity.
 
 ### Parameters
 * `filename`:\\[in\\] file to read the connectivity from
@@ -8341,7 +8341,7 @@ end
 | mpirank                | this process's MPI rank                                                                                    |
 | mpicomm\\_owned        | whether this communicator is owned by the forest                                                           |
 | data\\_size            | size of per-quadrant p.user\\_data (see [`p2est_quadrant_t`](@ref)::p2est\\_quadrant\\_data::user\\_data)  |
-| user\\_pointer         | convenience pointer for users, never touched by [`p4est`](@ref)                                            |
+| user\\_pointer         | convenience pointer for users, never touched by `p4est`                                            |
 | connectivity           | topology of sheet, not owned.                                                                              |
 | columns                | 2D description of column layout built from *connectivity*                                                  |
 | layers                 | single array that stores [`p2est_quadrant_t`](@ref) layers within columns                                  |
@@ -8366,7 +8366,7 @@ struct p6est
     root_len::p4est_qcoord_t
 end
 
-"""The [`p6est`](@ref) forest datatype"""
+"""The `p6est` forest datatype"""
 const p6est_t = p6est
 
 # typedef void ( * p6est_init_t ) ( p6est_t * p6est , p4est_topidx_t which_tree , p4est_quadrant_t * column , p2est_quadrant_t * layer )
@@ -8385,17 +8385,17 @@ const p6est_init_t = Ptr{Cvoid}
 """
 Callback function prototype to transfer information from outgoing layers to incoming layers.
 
-This is used by extended routines when the layers of an existing, valid [`p6est`](@ref) are changed. The callback allows the user to make changes to newly initialized layers before the layers that they replace are destroyed.
+This is used by extended routines when the layers of an existing, valid `p6est` are changed. The callback allows the user to make changes to newly initialized layers before the layers that they replace are destroyed.
 
 ### Parameters
 * `num_outcolumns`:\\[in\\] The number of columns that contain the outgoing layers: will be either 1 or 4.
 * `num_outlayers`:\\[in\\] The number of outgoing layers: will be either 1 (a single layer is being refined), 2 (two layers are being vertically coarsened), or 4 (four layers are being horizontally coarsened).
 * `outcolumns`:\\[in\\] The columns of the outgoing layers
-* `outlayers`:\\[in\\] The outgoing layers: after the callback, the user\\_data, if [`p6est`](@ref)->data_size is nonzero, will be destroyed.
+* `outlayers`:\\[in\\] The outgoing layers: after the callback, the user\\_data, if `p6est`->data_size is nonzero, will be destroyed.
 * `num_incolumns`:\\[in\\] The number of columns that contain the outgoing layers: will be either 1 or 4.
 * `num_inlayers`:\\[in\\] The number of incoming layers: will be either 1 (coarsening), 2 (vertical refinement), or 4 (horizontal refinement)
 * `incolumns`:\\[in\\] The columns of the incoming layers
-* `inlayers`:\\[in,out\\] The incoming layers: prior to the callback, the user\\_data, if [`p6est`](@ref)->data_size is nonzero, is allocated, and the [`p6est_init_t`](@ref) callback, if it has been provided, will be called.
+* `inlayers`:\\[in,out\\] The incoming layers: prior to the callback, the user\\_data, if `p6est`->data_size is nonzero, is allocated, and the [`p6est_init_t`](@ref) callback, if it has been provided, will be called.
 """
 const p6est_replace_t = Ptr{Cvoid}
 
@@ -8467,10 +8467,10 @@ end
 """
     p6est_new_from_p4est(p4est_, top_vertices, height, min_zlevel, data_size, init_fn, user_pointer)
 
-Create a new forest from an already created [`p4est`](@ref) that represents columns.
+Create a new forest from an already created `p4est` that represents columns.
 
 ### Parameters
-* `p4est`:\\[in\\] A valid [`p4est`](@ref). A deep copy will be created, so this can be destroyed without affectin the new [`p6est`](@ref) object.
+* `p4est`:\\[in\\] A valid `p4est`. A deep copy will be created, so this can be destroyed without affectin the new `p6est` object.
 * `top_vertices`:\\[in\\] the same as in p6est\\_conectivity\\_new()
 * `height`:\\[in\\] the same as in p6est\\_conectivity\\_new()
 * `min_zlevel`:\\[in\\] the same as in [`p6est_new`](@ref)()
@@ -8478,7 +8478,7 @@ Create a new forest from an already created [`p4est`](@ref) that represents colu
 * `init_fn`:\\[in\\] the same as in [`p6est_new`](@ref)()
 * `user_pointer`:\\[in\\] the same as in [`p6est_new`](@ref)()
 ### Returns
-This returns a valid forest. The user must destroy the connectivity for the new [`p6est`](@ref) independently.
+This returns a valid forest. The user must destroy the connectivity for the new `p6est` independently.
 ### Prototype
 ```c
 p6est_t *p6est_new_from_p4est (p4est_t * p4est, double *top_vertices, double height[3], int min_zlevel, size_t data_size, p6est_init_t init_fn, void *user_pointer);
@@ -8491,11 +8491,11 @@ end
 """
     p6est_destroy(p6est_)
 
-Destroy a [`p6est`](@ref).
+Destroy a `p6est`.
 
 !!! note
 
-    The connectivity structure is not destroyed with the [`p6est`](@ref).
+    The connectivity structure is not destroyed with the `p6est`.
 
 ### Prototype
 ```c
@@ -8509,12 +8509,12 @@ end
 """
     p6est_copy(input, copy_data)
 
-Make a deep copy of a [`p6est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless.
+Make a deep copy of a `p6est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 ### Returns
-Returns a valid [`p6est`](@ref) that does not depend on the input.
+Returns a valid `p6est` that does not depend on the input.
 ### Prototype
 ```c
 p6est_t *p6est_copy (p6est_t * input, int copy_data);
@@ -8532,7 +8532,7 @@ Reset user pointer and element data. When the data size is changed the quadrant 
 ### Parameters
 * `data_size`:\\[in\\] This is the size of data for each quadrant which can be zero. Then user\\_data\\_pool is set to NULL.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
-* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the [`p6est`](@ref) before init\\_fn is called the first time.
+* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the `p6est` before init\\_fn is called the first time.
 ### Prototype
 ```c
 void p6est_reset_data (p6est_t * p6est, size_t data_size, p6est_init_t init_fn, void *user_pointer);
@@ -8624,7 +8624,7 @@ end
 Balance a forest.
 
 ### Parameters
-* `p6est`:\\[in\\] The [`p6est`](@ref) to be worked on.
+* `p6est`:\\[in\\] The `p6est` to be worked on.
 * `btype`:\\[in\\] Balance type (face, corner or default, full).
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
 ### Prototype
@@ -8649,7 +8649,7 @@ Equally partition the forest.
 
 The forest will be partitioned between processors where they each have an approximately equal number of quadrants.
 
-Note that [`p6est`](@ref)->layers and [`p6est`](@ref)->global_first_layers may change during this call. Address pointers referencing these objects from before [`p6est_partition`](@ref) is called become invalid.
+Note that `p6est`->layers and `p6est`->global_first_layers may change during this call. Address pointers referencing these objects from before [`p6est_partition`](@ref) is called become invalid.
 
 ### Parameters
 * `p6est`:\\[in,out\\] The forest that will be partitioned.
@@ -8742,7 +8742,7 @@ end
 """
     p6est_save(filename, p6est_, save_data)
 
-Save the complete connectivity/[`p6est`](@ref) data to disk. This is a collective
+Save the complete connectivity/`p6est` data to disk. This is a collective
 
 operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations.
 
@@ -8886,13 +8886,13 @@ end
 """
     p6est_copy_ext(input, copy_data, duplicate_mpicomm)
 
-Make a deep copy of a [`p6est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL.
+Make a deep copy of a `p6est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 * `duplicate_mpicomm`:\\[in\\] If true, MPI communicator is copied.
 ### Returns
-Returns a valid [`p6est`](@ref) that does not depend on the input.
+Returns a valid `p6est` that does not depend on the input.
 ### Prototype
 ```c
 p6est_t *p6est_copy_ext (p6est_t * input, int copy_data, int duplicate_mpicomm);
@@ -8905,7 +8905,7 @@ end
 """
     p6est_save_ext(filename, p6est_, save_data, save_partition)
 
-Save the complete connectivity/[`p6est`](@ref) data to disk.
+Save the complete connectivity/`p6est` data to disk.
 
 This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations. See [`p6est_load_ext`](@ref)() for information on the autopartition parameter.
 
@@ -8947,7 +8947,7 @@ Horizontally refine a forest with a bounded refinement level and a replace optio
 ### Parameters
 * `p6est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in [`p4est`](@ref).h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -8968,7 +8968,7 @@ Vertically refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p6est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in [`p4est`](@ref).h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p4est`.h.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -9051,7 +9051,7 @@ end
 2:1 balance the size differences of neighboring elements in a forest.
 
 ### Parameters
-* `p6est`:\\[in,out\\] The [`p6est`](@ref) to be worked on.
+* `p6est`:\\[in,out\\] The `p6est` to be worked on.
 * `btype`:\\[in\\] Balance type (face or corner/full). Corner balance is almost never required when discretizing a PDE; just causes smoother mesh grading.
 * `max_diff`:\\[in\\] The maximum difference between the horizontal refinement level and the vertical refinement level
 * `min_diff`:\\[in\\] The minimum difference between the horizontal refinement level and the vertical refinement level
@@ -9139,7 +9139,7 @@ const p8est_quadrant_t = p8est_quadrant
 """
     p8est_tree
 
-The [`p8est`](@ref) tree datatype
+The `p8est` tree datatype
 
 | Field              | Note                                                               |
 | :----------------- | :----------------------------------------------------------------- |
@@ -9158,7 +9158,7 @@ struct p8est_tree
     maxlevel::Int8
 end
 
-"""The [`p8est`](@ref) tree datatype"""
+"""The `p8est` tree datatype"""
 const p8est_tree_t = p8est_tree
 
 """
@@ -9196,7 +9196,7 @@ struct p8est_inspect
     use_B::Cint
 end
 
-"""Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the [`p8est`](@ref) main structure. Declared in p8est\\_extended.h. Used to profile important algorithms."""
+"""Data pertaining to selecting, inspecting, and profiling algorithms. A pointer to this structure is hooked into the `p8est` main structure. Declared in p8est\\_extended.h. Used to profile important algorithms."""
 const p8est_inspect_t = p8est_inspect
 
 """
@@ -9208,7 +9208,7 @@ const p8est_inspect_t = p8est_inspect
 | mpirank                   | this process's MPI rank                                                                                          |
 | mpicomm\\_owned           | flag if communicator is owned                                                                                    |
 | data\\_size               | size of per-quadrant p.user\\_data (see [`p8est_quadrant_t`](@ref)::[`p8est_quadrant_data`](@ref)::user\\_data)  |
-| user\\_pointer            | convenience pointer for users, never touched by [`p4est`](@ref)                                                  |
+| user\\_pointer            | convenience pointer for users, never touched by `p4est`                                                  |
 | revision                  | Gets bumped on mesh change                                                                                       |
 | first\\_local\\_tree      | 0-based index of first local tree, must be -1 for an empty processor                                             |
 | last\\_local\\_tree       | 0-based index of last local tree, must be -2 for an empty processor                                              |
@@ -9243,13 +9243,13 @@ struct p8est
     inspect::Ptr{p8est_inspect_t}
 end
 
-"""The [`p8est`](@ref) forest datatype"""
+"""The `p8est` forest datatype"""
 const p8est_t = p8est
 
 """
     p8est_memory_used(p8est_)
 
-Calculate local memory usage of a forest structure. Not collective. The memory used on the current rank is returned. The connectivity structure is not counted since it is not owned; use p8est\\_connectivity\\_memory\\_usage ([`p8est`](@ref)->connectivity).
+Calculate local memory usage of a forest structure. Not collective. The memory used on the current rank is returned. The connectivity structure is not counted since it is not owned; use p8est\\_connectivity\\_memory\\_usage (`p8est`->connectivity).
 
 ### Parameters
 * `p8est`:\\[in\\] Valid forest structure.
@@ -9369,11 +9369,11 @@ end
 """
     p8est_destroy(p8est_)
 
-Destroy a [`p8est`](@ref).
+Destroy a `p8est`.
 
 !!! note
 
-    The connectivity structure is not destroyed with the [`p8est`](@ref).
+    The connectivity structure is not destroyed with the `p8est`.
 
 ### Prototype
 ```c
@@ -9387,12 +9387,12 @@ end
 """
     p8est_copy(input, copy_data)
 
-Make a deep copy of a [`p8est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
+Make a deep copy of a `p8est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 ### Returns
-Returns a valid [`p8est`](@ref) that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
+Returns a valid `p8est` that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
 ### Prototype
 ```c
 p8est_t *p8est_copy (p8est_t * input, int copy_data);
@@ -9410,7 +9410,7 @@ Reset user pointer and element data. When the data size is changed the quadrant 
 ### Parameters
 * `data_size`:\\[in\\] This is the size of data for each quadrant which can be zero. Then user\\_data\\_pool is set to NULL.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically. May be NULL.
-* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the [`p8est`](@ref) before init\\_fn is called the first time.
+* `user_pointer`:\\[in\\] Assign to the user\\_pointer member of the `p8est` before init\\_fn is called the first time.
 ### Prototype
 ```c
 void p8est_reset_data (p8est_t * p8est, size_t data_size, p8est_init_t init_fn, void *user_pointer);
@@ -9464,7 +9464,7 @@ end
 2:1 balance the size differences of neighboring elements in a forest.
 
 ### Parameters
-* `p8est`:\\[in,out\\] The [`p8est`](@ref) to be worked on.
+* `p8est`:\\[in,out\\] The `p8est` to be worked on.
 * `btype`:\\[in\\] Balance type (face, edge, or corner/full). Examples: Finite volume or discontinuous Galerkin methods only require face balance. Continuous finite element methods usually require edge balance. Corner balance is almost never required mathematically; it just produces a smoother mesh grading.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
 ### Prototype
@@ -9533,7 +9533,7 @@ end
 """
     p8est_save(filename, p8est_, save_data)
 
-Save the complete connectivity/[`p8est`](@ref) data to disk.
+Save the complete connectivity/`p8est` data to disk.
 
 This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations.
 
@@ -9547,7 +9547,7 @@ The revision counter is not saved to the file, since that would make files diffe
 
 !!! note
 
-    If [`p4est`](@ref) is not configured to use MPI-IO, some processes return from this function before the file is complete, in which case immediate read-access to the file may require a call to [`sc_MPI_Barrier`](@ref).
+    If `p4est` is not configured to use MPI-IO, some processes return from this function before the file is complete, in which case immediate read-access to the file may require a call to `sc_MPI_Barrier`.
 
 ### Parameters
 * `filename`:\\[in\\] Name of the file to write.
@@ -9868,7 +9868,7 @@ Check a forest to see if it is balanced.
 This function builds the ghost layer and discards it when done.
 
 ### Parameters
-* `p8est`:\\[in\\] The [`p8est`](@ref) to be tested.
+* `p8est`:\\[in\\] The `p8est` to be tested.
 * `btype`:\\[in\\] Balance type (face, edge, corner or default, full).
 ### Returns
 Returns true if balanced, false otherwise.
@@ -9887,8 +9887,8 @@ end
 Compute the parallel checksum of a ghost layer.
 
 ### Parameters
-* `p8est`:\\[in\\] The MPI information of this [`p8est`](@ref) will be used.
-* `ghost`:\\[in\\] A ghost layer obtained from the [`p8est`](@ref).
+* `p8est`:\\[in\\] The MPI information of this `p8est` will be used.
+* `ghost`:\\[in\\] A ghost layer obtained from the `p8est`.
 ### Returns
 Parallel checksum on rank 0, 0 otherwise.
 ### Prototype
@@ -9903,12 +9903,12 @@ end
 """
     p8est_ghost_exchange_data(p8est_, ghost, ghost_data)
 
-Transfer data for local quadrants that are ghosts to other processors. Send the data stored in the quadrant's user\\_data. This is either the pointer variable itself if [`p8est`](@ref)->data_size is 0, or the content of the referenced memory field if [`p8est`](@ref)->data\\_size is positive.
+Transfer data for local quadrants that are ghosts to other processors. Send the data stored in the quadrant's user\\_data. This is either the pointer variable itself if `p8est`->data_size is 0, or the content of the referenced memory field if `p8est`->data\\_size is positive.
 
 ### Parameters
 * `p8est`:\\[in\\] The forest used for reference.
 * `ghost`:\\[in\\] The ghost layer used for reference.
-* `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghost quadrants in sequence. If [`p8est`](@ref)->data\\_size is 0, must at least hold sizeof (void *) bytes for each, otherwise [`p8est`](@ref)->data\\_size each.
+* `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghost quadrants in sequence. If `p8est`->data\\_size is 0, must at least hold sizeof (void *) bytes for each, otherwise `p8est`->data\\_size each.
 ### Prototype
 ```c
 void p8est_ghost_exchange_data (p8est_t * p8est, p8est_ghost_t * ghost, void *ghost_data);
@@ -10048,7 +10048,7 @@ Transfer data for local quadrants that are ghosts to other processors. The data 
 * `p8est`:\\[in\\] The forest used for reference.
 * `ghost`:\\[in\\] The ghost layer used for reference.
 * `minlevel`:\\[in\\] Level of the largest quads to be exchanged. Use <= 0 for no restriction.
-* `maxlevel`:\\[in\\] Level of the smallest quads to be exchanged. Use >= [`P8EST_QMAXLEVEL`](@ref) for no restriction.
+* `maxlevel`:\\[in\\] Level of the smallest quads to be exchanged. Use >= `P8EST_QMAXLEVEL` for no restriction.
 * `data_size`:\\[in\\] The data size to transfer per quadrant.
 * `mirror_data`:\\[in\\] One data pointer per mirror quadrant as input.
 * `ghost_data`:\\[in,out\\] Pre-allocated contiguous data for all ghosts in sequence, which must hold at least `data_size` for each ghost.
@@ -10147,7 +10147,7 @@ TODO: In case of an inter-tree neighbor relation in a brick-like situation (one 
 | quad\\_to\\_quad    | one index for each of the 6 faces                                                                                                                                                                              |
 | quad\\_to\\_face    | encodes orientation/2:1 status                                                                                                                                                                                 |
 | quad\\_to\\_half    | stores half-size neighbors                                                                                                                                                                                     |
-| quad\\_level        | Stores lists of per-level quads. The array has entries indexed by 0..[`P4EST_QMAXLEVEL`](@ref) inclusive that are arrays of local quadrant ids. Is NULL by default, but may be enabled by p8est_mesh_new_ext.  |
+| quad\\_level        | Stores lists of per-level quads. The array has entries indexed by 0..`P4EST_QMAXLEVEL` inclusive that are arrays of local quadrant ids. Is NULL by default, but may be enabled by p8est_mesh_new_ext.  |
 | local\\_num\\_edges | unsame-size and tree-boundary edges                                                                                                                                                                            |
 | quad\\_to\\_edge    | 12 indices for each local quad                                                                                                                                                                                 |
 | edge\\_offset       | local\\_num\\_edges + 1 entries                                                                                                                                                                                |
@@ -10217,7 +10217,7 @@ Create a p8est\\_mesh structure. This function does not populate the quad\\_to\\
 
 ### Parameters
 * `p8est`:\\[in\\] A forest that is fully 2:1 balanced.
-* `ghost`:\\[in\\] The ghost layer created from the provided [`p4est`](@ref).
+* `ghost`:\\[in\\] The ghost layer created from the provided `p4est`.
 * `btype`:\\[in\\] Determines the highest codimension of neighbors.
 ### Returns
 A fully allocated mesh structure.
@@ -10393,7 +10393,7 @@ end
 
 The information that is available to the user-defined [`p8est_iter_volume_t`](@ref) callback function.
 
-*treeid* gives the index in [`p4est`](@ref)->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
+*treeid* gives the index in `p4est`->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
 
 | Field  | Note                                                    |
 | :----- | :------------------------------------------------------ |
@@ -10412,7 +10412,7 @@ end
 """
 The information that is available to the user-defined [`p8est_iter_volume_t`](@ref) callback function.
 
-*treeid* gives the index in [`p4est`](@ref)->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
+*treeid* gives the index in `p4est`->trees of the tree to which *quad* belongs. *quadid* gives the index of *quad* within *tree*'s quadrants array.
 """
 const p8est_iter_volume_info_t = p8est_iter_volume_info
 
@@ -10591,7 +10591,7 @@ The information about all sides of an edge in the forest. If tree\\_boundary is 
 | Field           | Note                                                   |
 | :-------------- | :----------------------------------------------------- |
 | tree\\_boundary | boolean: interior face (0), tree boundary face (true)  |
-| sides           | array of [`p8est_iter_edge_side_t`](@ref) type         |
+| sides           | array of `p8est_iter_edge_side_t` type         |
 """
 struct p8est_iter_edge_info
     p4est::Ptr{p8est_t}
@@ -10651,7 +10651,7 @@ If tree\\_boundary is false, the corner is on the interior of a tree. When tree\
 | Field           | Note                                                   |
 | :-------------- | :----------------------------------------------------- |
 | tree\\_boundary | boolean: interior face (0), tree boundary face (true)  |
-| sides           | array of [`p8est_iter_corner_side_t`](@ref) type       |
+| sides           | array of `p8est_iter_corner_side_t` type       |
 """
 struct p8est_iter_corner_info
     p4est::Ptr{p8est_t}
@@ -11444,15 +11444,15 @@ const p8est_lid_t = sc_uint128_t
 """
 Callback function prototype to replace one set of quadrants with another.
 
-This is used by extended routines when the quadrants of an existing, valid [`p8est`](@ref) are changed. The callback allows the user to make changes to newly initialized quadrants before the quadrants that they replace are destroyed.
+This is used by extended routines when the quadrants of an existing, valid `p8est` are changed. The callback allows the user to make changes to newly initialized quadrants before the quadrants that they replace are destroyed.
 
 If the mesh is being refined, num\\_outgoing will be 1 and num\\_incoming will be 8, and vice versa if the mesh is being coarsened.
 
 ### Parameters
 * `num_outgoing`:\\[in\\] The number of outgoing quadrants.
-* `outgoing`:\\[in\\] The outgoing quadrants: after the callback, the user\\_data, if [`p8est`](@ref)->data_size is nonzero, will be destroyed.
+* `outgoing`:\\[in\\] The outgoing quadrants: after the callback, the user\\_data, if `p8est`->data_size is nonzero, will be destroyed.
 * `num_incoming`:\\[in\\] The number of incoming quadrants.
-* `incoming`:\\[in,out\\] The incoming quadrants: prior to the callback, the user\\_data, if [`p8est`](@ref)->data_size is nonzero, is allocated, and the [`p8est_init_t`](@ref) callback, if it has been provided, will be called.
+* `incoming`:\\[in,out\\] The incoming quadrants: prior to the callback, the user\\_data, if `p8est`->data_size is nonzero, is allocated, and the [`p8est_init_t`](@ref) callback, if it has been provided, will be called.
 """
 const p8est_replace_t = Ptr{Cvoid}
 
@@ -11869,7 +11869,7 @@ Create a new mesh.
 
 ### Parameters
 * `p8est`:\\[in\\] A forest that is fully 2:1 balanced.
-* `ghost`:\\[in\\] The ghost layer created from the provided [`p4est`](@ref).
+* `ghost`:\\[in\\] The ghost layer created from the provided `p4est`.
 * `compute_tree_index`:\\[in\\] Boolean to decide whether to allocate and compute the quad\\_to\\_tree list.
 * `compute_level_lists`:\\[in\\] Boolean to decide whether to compute the level lists in quad\\_level.
 * `btype`:\\[in\\] Currently ignored, only face neighbors are stored.
@@ -11887,13 +11887,13 @@ end
 """
     p8est_copy_ext(input, copy_data, duplicate_mpicomm)
 
-Make a deep copy of a [`p8est`](@ref). The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
+Make a deep copy of a `p8est`. The connectivity is not duplicated. Copying of quadrant user data is optional. If old and new data sizes are 0, the user\\_data field is copied regardless. The inspect member of the copy is set to NULL. The revision counter of the copy is set to zero.
 
 ### Parameters
 * `copy_data`:\\[in\\] If true, data are copied. If false, data\\_size is set to 0.
 * `duplicate_mpicomm`:\\[in\\] If true, MPI communicator is copied.
 ### Returns
-Returns a valid [`p8est`](@ref) that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
+Returns a valid `p8est` that does not depend on the input, except for borrowing the same connectivity. Its revision counter is 0.
 ### Prototype
 ```c
 p8est_t *p8est_copy_ext (p8est_t * input, int copy_data, int duplicate_mpicomm);
@@ -11911,7 +11911,7 @@ Refine a forest with a bounded refinement level and a replace option.
 ### Parameters
 * `p8est`:\\[in,out\\] The forest is changed in place.
 * `refine_recursive`:\\[in\\] Boolean to decide on recursive refinement.
-* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in [`p8est`](@ref).h.
+* `maxlevel`:\\[in\\] Maximum allowed refinement level (inclusive). If this is negative the level is restricted only by the compile-time constant QMAXLEVEL in `p8est`.h.
 * `refine_fn`:\\[in\\] Callback function that must return true if a quadrant shall be refined. If refine\\_recursive is true, refine\\_fn is called for every existing and newly created quadrant. Otherwise, it is called for every existing quadrant. It is possible that a refinement request made by the callback is ignored. To catch this case, you can examine whether init\\_fn or replace\\_fn gets called.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data for newly created quadrants, which is guaranteed to be allocated. This function pointer may be NULL.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace; may be NULL.
@@ -11951,7 +11951,7 @@ end
 2:1 balance the size differences of neighboring elements in a forest.
 
 ### Parameters
-* `p8est`:\\[in,out\\] The [`p8est`](@ref) to be worked on.
+* `p8est`:\\[in,out\\] The `p8est` to be worked on.
 * `btype`:\\[in\\] Balance type (face, edge, or corner/full). Corner balance is almost never required when discretizing a PDE; just causes smoother mesh grading.
 * `init_fn`:\\[in\\] Callback function to initialize the user\\_data which is already allocated automatically.
 * `replace_fn`:\\[in\\] Callback function that allows the user to change incoming quadrants based on the quadrants they replace.
@@ -12034,7 +12034,7 @@ end
 """
     p8est_save_ext(filename, p8est_, save_data, save_partition)
 
-Save the complete connectivity/[`p8est`](@ref) data to disk. This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations. See [`p8est_load_ext`](@ref) for information on the autopartition parameter.
+Save the complete connectivity/`p8est` data to disk. This is a collective operation that all MPI processes need to call. All processes write into the same file, so the filename given needs to be identical over all parallel invocations. See [`p8est_load_ext`](@ref) for information on the autopartition parameter.
 
 !!! note
 
@@ -12260,7 +12260,7 @@ Search through the local part of a forest. The search is especially efficient if
 
 The search runs over all local quadrants and proceeds recursively top-down. For each tree, it may start at the root of that tree, or further down at the root of the subtree that contains all of the tree's local quadrants. Likewise, some intermediate levels in the recursion may be skipped if the processor-local part is contained in a single deeper subtree. The outer loop is thus a depth-first, processor-local forest traversal. Each quadrant in that loop either is a leaf, or a (direct or indirect) strict ancestor of a leaf. On entering a new quadrant, a user-provided quadrant-callback is executed.
 
-As a convenience, the user may provide anonymous "points" that are tracked down the forest. This way one search call may be used for multiple targets. The set of points that potentially matches a given quadrant diminishes from the root down to the leaves: For each quadrant, an inner loop over the potentially matching points executes a point-callback for each candidate that determines whether the point may be a match. If not, it is discarded in the current branch, otherwise it is passed to the next deeper level. The callback is allowed to return true for the same point and more than one quadrant; in this case more than one matching quadrant may be identified. The callback is also allowed to return false for all children of a quadrant that it returned true for earlier. If the point callback returns false for all points relevant to a quadrant, the recursion stops. The points can really be anything, [`p4est`](@ref) does not perform any interpretation, just passes the pointer along to the callback function.
+As a convenience, the user may provide anonymous "points" that are tracked down the forest. This way one search call may be used for multiple targets. The set of points that potentially matches a given quadrant diminishes from the root down to the leaves: For each quadrant, an inner loop over the potentially matching points executes a point-callback for each candidate that determines whether the point may be a match. If not, it is discarded in the current branch, otherwise it is passed to the next deeper level. The callback is allowed to return true for the same point and more than one quadrant; in this case more than one matching quadrant may be identified. The callback is also allowed to return false for all children of a quadrant that it returned true for earlier. If the point callback returns false for all points relevant to a quadrant, the recursion stops. The points can really be anything, `p4est` does not perform any interpretation, just passes the pointer along to the callback function.
 
 If points are present and the first quadrant callback returned true, we execute it a second time after calling the point callback for all current points. This can be used to gather and postprocess information about the points more easily. If it returns false, the recursion stops.
 
@@ -12342,13 +12342,13 @@ Callback function for the top-down search through the whole forest.
 ### Parameters
 * `p4est`:\\[in\\] The forest to search. We recurse through the trees one after another.
 * `which_tree`:\\[in\\] The current tree number.
-* `quadrant`:\\[in\\] The current quadrant in the recursion. This quadrant is either a non-leaf tree branch or a leaf. If the quadrant is contained in the local partition, we know which, otherwise we don't. Let us first consider the situation when **quadrant** is local, which is indicated by both **pfirst** and **plast** being equal to [`p4est`](@ref)->mpirank. Then the parameter **local_num** is negative for non-leaves and the number of the quadrant as a leaf in local storage otherwise. Only if the quadrant is a local leaf, it points to the actual local storage and can be used to access user data etc., and the recursion terminates. The other possibility is that **pfirst** < **plast**, in which case we proceed with the recursion, or both are equal to the same remote rank, in which case the recursion terminates. Either way, the quadrant is not from local forest storage.
+* `quadrant`:\\[in\\] The current quadrant in the recursion. This quadrant is either a non-leaf tree branch or a leaf. If the quadrant is contained in the local partition, we know which, otherwise we don't. Let us first consider the situation when **quadrant** is local, which is indicated by both **pfirst** and **plast** being equal to `p4est`->mpirank. Then the parameter **local_num** is negative for non-leaves and the number of the quadrant as a leaf in local storage otherwise. Only if the quadrant is a local leaf, it points to the actual local storage and can be used to access user data etc., and the recursion terminates. The other possibility is that **pfirst** < **plast**, in which case we proceed with the recursion, or both are equal to the same remote rank, in which case the recursion terminates. Either way, the quadrant is not from local forest storage.
 * `pfirst`:\\[in\\] The lowest processor that owns part of **quadrant**. Guaranteed to be non-empty.
 * `plast`:\\[in\\] The highest processor that owns part of **quadrant**. Guaranteed to be non-empty.
 * `local_num`:\\[in\\] If **quadrant** is a local leaf, this number is the index of the leaf in local quadrant storage. Else, this is a negative value.
 * `point`:\\[in,out\\] User-defined representation of a point. This parameter distinguishes two uses of the callback. For each quadrant, the callback is first called with a NULL point, and if this callback returns true, once for each point tracked in this branch. The return value for a point determines whether it shall be tracked further down the branch or not, and has no effect on a local leaf. The call with a NULL point is intended to prepare quadrant-related search meta data that is common to all points, and/or to efficiently terminate the recursion for all points in the branch in one call.
 ### Returns
-If false, the recursion at **quadrant** terminates. If true, it continues if **pfirst** < **plast** or if they are both equal to [`p4est`](@ref)->mpirank and the recursion has not reached a leaf yet.
+If false, the recursion at **quadrant** terminates. If true, it continues if **pfirst** < **plast** or if they are both equal to `p4est`->mpirank and the recursion has not reached a leaf yet.
 """
 const p8est_search_all_t = Ptr{Cvoid}
 
