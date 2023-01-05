@@ -76,14 +76,14 @@ function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_dat
   if unsafe_load(info).sides.elem_count == 2
     sides = (unsafe_load_side(info, 1), unsafe_load_side(info, 2))
     @test sides[1].is_hanging isa Integer
-    @test sides[1].is_hanging isa Integer
+    @test sides[2].is_hanging isa Integer
     @test sides[1].is.full.is_ghost isa Integer
     @test sides[2].is.full.is_ghost isa Integer
     if sides[1].is_hanging == false && sides[2].is_hanging == false # no hanging nodes
       if sides[1].is.full.is_ghost == true
         remote_side = 1
         local_side = 2
-      elseif @test_nowarn sides[2].is.full.is_ghost == true
+      elseif sides[2].is.full.is_ghost == true
         remote_side = 2
         local_side = 1
       else
