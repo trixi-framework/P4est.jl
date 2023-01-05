@@ -97,7 +97,6 @@ function iter_face_nested_attributes(info::Ptr{p4est_iter_face_info_t}, user_dat
                         MPI.Comm_size(MPI.COMM_WORLD) + 1) isa Vector{Int32}
       @test sides[remote_side].is.full.quadid isa Integer
       if local_side == 2
-        # @test unsafe_load(sides[1].is.full.quad.p.piggy3.local_num) isa Integer # TODO: does not work
         @test unsafe_load(sides[2].is.full.quad.p.piggy3.local_num) isa Integer
       end
     else # hanging node
