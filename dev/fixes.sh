@@ -31,7 +31,7 @@ sed -i "s/\[\`p4est\`](@ref)/\`p4est\`/g" LibP4est.jl
 sed -i "s/\[\`p6est\`](@ref)/\`p6est\`/g" LibP4est.jl
 sed -i "s/\[\`p8est\`](@ref)/\`p8est\`/g" LibP4est.jl
 sed -i "s/\[\`P4EST_QMAXLEVEL\`](@ref)/\`P4EST_QMAXLEVEL\`/g" LibP4est.jl
-sed -i "s/\[\`P8EST_QMAXLEVEL\`](@ref)/\`p8est\`/g" LibP4est.jl
+sed -i "s/\[\`P8EST_QMAXLEVEL\`](@ref)/\`P8EST_QMAXLEVEL\`/g" LibP4est.jl
 sed -i "s/\[\`P4EST_CONN_DISK_PERIODIC\`](@ref)/\`P4EST_CONN_DISK_PERIODIC\`/g" LibP4est.jl
 sed -i "s/\[\`p8est_iter_corner_side_t\`](@ref)/\`p8est_iter_corner_side_t\`/g" LibP4est.jl
 sed -i "s/\[\`p8est_iter_edge_side_t\`](@ref)/\`p8est_iter_edge_side_t\`/g" LibP4est.jl
