@@ -9,12 +9,12 @@ using P4est
 # it looks like we need to define the functions outside of `@testset`
 # to make `@cfunction` work.
 function iter_volume_for_p4est_qcoord_to_vertex(info::Ptr{p4est_iter_volume_info_t}, user_data)
-  info = unsafe_load(info)
-  p4est = unsafe_load(info.p4est)
-  quad = unsafe_load(info.quad)
+  info_obj = unsafe_load(info)
+  p4est_obj = unsafe_load(info_obj.p4est)
+  quad_obj = unsafe_load(info_obj.quad)
 
   vxyz = Array{Float64}(undef, 3)
-  p4est_qcoord_to_vertex(p4est.connectivity, info.treeid, quad.x, quad.y, vxyz)
+  p4est_qcoord_to_vertex(p4est_obj.connectivity, info_obj.treeid, quad_obj.x, quad_obj.y, vxyz)
 
   println(vxyz)
   return nothing
@@ -283,12 +283,12 @@ end
 
 # This belongs to the testset "p8est_qcoord_to_vertex" below.
 function iter_volume_for_p8est_qcoord_to_vertex(info::Ptr{p8est_iter_volume_info_t}, user_data)
-  info = unsafe_load(info)
-  p4est = unsafe_load(info.p4est)
-  quad = unsafe_load(info.quad)
+  info_obj = unsafe_load(info)
+  p4est_obj = unsafe_load(info_obj.p4est)
+  quad_obj = unsafe_load(info_obj.quad)
 
   vxyz = Array{Float64}(undef, 3)
-  p8est_qcoord_to_vertex(p4est.connectivity, info.treeid, quad.x, quad.y, quad.z, vxyz)
+  p8est_qcoord_to_vertex(p4est_obj.connectivity, info_obj.treeid, quad_obj.x, quad_obj.y, quad_obj.z, vxyz)
 
   println(vxyz)
   return nothing
