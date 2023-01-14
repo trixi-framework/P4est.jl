@@ -60,13 +60,37 @@ end
 
 function p4est_test_pointerwrapper_1step(p4est)
   pw = PointerWrapper(p4est)
-  num_trees = pw.connectivity.num_trees[]
+  pw.connectivity.num_vertices[]
+  pw.connectivity.num_trees[]
+  pw.connectivity.num_corners[]
+  pw.connectivity.vertices[]
+  pw.connectivity.tree_to_vertex[]
+  pw.connectivity.tree_attr_bytes[]
+  pw.connectivity.tree_to_attr[]
+  pw.connectivity.tree_to_tree[]
+  pw.connectivity.tree_to_face[]
+  pw.connectivity.tree_to_corner[]
+  pw.connectivity.ctt_offset[]
+  pw.connectivity.corner_to_tree[]
+  pw.connectivity.corner_to_corner[]
 end
 
 function p4est_test_pointerwrapper_2steps(p4est)
   pw = PointerWrapper(p4est)
   connectivity = pw.connectivity
+  connectivity.num_vertices[]
   connectivity.num_trees[]
+  connectivity.num_corners[]
+  connectivity.vertices[]
+  connectivity.tree_to_vertex[]
+  connectivity.tree_attr_bytes[]
+  connectivity.tree_to_attr[]
+  connectivity.tree_to_tree[]
+  connectivity.tree_to_face[]
+  connectivity.tree_to_corner[]
+  connectivity.ctt_offset[]
+  connectivity.corner_to_tree[]
+  connectivity.corner_to_corner[]
 end
 
 # test if dividing nested attribute accesses into two steps has impact on performance
