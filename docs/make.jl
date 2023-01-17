@@ -104,7 +104,7 @@ makedocs(
     "Contributing" => "contributing.md",
     "License" => "license.md"
   ],
-  strict = false, # `true` lets Documenter CI fail when doctests fail
+  strict = true, # `true` lets Documenter CI fail when doctests fail
   checkdocs = :exports, # complain only about non-included docstrings for exported names
 )
 
