@@ -1,7 +1,9 @@
 module PointerWrappers
 
+export PointerWrapper
+
 """
-    PointerWrapper
+    PointerWrapper(p::Ptr)
 
 Pointer wrapper for conveniently accessing nested structures. `PointerWrapper`s allow to store pointers to C types
 without the need to use `unsafe_load` even in nested structures.
@@ -46,7 +48,5 @@ Base.unsafe_store!(pw::PointerWrapper{T}, value) where T = unsafe_store!(pw, con
 
 # Store value to wrapped location
 Base.unsafe_store!(pw::PointerWrapper{T}, value::T) where T = unsafe_store!(pointer(pw), value)
-
-export PointerWrapper
 
 end
