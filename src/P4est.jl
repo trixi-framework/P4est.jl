@@ -18,7 +18,6 @@ include("LibP4est.jl")
 include("pointerwrappers.jl")
 @reexport using .PointerWrappers: PointerWrapper
 
-
 # Higher-level API defined in P4est.jl
 """
     P4est.uses_mpi()

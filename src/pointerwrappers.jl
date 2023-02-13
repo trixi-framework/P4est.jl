@@ -8,6 +8,7 @@ export PointerWrapper
 Pointer wrapper for conveniently accessing nested structures. `PointerWrapper`s allow to store pointers to C types
 without the need to use `unsafe_load` even in nested structures.
 """
+
 struct PointerWrapper{T}
   pointer::Ptr{T}
 end
