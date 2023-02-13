@@ -71,17 +71,20 @@ If you, e.g., have a pointer to a `p4est_connectivity` (i.e., an object of type 
 called `connectivity`, you can use `connectivity_pw = PointerWrapper(connectivity)` to obtain
 a wrapped version of the pointer, where the underlying data can be accessed simply by
 `connectivity_pw.num_trees[]` without the need to call `unsafe_load` manually. This works even for nested
-structures, where the data of a `struct` is, again, a `struct`. The example from above, but now
-using a `PointerWrapper` is given here:
+structures, e.g, where the named field of a `struct` is a pointer to a `struct`. A full example on how to
+use the `PointerWrapper` is given here (note the nested access at `p4est_pw.connectivity.num_trees[]`
+compared to `unsafe_load(unsafe_load(p4est).connectivity).num_trees` without a `PointerWrapper`):
 
 ```@repl
 using P4est, MPI; MPI.Init()
 connectivity = p4est_connectivity_new_periodic()
 connectivity_pw = PointerWrapper(connectivity)
-connectivity_pw.num_vertices[]
 connectivity_pw.num_trees[]
-connectivity_pw.num_corners[]
+p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
+p4est_pw = PointerWrapper(p4est)
+p4est_pw.connectivity.num_trees[]
 p4est_connectivity_destroy(connectivity)
+p4est_destroy(p4est)
 ```
 
 
