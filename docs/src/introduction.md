@@ -70,7 +70,7 @@ using `unsafe_load` whenever it is necessary by using a [`PointerWrapper`](@ref)
 If you, e.g., have a pointer to a `p4est_connectivity` (i.e. an object of type `Ptr{p4est_connectivity}`)
 called `connectivity`, you can use `connectivity_pw = PointerWrapper(connectivity)` to obtain
 a wrapped version of the pointer, where the underlying data can be accessed simply by
-`connectivity_pw.num_trees[]` without the need to use `unsafe_load`. This works even for nested
+`connectivity_pw.num_trees[]` without the need to call `unsafe_load` manually. This works even for nested
 structures, where the data of a `struct` is, again, a `struct`. The example from above, but now
 using a `PointerWrapper` is given here:
 
