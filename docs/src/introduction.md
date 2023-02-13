@@ -40,7 +40,7 @@ p4est_connectivity_t *p4est_connectivity_new_periodic (void);
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) wraps these C
 functions accordingly and works with pointers. For a convenient alternative
-to using pointers, see the [next section](@ref pointer_wrappers). We also
+to using raw pointers directly, see the next section on [`PointerWrapper`s](@ref pointer_wrappers). We also
 follow the naming scheme of [`p4est`](https://github.com/cburstedde/p4est).
 For example, we use `connectivity::Ptr{p4est_connectivity}`. However, it is
 sometimes useful/required to also load the wrappers of the C `struct`s from their
@@ -61,13 +61,13 @@ p4est_connectivity_destroy(connectivity)
 
 ## [`PointerWrapper`s](@id pointer_wrappers)
 
-As we have seen in the [previous section](@ref translation_guidelines) many functions
+As we have seen in the previous section on [translation guidelines](@ref translation_guidelines), many functions
 provided by [`p4est`](https://github.com/cburstedde/p4est) return pointers to `struct`s,
-which requires to [`unsafe_load`](https://docs.julialang.org/en/v1/base/c/#Base.unsafe_load)
+which requires one to [`unsafe_load`](https://docs.julialang.org/en/v1/base/c/#Base.unsafe_load)
 the pointer in order to access the underlying data.
-[P4est.jl](https://github.com/trixi-framework/P4est.jl) offers a convenient way to avoid
-using `unsafe_load` whenever it is necessary by using a [`PointerWrapper`](@ref).
-If you, e.g., have a pointer to a `p4est_connectivity` (i.e. an object of type `Ptr{p4est_connectivity}`)
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) offers a convenient alternative to
+directly using `unsafe_load` by providing the [`PointerWrapper`](@ref) data type.
+If you, e.g., have a pointer to a `p4est_connectivity` (i.e., an object of type `Ptr{p4est_connectivity}`)
 called `connectivity`, you can use `connectivity_pw = PointerWrapper(connectivity)` to obtain
 a wrapped version of the pointer, where the underlying data can be accessed simply by
 `connectivity_pw.num_trees[]` without the need to call `unsafe_load` manually. This works even for nested
