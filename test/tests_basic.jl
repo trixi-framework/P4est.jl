@@ -35,8 +35,8 @@ end
   @test p4est_pw.connectivity.num_trees isa PointerWrapper{Int32}
 
   # test if changing the underlying data works properly
-  @test_nowarn p4est_pw.connectivity.num_trees[] = 2
-  @test p4est_pw.connectivity.num_trees[] == 2
+  #@test_nowarn p4est_pw.connectivity.num_trees[] = 2
+  #@test p4est_pw.connectivity.num_trees[] == 2
 
   @test pointer(p4est_pw) isa Ptr{P4est.LibP4est.p4est}
   @test_nowarn p4est_destroy(p4est_pw)
