@@ -39,8 +39,8 @@ end
   @test p4est_pw.connectivity.num_trees[] == 2
 
   @test pointer(p4est_pw) isa Ptr{P4est.LibP4est.p4est}
-  @test_nowarn p4est_connectivity_destroy(connectivity_pw)
   @test_nowarn p4est_destroy(p4est_pw)
+  @test_nowarn p4est_connectivity_destroy(connectivity_pw)
 end
 
 @testset "2D tests" begin
