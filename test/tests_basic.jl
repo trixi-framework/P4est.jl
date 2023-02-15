@@ -39,6 +39,7 @@ end
   @test pw.value[] == 0.0
   pw.value[] = 1.0
   @test pw.value[] == 1.0
+  @test obj.value == 1.0
 
   # test if nested accesses work properly
   @test p4est_pw.connectivity isa PointerWrapper{p4est_connectivity}
