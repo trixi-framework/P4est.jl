@@ -29,6 +29,17 @@ end
   p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity_pw, 0, C_NULL, C_NULL)
   p4est_pw = @test_nowarn PointerWrapper(p4est)
 
+  # test if changing the underlying data works properly
+  struct MyStruct
+    value::Float64
+  end
+  obj = MyStruct(0.0)
+  ptr = Base.unsafe_convert(Ptr{MyStruct}, Ref(obj))
+  pw = PointerWrapper(ptr)
+  @test pw.value[] == 0.0
+  pw.value[] = 1.0
+  @test pw.value[] == 1.0
+
   # test if nested accesses work properly
   @test p4est_pw.connectivity isa PointerWrapper{p4est_connectivity}
   @test p4est_pw.connectivity.num_trees[] isa Integer
