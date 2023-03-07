@@ -16,7 +16,7 @@ include("LibP4est.jl")
 
 # Include pointer wrapper
 include("pointerwrappers.jl")
-using .PointerWrappers: PointerWrapper
+@reexport using .PointerWrappers: PointerWrapper
 
 
 # Higher-level API defined in P4est.jl
