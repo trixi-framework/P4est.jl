@@ -19,6 +19,37 @@ using P4est
   end
 end
 
+@testset "PointerWrapper" begin
+  connectivity = @test_nowarn p4est_connectivity_new_periodic()
+  connectivity_pw = @test_nowarn PointerWrapper(connectivity)
+  @test connectivity_pw.num_trees[] isa Integer
+  @test_nowarn propertynames(connectivity_pw)
+
+  # passing a `PointerWrapper` to a wrapped C function
+  p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity_pw, 0, C_NULL, C_NULL)
+  p4est_pw = @test_nowarn PointerWrapper(p4est)
+
+  # test if changing the underlying data works properly
+  struct MyStruct
+    value::Float64
+  end
+  obj = MyStruct(0.0)
+  ptr = Base.unsafe_convert(Ptr{MyStruct}, Ref(obj))
+  pw = PointerWrapper(ptr)
+  @test pw.value[] == 0.0
+  pw.value[] = 1.0
+  @test pw.value[] == 1.0
+
+  # test if nested accesses work properly
+  @test p4est_pw.connectivity isa PointerWrapper{p4est_connectivity}
+  @test p4est_pw.connectivity.num_trees[] isa Integer
+  @test p4est_pw.connectivity.num_trees isa PointerWrapper{Int32}
+
+  @test pointer(p4est_pw) isa Ptr{P4est.LibP4est.p4est}
+  @test_nowarn p4est_destroy(p4est_pw)
+  @test_nowarn p4est_connectivity_destroy(connectivity_pw)
+end
+
 @testset "2D tests" begin
   @testset "p4est_connectivity_new_periodic" begin
     connectivity = @test_nowarn p4est_connectivity_new_periodic()
