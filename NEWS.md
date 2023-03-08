@@ -6,6 +6,22 @@ used in the Julia ecosystem. Notable changes will be documented in this file
 for human readability.
 
 
+## Changes in the v0.4 lifecycle
+
+#### Added
+
+- `PointerWrapper`s were added in version v0.4.1 of P4est.jl.
+
+#### Changed
+
+
+#### Deprecated
+
+
+#### Removed
+
+
+
 ## Changes when updating to v0.4 from v0.3.x
 
 #### Added
@@ -26,6 +42,7 @@ for human readability.
 #### Removed
 
 
+
 ## Changes in the v0.3 lifecycle
 
 #### Added
@@ -38,6 +55,7 @@ for human readability.
 
 
 #### Removed
+
 
 
 ## Changes when updating to v0.3 from v0.2.x
