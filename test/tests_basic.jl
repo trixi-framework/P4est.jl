@@ -39,6 +39,14 @@ end
   @test pw.value[] == 0.0
   pw.value[] = 1.0
   @test pw.value[] == 1.0
+  @test pw.value[1] == 1.0
+  pw.value[1] = 2.0
+  @test pw.value[1] == 2.0
+  @test pw.value[] == 2.0
+
+  # test if accessing an underlying array works properly
+  @test p4est_pw.global_first_quadrant[1] isa Integer
+  @test p4est_pw.global_first_quadrant[2] == unsafe_load(unsafe_load(p4est).global_first_quadrant, 2)
 
   # test if nested accesses work properly
   @test p4est_pw.connectivity isa PointerWrapper{p4est_connectivity}

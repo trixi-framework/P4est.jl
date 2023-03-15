@@ -64,17 +64,18 @@ function Base.getproperty(pw::PointerWrapper{T}, name::Symbol) where T
   PointerWrapper(fieldtype(T, i), pointer(pw) + fieldoffset(T, i))
 end
 
-# `[]` allows one to access the actual underlying data
-Base.getindex(pw::PointerWrapper) = unsafe_load(pw)
-Base.setindex!(pw::PointerWrapper, value) = unsafe_store!(pw, value)
+# `[]` allows one to access the actual underlying data and
+# `[i]` allows one to access the actual underlying data of an array
+Base.getindex(pw::PointerWrapper, i::Integer=1) = unsafe_load(pw, i)
+Base.setindex!(pw::PointerWrapper, value, i::Integer=1) = unsafe_store!(pw, value, i)
 
 # When `unsafe_load`ing a PointerWrapper object, we really want to load the underlying object
-Base.unsafe_load(pw::PointerWrapper) = unsafe_load(pointer(pw))
+Base.unsafe_load(pw::PointerWrapper, i::Integer=1) = unsafe_load(pointer(pw), i)
 
 # If value is of the wrong type, try to convert it
-Base.unsafe_store!(pw::PointerWrapper{T}, value) where T = unsafe_store!(pw, convert(T, value))
+Base.unsafe_store!(pw::PointerWrapper{T}, value, i::Integer=1) where T = unsafe_store!(pw, convert(T, value), i)
 
 # Store value to wrapped location
-Base.unsafe_store!(pw::PointerWrapper{T}, value::T) where T = unsafe_store!(pointer(pw), value)
+Base.unsafe_store!(pw::PointerWrapper{T}, value::T, i::Integer=1) where T = unsafe_store!(pointer(pw), value, i)
 
 end
