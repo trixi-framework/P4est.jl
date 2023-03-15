@@ -87,6 +87,19 @@ p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
 ```
 
+In addition, you can use a `PointerWrapper` as an array if the underlying datastructure is an array, i.e.
+you can access the `i`-th element of the underlying array by `pw[i]` for a `PointerWrapper` `pw`. See the
+following code for a full example:
+
+```@repl
+using P4est, MPI; MPI.Init()
+connectivity = p4est_connectivity_new_periodic()
+p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
+p4est_pw = PointerWrapper(p4est)
+p4est_pw.global_first_quadrant[2]
+p4est_connectivity_destroy(connectivity)
+p4est_destroy(p4est)
+```
 
 ### Note on MPI datatypes
 
