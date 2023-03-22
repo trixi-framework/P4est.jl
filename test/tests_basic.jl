@@ -25,6 +25,10 @@ end
   @test connectivity_pw.num_trees[] isa Integer
   @test_nowarn propertynames(connectivity_pw)
 
+  # `unsafe_wrap`ping a `PointerWrapper`
+  n_vertices::Int = connectivity_pw.num_vertices[]
+  @test unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices)) isa Array
+
   # passing a `PointerWrapper` to a wrapped C function
   p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity_pw, 0, C_NULL, C_NULL)
   p4est_pw = @test_nowarn PointerWrapper(p4est)
