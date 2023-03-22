@@ -25,12 +25,6 @@ end
   @test connectivity_pw.num_trees[] isa Integer
   @test_nowarn propertynames(connectivity_pw)
 
-  # `unsafe_wrap`ping a `PointerWrapper`
-  n_vertices::Int = connectivity_pw.num_vertices[]
-  @test unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices)) isa Array
-  @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64}
-  @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
-
   # passing a `PointerWrapper` to a wrapped C function
   p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity_pw, 0, C_NULL, C_NULL)
   p4est_pw = @test_nowarn PointerWrapper(p4est)
@@ -60,6 +54,21 @@ end
   @test p4est_pw.connectivity.num_trees isa PointerWrapper{Int32}
 
   @test pointer(p4est_pw) isa Ptr{P4est.LibP4est.p4est}
+
+  # `unsafe_wrap`ping a `PointerWrapper`
+  n_vertices::Int = connectivity_pw.num_vertices[]
+  @test_nowarn vertices = unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
+  @test vertices isa Array{Float64, 2}
+  @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
+  @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
+
+  @test size(vertices) == (3, n_vertices)
+  @test vertices[1, 1] == connectivity_pw.vertices[1] == 0.0
+  @test_nowarn vertices[1, 1] = 1.0
+  @test vertices[1, 1] == connectivity_pw.vertices[1] == 1.0
+  @test_nowarn connectivity_pw.vertices[1] = 2.0
+  @test vertices[1, 1] == connectivity_pw.vertices[1] == 2.0
+
   @test_nowarn p4est_destroy(p4est_pw)
   @test_nowarn p4est_connectivity_destroy(connectivity_pw)
 end
