@@ -57,7 +57,7 @@ end
 
   # `unsafe_wrap`ping a `PointerWrapper`
   n_vertices::Int = connectivity_pw.num_vertices[]
-  @test_nowarn vertices = unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
+  vertices = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
   @test vertices isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
