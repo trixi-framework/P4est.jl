@@ -26,6 +26,9 @@ sed -i "s/\bt::Cint/t::MPI_Datatype/g" LibP4est.jl
 # Fix type of `sc_array` field `array`
 sed -i "s/array::Cstring/array::Ptr{Int8}/g" LibP4est.jl
 
+# Use libsc for `sc_*` functions
+sed -i "s/libp4est\.sc_/libsc.sc_/g" LibP4est.jl
+
 # Remove cross references that are not found
 sed -i "s/\[\`p4est\`](@ref)/\`p4est\`/g" LibP4est.jl
 sed -i "s/\[\`p6est\`](@ref)/\`p6est\`/g" LibP4est.jl

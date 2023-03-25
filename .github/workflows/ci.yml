@@ -86,6 +86,8 @@ jobs:
             echo "P4EST_TMP=$P4EST_TMP"
             echo "JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so" >> $GITHUB_ENV
             echo "$JULIA_P4EST_TEST_LIBP4EST=$P4EST_TMP/prefix/lib/libp4est.so"
+            echo "JULIA_P4EST_TEST_LIBSC=$P4EST_TMP/prefix/lib/libsc.so" >> $GITHUB_ENV
+            echo "$JULIA_P4EST_TEST_LIBSC=$P4EST_TMP/prefix/lib/libsc.so"
           else
             echo "ERROR: unknown test type ${{ matrix.JULIA_P4EST_TEST }}" >&2
             exit 1
