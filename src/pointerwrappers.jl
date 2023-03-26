@@ -56,12 +56,19 @@ Base.propertynames(::PointerWrapper{T}) where T = fieldnames(T)
 
 # Syntactic sugar: allows one to use `pw.fieldname` to get a PointerWrapper-wrapped pointer to `fieldname`
 function Base.getproperty(pw::PointerWrapper{T}, name::Symbol) where T
-  i = findfirst(isequal(name), fieldnames(T))
-  if isnothing(i)
-    error("type $(string(T)) has no field $name")
-  end
+  try
+    # For some `struct`s, `fieldnames` isn't implemented, but we can use `Base.getproperty` for pointers,
+    # see https://github.com/trixi-framework/P4est.jl/issues/72
+    return PointerWrapper(Base.getproperty(pointer(pw), name))
+  catch e
+    # In this case we cannot use `Base.getproperty` for the pointer since it is not overwritten, but `fieldnames` works
+    i = findfirst(isequal(name), fieldnames(T))
+    if isnothing(i)
+      error("type $(string(T)) has no field $name")
+    end
 
-  PointerWrapper(fieldtype(T, i), pointer(pw) + fieldoffset(T, i))
+    return PointerWrapper(fieldtype(T, i), pointer(pw) + fieldoffset(T, i))
+  end
 end
 
 # `[]` allows one to access the actual underlying data and
