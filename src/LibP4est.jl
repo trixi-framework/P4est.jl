@@ -10,12 +10,18 @@ end
 using P4est_jll: P4est_jll
 export P4est_jll
 
-using ..P4est: _PREFERENCE_LIBP4EST
+using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 
 @static if _PREFERENCE_LIBP4EST == "P4est_jll"
     const libp4est = P4est_jll.libp4est
 else
     const libp4est = _PREFERENCE_LIBP4EST
+end
+
+@static if _PREFERENCE_LIBSC == "P4est_jll"
+    const libsc = P4est_jll.libsc
+else
+    const libsc = _PREFERENCE_LIBSC
 end
 
 
@@ -60,12 +66,12 @@ void sc_abort_verbose (const char *filename, int lineno, const char *msg) __attr
 ```
 """
 function sc_abort_verbose(filename, lineno, msg)
-    @ccall libp4est.sc_abort_verbose(filename::Cstring, lineno::Cint, msg::Cstring)::Cvoid
+    @ccall libsc.sc_abort_verbose(filename::Cstring, lineno::Cint, msg::Cstring)::Cvoid
 end
 
 # automatic type deduction for variadic arguments may not be what you want, please use with caution
 @generated function sc_abort_verbosef(filename, lineno, fmt, va_list...)
-        :(@ccall(libp4est.sc_abort_verbosef(filename::Cstring, lineno::Cint, fmt::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
+        :(@ccall(libsc.sc_abort_verbosef(filename::Cstring, lineno::Cint, fmt::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
     end
 
 """
@@ -77,7 +83,7 @@ void *sc_malloc (int package, size_t size);
 ```
 """
 function sc_malloc(package, size)
-    @ccall libp4est.sc_malloc(package::Cint, size::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_malloc(package::Cint, size::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -89,7 +95,7 @@ void *sc_calloc (int package, size_t nmemb, size_t size);
 ```
 """
 function sc_calloc(package, nmemb, size)
-    @ccall libp4est.sc_calloc(package::Cint, nmemb::Csize_t, size::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_calloc(package::Cint, nmemb::Csize_t, size::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -101,7 +107,7 @@ void *sc_realloc (int package, void *ptr, size_t size);
 ```
 """
 function sc_realloc(package, ptr, size)
-    @ccall libp4est.sc_realloc(package::Cint, ptr::Ptr{Cvoid}, size::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_realloc(package::Cint, ptr::Ptr{Cvoid}, size::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -113,7 +119,7 @@ char *sc_strdup (int package, const char *s);
 ```
 """
 function sc_strdup(package, s)
-    @ccall libp4est.sc_strdup(package::Cint, s::Cstring)::Cstring
+    @ccall libsc.sc_strdup(package::Cint, s::Cstring)::Cstring
 end
 
 """
@@ -125,7 +131,7 @@ void sc_free (int package, void *ptr);
 ```
 """
 function sc_free(package, ptr)
-    @ccall libp4est.sc_free(package::Cint, ptr::Ptr{Cvoid})::Cvoid
+    @ccall libsc.sc_free(package::Cint, ptr::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -143,12 +149,12 @@ void sc_log (const char *filename, int lineno, int package, int category, int pr
 ```
 """
 function sc_log(filename, lineno, package, category, priority, msg)
-    @ccall libp4est.sc_log(filename::Cstring, lineno::Cint, package::Cint, category::Cint, priority::Cint, msg::Cstring)::Cvoid
+    @ccall libsc.sc_log(filename::Cstring, lineno::Cint, package::Cint, category::Cint, priority::Cint, msg::Cstring)::Cvoid
 end
 
 # automatic type deduction for variadic arguments may not be what you want, please use with caution
 @generated function sc_logf(filename, lineno, package, category, priority, fmt, va_list...)
-        :(@ccall(libp4est.sc_logf(filename::Cstring, lineno::Cint, package::Cint, category::Cint, priority::Cint, fmt::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
+        :(@ccall(libsc.sc_logf(filename::Cstring, lineno::Cint, package::Cint, category::Cint, priority::Cint, fmt::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
     end
 
 """
@@ -189,7 +195,7 @@ sc_array_t *sc_array_new_count (size_t elem_size, size_t elem_count);
 ```
 """
 function sc_array_new_count(elem_size, elem_count)
-    @ccall libp4est.sc_array_new_count(elem_size::Csize_t, elem_count::Csize_t)::Ptr{sc_array_t}
+    @ccall libsc.sc_array_new_count(elem_size::Csize_t, elem_count::Csize_t)::Ptr{sc_array_t}
 end
 
 """
@@ -201,7 +207,7 @@ int sc_int32_compare (const void *v1, const void *v2);
 ```
 """
 function sc_int32_compare(v1, v2)
-    @ccall libp4est.sc_int32_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_int32_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """Typedef for quadrant coordinates."""
@@ -222,7 +228,7 @@ int sc_int64_compare (const void *v1, const void *v2);
 ```
 """
 function sc_int64_compare(v1, v2)
-    @ccall libp4est.sc_int64_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_int64_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """Typedef for globally unique indexing of quadrants."""
@@ -329,7 +335,7 @@ size_t sc_mpi_sizeof (sc_MPI_Datatype t);
 ```
 """
 function sc_mpi_sizeof(t)
-    @ccall libp4est.sc_mpi_sizeof(t::MPI_Datatype)::Csize_t
+    @ccall libsc.sc_mpi_sizeof(t::MPI_Datatype)::Csize_t
 end
 
 """
@@ -341,7 +347,7 @@ void sc_mpi_comm_attach_node_comms (sc_MPI_Comm comm, int processes_per_node);
 ```
 """
 function sc_mpi_comm_attach_node_comms(comm, processes_per_node)
-    @ccall libp4est.sc_mpi_comm_attach_node_comms(comm::MPI_Comm, processes_per_node::Cint)::Cvoid
+    @ccall libsc.sc_mpi_comm_attach_node_comms(comm::MPI_Comm, processes_per_node::Cint)::Cvoid
 end
 
 """
@@ -353,7 +359,7 @@ void sc_mpi_comm_detach_node_comms (sc_MPI_Comm comm);
 ```
 """
 function sc_mpi_comm_detach_node_comms(comm)
-    @ccall libp4est.sc_mpi_comm_detach_node_comms(comm::MPI_Comm)::Cvoid
+    @ccall libsc.sc_mpi_comm_detach_node_comms(comm::MPI_Comm)::Cvoid
 end
 
 """
@@ -365,7 +371,7 @@ void sc_mpi_comm_get_node_comms (sc_MPI_Comm comm, sc_MPI_Comm * intranode, sc_M
 ```
 """
 function sc_mpi_comm_get_node_comms(comm, intranode, internode)
-    @ccall libp4est.sc_mpi_comm_get_node_comms(comm::MPI_Comm, intranode::Ptr{MPI_Comm}, internode::Ptr{MPI_Comm})::Cvoid
+    @ccall libsc.sc_mpi_comm_get_node_comms(comm::MPI_Comm, intranode::Ptr{MPI_Comm}, internode::Ptr{MPI_Comm})::Cvoid
 end
 
 """
@@ -377,7 +383,7 @@ int sc_mpi_comm_get_and_attach (sc_MPI_Comm comm);
 ```
 """
 function sc_mpi_comm_get_and_attach(comm)
-    @ccall libp4est.sc_mpi_comm_get_and_attach(comm::MPI_Comm)::Cint
+    @ccall libsc.sc_mpi_comm_get_and_attach(comm::MPI_Comm)::Cint
 end
 
 # typedef void ( * sc_handler_t ) ( void * data )
@@ -398,7 +404,7 @@ int sc_memory_status (int package);
 ```
 """
 function sc_memory_status(package)
-    @ccall libp4est.sc_memory_status(package::Cint)::Cint
+    @ccall libsc.sc_memory_status(package::Cint)::Cint
 end
 
 """
@@ -410,7 +416,7 @@ void sc_memory_check (int package);
 ```
 """
 function sc_memory_check(package)
-    @ccall libp4est.sc_memory_check(package::Cint)::Cvoid
+    @ccall libsc.sc_memory_check(package::Cint)::Cvoid
 end
 
 """
@@ -424,7 +430,7 @@ int sc_memory_check_noerr (int package);
 ```
 """
 function sc_memory_check_noerr(package)
-    @ccall libp4est.sc_memory_check_noerr(package::Cint)::Cint
+    @ccall libsc.sc_memory_check_noerr(package::Cint)::Cint
 end
 
 """
@@ -436,7 +442,7 @@ int sc_int_compare (const void *v1, const void *v2);
 ```
 """
 function sc_int_compare(v1, v2)
-    @ccall libp4est.sc_int_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_int_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """
@@ -448,7 +454,7 @@ int sc_int8_compare (const void *v1, const void *v2);
 ```
 """
 function sc_int8_compare(v1, v2)
-    @ccall libp4est.sc_int8_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_int8_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """
@@ -460,7 +466,7 @@ int sc_int16_compare (const void *v1, const void *v2);
 ```
 """
 function sc_int16_compare(v1, v2)
-    @ccall libp4est.sc_int16_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_int16_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """
@@ -472,7 +478,7 @@ int sc_double_compare (const void *v1, const void *v2);
 ```
 """
 function sc_double_compare(v1, v2)
-    @ccall libp4est.sc_double_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_double_compare(v1::Ptr{Cvoid}, v2::Ptr{Cvoid})::Cint
 end
 
 """
@@ -490,7 +496,7 @@ int sc_atoi (const char *nptr);
 ```
 """
 function sc_atoi(nptr)
-    @ccall libp4est.sc_atoi(nptr::Cstring)::Cint
+    @ccall libsc.sc_atoi(nptr::Cstring)::Cint
 end
 
 """
@@ -508,7 +514,7 @@ long sc_atol (const char *nptr);
 ```
 """
 function sc_atol(nptr)
-    @ccall libp4est.sc_atol(nptr::Cstring)::Clong
+    @ccall libsc.sc_atol(nptr::Cstring)::Clong
 end
 
 """
@@ -526,7 +532,7 @@ void sc_set_log_defaults (FILE * log_stream, sc_log_handler_t log_handler, int l
 ```
 """
 function sc_set_log_defaults(log_stream, log_handler, log_thresold)
-    @ccall libp4est.sc_set_log_defaults(log_stream::Ptr{Libc.FILE}, log_handler::sc_log_handler_t, log_thresold::Cint)::Cvoid
+    @ccall libsc.sc_set_log_defaults(log_stream::Ptr{Libc.FILE}, log_handler::sc_log_handler_t, log_thresold::Cint)::Cvoid
 end
 
 """
@@ -542,7 +548,7 @@ void sc_set_abort_handler (sc_abort_handler_t abort_handler);
 ```
 """
 function sc_set_abort_handler(abort_handler)
-    @ccall libp4est.sc_set_abort_handler(abort_handler::sc_abort_handler_t)::Cvoid
+    @ccall libsc.sc_set_abort_handler(abort_handler::sc_abort_handler_t)::Cvoid
 end
 
 """
@@ -556,7 +562,7 @@ void sc_log_indent_push_count (int package, int count);
 ```
 """
 function sc_log_indent_push_count(package, count)
-    @ccall libp4est.sc_log_indent_push_count(package::Cint, count::Cint)::Cvoid
+    @ccall libsc.sc_log_indent_push_count(package::Cint, count::Cint)::Cvoid
 end
 
 """
@@ -570,7 +576,7 @@ void sc_log_indent_pop_count (int package, int count);
 ```
 """
 function sc_log_indent_pop_count(package, count)
-    @ccall libp4est.sc_log_indent_pop_count(package::Cint, count::Cint)::Cvoid
+    @ccall libsc.sc_log_indent_pop_count(package::Cint, count::Cint)::Cvoid
 end
 
 """
@@ -584,7 +590,7 @@ void sc_log_indent_push (void);
 ```
 """
 function sc_log_indent_push()
-    @ccall libp4est.sc_log_indent_push()::Cvoid
+    @ccall libsc.sc_log_indent_push()::Cvoid
 end
 
 """
@@ -598,7 +604,7 @@ void sc_log_indent_pop (void);
 ```
 """
 function sc_log_indent_pop()
-    @ccall libp4est.sc_log_indent_pop()::Cvoid
+    @ccall libsc.sc_log_indent_pop()::Cvoid
 end
 
 """
@@ -612,7 +618,7 @@ void sc_abort (void) __attribute__ ((noreturn));
 ```
 """
 function sc_abort()
-    @ccall libp4est.sc_abort()::Cvoid
+    @ccall libsc.sc_abort()::Cvoid
 end
 
 """
@@ -626,7 +632,7 @@ void sc_abort_collective (const char *msg) __attribute__ ((noreturn));
 ```
 """
 function sc_abort_collective(msg)
-    @ccall libp4est.sc_abort_collective(msg::Cstring)::Cvoid
+    @ccall libsc.sc_abort_collective(msg::Cstring)::Cvoid
 end
 
 """
@@ -642,7 +648,7 @@ int sc_package_register (sc_log_handler_t log_handler, int log_threshold, const 
 ```
 """
 function sc_package_register(log_handler, log_threshold, name, full)
-    @ccall libp4est.sc_package_register(log_handler::sc_log_handler_t, log_threshold::Cint, name::Cstring, full::Cstring)::Cint
+    @ccall libsc.sc_package_register(log_handler::sc_log_handler_t, log_threshold::Cint, name::Cstring, full::Cstring)::Cint
 end
 
 """
@@ -660,7 +666,7 @@ int sc_package_is_registered (int package_id);
 ```
 """
 function sc_package_is_registered(package_id)
-    @ccall libp4est.sc_package_is_registered(package_id::Cint)::Cint
+    @ccall libsc.sc_package_is_registered(package_id::Cint)::Cint
 end
 
 """
@@ -676,7 +682,7 @@ void sc_package_lock (int package_id);
 ```
 """
 function sc_package_lock(package_id)
-    @ccall libp4est.sc_package_lock(package_id::Cint)::Cvoid
+    @ccall libsc.sc_package_lock(package_id::Cint)::Cvoid
 end
 
 """
@@ -692,7 +698,7 @@ void sc_package_unlock (int package_id);
 ```
 """
 function sc_package_unlock(package_id)
-    @ccall libp4est.sc_package_unlock(package_id::Cint)::Cvoid
+    @ccall libsc.sc_package_unlock(package_id::Cint)::Cvoid
 end
 
 """
@@ -708,7 +714,7 @@ void sc_package_set_verbosity (int package_id, int log_priority);
 ```
 """
 function sc_package_set_verbosity(package_id, log_priority)
-    @ccall libp4est.sc_package_set_verbosity(package_id::Cint, log_priority::Cint)::Cvoid
+    @ccall libsc.sc_package_set_verbosity(package_id::Cint, log_priority::Cint)::Cvoid
 end
 
 """
@@ -725,7 +731,7 @@ void sc_package_set_abort_alloc_mismatch (int package_id, int set_abort);
 ```
 """
 function sc_package_set_abort_alloc_mismatch(package_id, set_abort)
-    @ccall libp4est.sc_package_set_abort_alloc_mismatch(package_id::Cint, set_abort::Cint)::Cvoid
+    @ccall libsc.sc_package_set_abort_alloc_mismatch(package_id::Cint, set_abort::Cint)::Cvoid
 end
 
 """
@@ -739,7 +745,7 @@ void sc_package_unregister (int package_id);
 ```
 """
 function sc_package_unregister(package_id)
-    @ccall libp4est.sc_package_unregister(package_id::Cint)::Cvoid
+    @ccall libsc.sc_package_unregister(package_id::Cint)::Cvoid
 end
 
 """
@@ -755,7 +761,7 @@ void sc_package_print_summary (int log_priority);
 ```
 """
 function sc_package_print_summary(log_priority)
-    @ccall libp4est.sc_package_print_summary(log_priority::Cint)::Cvoid
+    @ccall libsc.sc_package_print_summary(log_priority::Cint)::Cvoid
 end
 
 """
@@ -767,7 +773,7 @@ void sc_init (sc_MPI_Comm mpicomm, int catch_signals, int print_backtrace, sc_lo
 ```
 """
 function sc_init(mpicomm, catch_signals, print_backtrace, log_handler, log_threshold)
-    @ccall libp4est.sc_init(mpicomm::MPI_Comm, catch_signals::Cint, print_backtrace::Cint, log_handler::sc_log_handler_t, log_threshold::Cint)::Cvoid
+    @ccall libsc.sc_init(mpicomm::MPI_Comm, catch_signals::Cint, print_backtrace::Cint, log_handler::sc_log_handler_t, log_threshold::Cint)::Cvoid
 end
 
 """
@@ -781,7 +787,7 @@ void sc_finalize (void);
 ```
 """
 function sc_finalize()
-    @ccall libp4est.sc_finalize()::Cvoid
+    @ccall libsc.sc_finalize()::Cvoid
 end
 
 """
@@ -797,7 +803,7 @@ int sc_finalize_noabort (void);
 ```
 """
 function sc_finalize_noabort()
-    @ccall libp4est.sc_finalize_noabort()::Cint
+    @ccall libsc.sc_finalize_noabort()::Cint
 end
 
 """
@@ -813,7 +819,7 @@ int sc_is_root (void);
 ```
 """
 function sc_is_root()
-    @ccall libp4est.sc_is_root()::Cint
+    @ccall libsc.sc_is_root()::Cint
 end
 
 """
@@ -833,12 +839,12 @@ void sc_strcopy (char *dest, size_t size, const char *src);
 ```
 """
 function sc_strcopy(dest, size, src)
-    @ccall libp4est.sc_strcopy(dest::Cstring, size::Csize_t, src::Cstring)::Cvoid
+    @ccall libsc.sc_strcopy(dest::Cstring, size::Csize_t, src::Cstring)::Cvoid
 end
 
 # automatic type deduction for variadic arguments may not be what you want, please use with caution
 @generated function sc_snprintf(str, size, format, va_list...)
-        :(@ccall(libp4est.sc_snprintf(str::Cstring, size::Csize_t, format::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
+        :(@ccall(libsc.sc_snprintf(str::Cstring, size::Csize_t, format::Cstring; $(to_c_type_pairs(va_list)...))::Cvoid))
     end
 
 """
@@ -854,7 +860,7 @@ const char *sc_version (void);
 ```
 """
 function sc_version()
-    @ccall libp4est.sc_version()::Cstring
+    @ccall libsc.sc_version()::Cstring
 end
 
 """
@@ -870,7 +876,7 @@ int sc_version_major (void);
 ```
 """
 function sc_version_major()
-    @ccall libp4est.sc_version_major()::Cint
+    @ccall libsc.sc_version_major()::Cint
 end
 
 """
@@ -886,7 +892,7 @@ int sc_version_minor (void);
 ```
 """
 function sc_version_minor()
-    @ccall libp4est.sc_version_minor()::Cint
+    @ccall libsc.sc_version_minor()::Cint
 end
 
 # typedef unsigned int ( * sc_hash_function_t ) ( const void * v , const void * u )
@@ -940,7 +946,7 @@ size_t sc_array_memory_used (sc_array_t * array, int is_dynamic);
 ```
 """
 function sc_array_memory_used(array, is_dynamic)
-    @ccall libp4est.sc_array_memory_used(array::Ptr{sc_array_t}, is_dynamic::Cint)::Csize_t
+    @ccall libsc.sc_array_memory_used(array::Ptr{sc_array_t}, is_dynamic::Cint)::Csize_t
 end
 
 """
@@ -958,7 +964,7 @@ sc_array_t *sc_array_new (size_t elem_size);
 ```
 """
 function sc_array_new(elem_size)
-    @ccall libp4est.sc_array_new(elem_size::Csize_t)::Ptr{sc_array_t}
+    @ccall libsc.sc_array_new(elem_size::Csize_t)::Ptr{sc_array_t}
 end
 
 """
@@ -976,7 +982,7 @@ sc_array_t *sc_array_new_view (sc_array_t * array, size_t offset, size_t length)
 ```
 """
 function sc_array_new_view(array, offset, length)
-    @ccall libp4est.sc_array_new_view(array::Ptr{sc_array_t}, offset::Csize_t, length::Csize_t)::Ptr{sc_array_t}
+    @ccall libsc.sc_array_new_view(array::Ptr{sc_array_t}, offset::Csize_t, length::Csize_t)::Ptr{sc_array_t}
 end
 
 """
@@ -994,7 +1000,7 @@ sc_array_t *sc_array_new_data (void *base, size_t elem_size, size_t elem_count);
 ```
 """
 function sc_array_new_data(base, elem_size, elem_count)
-    @ccall libp4est.sc_array_new_data(base::Ptr{Cvoid}, elem_size::Csize_t, elem_count::Csize_t)::Ptr{sc_array_t}
+    @ccall libsc.sc_array_new_data(base::Ptr{Cvoid}, elem_size::Csize_t, elem_count::Csize_t)::Ptr{sc_array_t}
 end
 
 """
@@ -1010,7 +1016,7 @@ void sc_array_destroy (sc_array_t * array);
 ```
 """
 function sc_array_destroy(array)
-    @ccall libp4est.sc_array_destroy(array::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_array_destroy(array::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -1026,7 +1032,7 @@ void sc_array_destroy_null (sc_array_t ** parray);
 ```
 """
 function sc_array_destroy_null(parray)
-    @ccall libp4est.sc_array_destroy_null(parray::Ptr{Ptr{sc_array_t}})::Cvoid
+    @ccall libsc.sc_array_destroy_null(parray::Ptr{Ptr{sc_array_t}})::Cvoid
 end
 
 """
@@ -1043,7 +1049,7 @@ void sc_array_init (sc_array_t * array, size_t elem_size);
 ```
 """
 function sc_array_init(array, elem_size)
-    @ccall libp4est.sc_array_init(array::Ptr{sc_array_t}, elem_size::Csize_t)::Cvoid
+    @ccall libsc.sc_array_init(array::Ptr{sc_array_t}, elem_size::Csize_t)::Cvoid
 end
 
 """
@@ -1061,7 +1067,7 @@ void sc_array_init_size (sc_array_t * array, size_t elem_size, size_t elem_count
 ```
 """
 function sc_array_init_size(array, elem_size, elem_count)
-    @ccall libp4est.sc_array_init_size(array::Ptr{sc_array_t}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_init_size(array::Ptr{sc_array_t}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
 end
 
 """
@@ -1079,7 +1085,7 @@ void sc_array_init_count (sc_array_t * array, size_t elem_size, size_t elem_coun
 ```
 """
 function sc_array_init_count(array, elem_size, elem_count)
-    @ccall libp4est.sc_array_init_count(array::Ptr{sc_array_t}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_init_count(array::Ptr{sc_array_t}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
 end
 
 """
@@ -1098,7 +1104,7 @@ void sc_array_init_view (sc_array_t * view, sc_array_t * array, size_t offset, s
 ```
 """
 function sc_array_init_view(view, array, offset, length)
-    @ccall libp4est.sc_array_init_view(view::Ptr{sc_array_t}, array::Ptr{sc_array_t}, offset::Csize_t, length::Csize_t)::Cvoid
+    @ccall libsc.sc_array_init_view(view::Ptr{sc_array_t}, array::Ptr{sc_array_t}, offset::Csize_t, length::Csize_t)::Cvoid
 end
 
 """
@@ -1117,7 +1123,7 @@ void sc_array_init_data (sc_array_t * view, void *base, size_t elem_size, size_t
 ```
 """
 function sc_array_init_data(view, base, elem_size, elem_count)
-    @ccall libp4est.sc_array_init_data(view::Ptr{sc_array_t}, base::Ptr{Cvoid}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_init_data(view::Ptr{sc_array_t}, base::Ptr{Cvoid}, elem_size::Csize_t, elem_count::Csize_t)::Cvoid
 end
 
 """
@@ -1134,7 +1140,7 @@ void sc_array_memset (sc_array_t * array, int c);
 ```
 """
 function sc_array_memset(array, c)
-    @ccall libp4est.sc_array_memset(array::Ptr{sc_array_t}, c::Cint)::Cvoid
+    @ccall libsc.sc_array_memset(array::Ptr{sc_array_t}, c::Cint)::Cvoid
 end
 
 """
@@ -1154,7 +1160,7 @@ void sc_array_reset (sc_array_t * array);
 ```
 """
 function sc_array_reset(array)
-    @ccall libp4est.sc_array_reset(array::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_array_reset(array::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -1174,7 +1180,7 @@ void sc_array_truncate (sc_array_t * array);
 ```
 """
 function sc_array_truncate(array)
-    @ccall libp4est.sc_array_truncate(array::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_array_truncate(array::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -1191,7 +1197,7 @@ void sc_array_rewind (sc_array_t * array, size_t new_count);
 ```
 """
 function sc_array_rewind(array, new_count)
-    @ccall libp4est.sc_array_rewind(array::Ptr{sc_array_t}, new_count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_rewind(array::Ptr{sc_array_t}, new_count::Csize_t)::Cvoid
 end
 
 """
@@ -1208,7 +1214,7 @@ void sc_array_resize (sc_array_t * array, size_t new_count);
 ```
 """
 function sc_array_resize(array, new_count)
-    @ccall libp4est.sc_array_resize(array::Ptr{sc_array_t}, new_count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_resize(array::Ptr{sc_array_t}, new_count::Csize_t)::Cvoid
 end
 
 """
@@ -1225,7 +1231,7 @@ void sc_array_copy (sc_array_t * dest, sc_array_t * src);
 ```
 """
 function sc_array_copy(dest, src)
-    @ccall libp4est.sc_array_copy(dest::Ptr{sc_array_t}, src::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_array_copy(dest::Ptr{sc_array_t}, src::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -1243,7 +1249,7 @@ void sc_array_copy_into (sc_array_t * dest, size_t dest_offset, sc_array_t * src
 ```
 """
 function sc_array_copy_into(dest, dest_offset, src)
-    @ccall libp4est.sc_array_copy_into(dest::Ptr{sc_array_t}, dest_offset::Csize_t, src::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_array_copy_into(dest::Ptr{sc_array_t}, dest_offset::Csize_t, src::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -1263,7 +1269,7 @@ void sc_array_move_part (sc_array_t * dest, size_t dest_offset, sc_array_t * src
 ```
 """
 function sc_array_move_part(dest, dest_offset, src, src_offset, count)
-    @ccall libp4est.sc_array_move_part(dest::Ptr{sc_array_t}, dest_offset::Csize_t, src::Ptr{sc_array_t}, src_offset::Csize_t, count::Csize_t)::Cvoid
+    @ccall libsc.sc_array_move_part(dest::Ptr{sc_array_t}, dest_offset::Csize_t, src::Ptr{sc_array_t}, src_offset::Csize_t, count::Csize_t)::Cvoid
 end
 
 """
@@ -1280,7 +1286,7 @@ void sc_array_sort (sc_array_t * array, int (*compar) (const void *, const void 
 ```
 """
 function sc_array_sort(array, compar)
-    @ccall libp4est.sc_array_sort(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cvoid
+    @ccall libsc.sc_array_sort(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -1299,7 +1305,7 @@ int sc_array_is_sorted (sc_array_t * array, int (*compar) (const void *, const v
 ```
 """
 function sc_array_is_sorted(array, compar)
-    @ccall libp4est.sc_array_is_sorted(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_array_is_sorted(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cint
 end
 
 """
@@ -1318,7 +1324,7 @@ int sc_array_is_equal (sc_array_t * array, sc_array_t * other);
 ```
 """
 function sc_array_is_equal(array, other)
-    @ccall libp4est.sc_array_is_equal(array::Ptr{sc_array_t}, other::Ptr{sc_array_t})::Cint
+    @ccall libsc.sc_array_is_equal(array::Ptr{sc_array_t}, other::Ptr{sc_array_t})::Cint
 end
 
 """
@@ -1335,7 +1341,7 @@ void sc_array_uniq (sc_array_t * array, int (*compar) (const void *, const void 
 ```
 """
 function sc_array_uniq(array, compar)
-    @ccall libp4est.sc_array_uniq(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cvoid
+    @ccall libsc.sc_array_uniq(array::Ptr{sc_array_t}, compar::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -1355,7 +1361,7 @@ ssize_t sc_array_bsearch (sc_array_t * array, const void *key, int (*compar) (co
 ```
 """
 function sc_array_bsearch(array, key, compar)
-    @ccall libp4est.sc_array_bsearch(array::Ptr{sc_array_t}, key::Ptr{Cvoid}, compar::Ptr{Cvoid})::Cssize_t
+    @ccall libsc.sc_array_bsearch(array::Ptr{sc_array_t}, key::Ptr{Cvoid}, compar::Ptr{Cvoid})::Cssize_t
 end
 
 # typedef size_t ( * sc_array_type_t ) ( sc_array_t * array , size_t index , void * data )
@@ -1386,7 +1392,7 @@ void sc_array_split (sc_array_t * array, sc_array_t * offsets, size_t num_types,
 ```
 """
 function sc_array_split(array, offsets, num_types, type_fn, data)
-    @ccall libp4est.sc_array_split(array::Ptr{sc_array_t}, offsets::Ptr{sc_array_t}, num_types::Csize_t, type_fn::sc_array_type_t, data::Ptr{Cvoid})::Cvoid
+    @ccall libsc.sc_array_split(array::Ptr{sc_array_t}, offsets::Ptr{sc_array_t}, num_types::Csize_t, type_fn::sc_array_type_t, data::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -1404,7 +1410,7 @@ int sc_array_is_permutation (sc_array_t * array);
 ```
 """
 function sc_array_is_permutation(array)
-    @ccall libp4est.sc_array_is_permutation(array::Ptr{sc_array_t})::Cint
+    @ccall libsc.sc_array_is_permutation(array::Ptr{sc_array_t})::Cint
 end
 
 """
@@ -1422,7 +1428,7 @@ void sc_array_permute (sc_array_t * array, sc_array_t * newindices, int keepperm
 ```
 """
 function sc_array_permute(array, newindices, keepperm)
-    @ccall libp4est.sc_array_permute(array::Ptr{sc_array_t}, newindices::Ptr{sc_array_t}, keepperm::Cint)::Cvoid
+    @ccall libsc.sc_array_permute(array::Ptr{sc_array_t}, newindices::Ptr{sc_array_t}, keepperm::Cint)::Cvoid
 end
 
 """
@@ -1436,7 +1442,7 @@ unsigned int sc_array_checksum (sc_array_t * array);
 ```
 """
 function sc_array_checksum(array)
-    @ccall libp4est.sc_array_checksum(array::Ptr{sc_array_t})::Cuint
+    @ccall libsc.sc_array_checksum(array::Ptr{sc_array_t})::Cuint
 end
 
 """
@@ -1459,7 +1465,7 @@ size_t sc_array_pqueue_add (sc_array_t * array, void *temp, int (*compar) (const
 ```
 """
 function sc_array_pqueue_add(array, temp, compar)
-    @ccall libp4est.sc_array_pqueue_add(array::Ptr{sc_array_t}, temp::Ptr{Cvoid}, compar::Ptr{Cvoid})::Csize_t
+    @ccall libsc.sc_array_pqueue_add(array::Ptr{sc_array_t}, temp::Ptr{Cvoid}, compar::Ptr{Cvoid})::Csize_t
 end
 
 """
@@ -1482,7 +1488,7 @@ size_t sc_array_pqueue_pop (sc_array_t * array, void *result, int (*compar) (con
 ```
 """
 function sc_array_pqueue_pop(array, result, compar)
-    @ccall libp4est.sc_array_pqueue_pop(array::Ptr{sc_array_t}, result::Ptr{Cvoid}, compar::Ptr{Cvoid})::Csize_t
+    @ccall libsc.sc_array_pqueue_pop(array::Ptr{sc_array_t}, result::Ptr{Cvoid}, compar::Ptr{Cvoid})::Csize_t
 end
 
 """
@@ -1494,7 +1500,7 @@ static inline void * sc_array_index (sc_array_t * array, size_t iz);
 ```
 """
 function sc_array_index(array, iz)
-    @ccall libp4est.sc_array_index(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -1506,7 +1512,7 @@ static inline void * sc_array_index_null (sc_array_t * array, size_t iz);
 ```
 """
 function sc_array_index_null(array, iz)
-    @ccall libp4est.sc_array_index_null(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index_null(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -1518,7 +1524,7 @@ static inline void * sc_array_index_int (sc_array_t * array, int i);
 ```
 """
 function sc_array_index_int(array, i)
-    @ccall libp4est.sc_array_index_int(array::Ptr{sc_array_t}, i::Cint)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index_int(array::Ptr{sc_array_t}, i::Cint)::Ptr{Cvoid}
 end
 
 """
@@ -1530,7 +1536,7 @@ static inline void * sc_array_index_long (sc_array_t * array, long l);
 ```
 """
 function sc_array_index_long(array, l)
-    @ccall libp4est.sc_array_index_long(array::Ptr{sc_array_t}, l::Clong)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index_long(array::Ptr{sc_array_t}, l::Clong)::Ptr{Cvoid}
 end
 
 """
@@ -1542,7 +1548,7 @@ static inline void * sc_array_index_ssize_t (sc_array_t * array, ssize_t is);
 ```
 """
 function sc_array_index_ssize_t(array, is)
-    @ccall libp4est.sc_array_index_ssize_t(array::Ptr{sc_array_t}, is::Cssize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index_ssize_t(array::Ptr{sc_array_t}, is::Cssize_t)::Ptr{Cvoid}
 end
 
 """
@@ -1554,7 +1560,7 @@ static inline void * sc_array_index_int16 (sc_array_t * array, int16_t i16);
 ```
 """
 function sc_array_index_int16(array, i16)
-    @ccall libp4est.sc_array_index_int16(array::Ptr{sc_array_t}, i16::Int16)::Ptr{Cvoid}
+    @ccall libsc.sc_array_index_int16(array::Ptr{sc_array_t}, i16::Int16)::Ptr{Cvoid}
 end
 
 """
@@ -1566,7 +1572,7 @@ static inline size_t sc_array_position (sc_array_t * array, void *element);
 ```
 """
 function sc_array_position(array, element)
-    @ccall libp4est.sc_array_position(array::Ptr{sc_array_t}, element::Ptr{Cvoid})::Csize_t
+    @ccall libsc.sc_array_position(array::Ptr{sc_array_t}, element::Ptr{Cvoid})::Csize_t
 end
 
 """
@@ -1578,7 +1584,7 @@ static inline void * sc_array_pop (sc_array_t * array);
 ```
 """
 function sc_array_pop(array)
-    @ccall libp4est.sc_array_pop(array::Ptr{sc_array_t})::Ptr{Cvoid}
+    @ccall libsc.sc_array_pop(array::Ptr{sc_array_t})::Ptr{Cvoid}
 end
 
 """
@@ -1590,7 +1596,7 @@ static inline void * sc_array_push_count (sc_array_t * array, size_t add_count);
 ```
 """
 function sc_array_push_count(array, add_count)
-    @ccall libp4est.sc_array_push_count(array::Ptr{sc_array_t}, add_count::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_array_push_count(array::Ptr{sc_array_t}, add_count::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -1602,7 +1608,7 @@ static inline void * sc_array_push (sc_array_t * array);
 ```
 """
 function sc_array_push(array)
-    @ccall libp4est.sc_array_push(array::Ptr{sc_array_t})::Ptr{Cvoid}
+    @ccall libsc.sc_array_push(array::Ptr{sc_array_t})::Ptr{Cvoid}
 end
 
 """
@@ -1646,7 +1652,7 @@ void sc_mstamp_init (sc_mstamp_t * mst, size_t stamp_unit, size_t elem_size);
 ```
 """
 function sc_mstamp_init(mst, stamp_unit, elem_size)
-    @ccall libp4est.sc_mstamp_init(mst::Ptr{sc_mstamp_t}, stamp_unit::Csize_t, elem_size::Csize_t)::Cvoid
+    @ccall libsc.sc_mstamp_init(mst::Ptr{sc_mstamp_t}, stamp_unit::Csize_t, elem_size::Csize_t)::Cvoid
 end
 
 """
@@ -1662,7 +1668,7 @@ void sc_mstamp_reset (sc_mstamp_t * mst);
 ```
 """
 function sc_mstamp_reset(mst)
-    @ccall libp4est.sc_mstamp_reset(mst::Ptr{sc_mstamp_t})::Cvoid
+    @ccall libsc.sc_mstamp_reset(mst::Ptr{sc_mstamp_t})::Cvoid
 end
 
 """
@@ -1678,7 +1684,7 @@ void sc_mstamp_truncate (sc_mstamp_t * mst);
 ```
 """
 function sc_mstamp_truncate(mst)
-    @ccall libp4est.sc_mstamp_truncate(mst::Ptr{sc_mstamp_t})::Cvoid
+    @ccall libsc.sc_mstamp_truncate(mst::Ptr{sc_mstamp_t})::Cvoid
 end
 
 """
@@ -1696,7 +1702,7 @@ void *sc_mstamp_alloc (sc_mstamp_t * mst);
 ```
 """
 function sc_mstamp_alloc(mst)
-    @ccall libp4est.sc_mstamp_alloc(mst::Ptr{sc_mstamp_t})::Ptr{Cvoid}
+    @ccall libsc.sc_mstamp_alloc(mst::Ptr{sc_mstamp_t})::Ptr{Cvoid}
 end
 
 """
@@ -1714,7 +1720,7 @@ size_t sc_mstamp_memory_used (sc_mstamp_t * mst);
 ```
 """
 function sc_mstamp_memory_used(mst)
-    @ccall libp4est.sc_mstamp_memory_used(mst::Ptr{sc_mstamp_t})::Csize_t
+    @ccall libsc.sc_mstamp_memory_used(mst::Ptr{sc_mstamp_t})::Csize_t
 end
 
 """
@@ -1756,7 +1762,7 @@ size_t sc_mempool_memory_used (sc_mempool_t * mempool);
 ```
 """
 function sc_mempool_memory_used(mempool)
-    @ccall libp4est.sc_mempool_memory_used(mempool::Ptr{sc_mempool_t})::Csize_t
+    @ccall libsc.sc_mempool_memory_used(mempool::Ptr{sc_mempool_t})::Csize_t
 end
 
 """
@@ -1774,7 +1780,7 @@ sc_mempool_t *sc_mempool_new (size_t elem_size);
 ```
 """
 function sc_mempool_new(elem_size)
-    @ccall libp4est.sc_mempool_new(elem_size::Csize_t)::Ptr{sc_mempool_t}
+    @ccall libsc.sc_mempool_new(elem_size::Csize_t)::Ptr{sc_mempool_t}
 end
 
 """
@@ -1792,7 +1798,7 @@ sc_mempool_t *sc_mempool_new_zero_and_persist (size_t elem_size);
 ```
 """
 function sc_mempool_new_zero_and_persist(elem_size)
-    @ccall libp4est.sc_mempool_new_zero_and_persist(elem_size::Csize_t)::Ptr{sc_mempool_t}
+    @ccall libsc.sc_mempool_new_zero_and_persist(elem_size::Csize_t)::Ptr{sc_mempool_t}
 end
 
 """
@@ -1806,7 +1812,7 @@ void sc_mempool_init (sc_mempool_t * mempool, size_t elem_size);
 ```
 """
 function sc_mempool_init(mempool, elem_size)
-    @ccall libp4est.sc_mempool_init(mempool::Ptr{sc_mempool_t}, elem_size::Csize_t)::Cvoid
+    @ccall libsc.sc_mempool_init(mempool::Ptr{sc_mempool_t}, elem_size::Csize_t)::Cvoid
 end
 
 """
@@ -1822,7 +1828,7 @@ void sc_mempool_destroy (sc_mempool_t * mempool);
 ```
 """
 function sc_mempool_destroy(mempool)
-    @ccall libp4est.sc_mempool_destroy(mempool::Ptr{sc_mempool_t})::Cvoid
+    @ccall libsc.sc_mempool_destroy(mempool::Ptr{sc_mempool_t})::Cvoid
 end
 
 """
@@ -1838,7 +1844,7 @@ void sc_mempool_destroy_null (sc_mempool_t ** pmempool);
 ```
 """
 function sc_mempool_destroy_null(pmempool)
-    @ccall libp4est.sc_mempool_destroy_null(pmempool::Ptr{Ptr{sc_mempool_t}})::Cvoid
+    @ccall libsc.sc_mempool_destroy_null(pmempool::Ptr{Ptr{sc_mempool_t}})::Cvoid
 end
 
 """
@@ -1852,7 +1858,7 @@ void sc_mempool_reset (sc_mempool_t * mempool);
 ```
 """
 function sc_mempool_reset(mempool)
-    @ccall libp4est.sc_mempool_reset(mempool::Ptr{sc_mempool_t})::Cvoid
+    @ccall libsc.sc_mempool_reset(mempool::Ptr{sc_mempool_t})::Cvoid
 end
 
 """
@@ -1866,7 +1872,7 @@ void sc_mempool_truncate (sc_mempool_t * mempool);
 ```
 """
 function sc_mempool_truncate(mempool)
-    @ccall libp4est.sc_mempool_truncate(mempool::Ptr{sc_mempool_t})::Cvoid
+    @ccall libsc.sc_mempool_truncate(mempool::Ptr{sc_mempool_t})::Cvoid
 end
 
 """
@@ -1878,7 +1884,7 @@ static inline void * sc_mempool_alloc (sc_mempool_t * mempool);
 ```
 """
 function sc_mempool_alloc(mempool)
-    @ccall libp4est.sc_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{Cvoid}
+    @ccall libsc.sc_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{Cvoid}
 end
 
 """
@@ -1890,7 +1896,7 @@ static inline void sc_mempool_free (sc_mempool_t * mempool, void *elem);
 ```
 """
 function sc_mempool_free(mempool, elem)
-    @ccall libp4est.sc_mempool_free(mempool::Ptr{sc_mempool_t}, elem::Ptr{Cvoid})::Cvoid
+    @ccall libsc.sc_mempool_free(mempool::Ptr{sc_mempool_t}, elem::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -1938,7 +1944,7 @@ size_t sc_list_memory_used (sc_list_t * list, int is_dynamic);
 ```
 """
 function sc_list_memory_used(list, is_dynamic)
-    @ccall libp4est.sc_list_memory_used(list::Ptr{sc_list_t}, is_dynamic::Cint)::Csize_t
+    @ccall libsc.sc_list_memory_used(list::Ptr{sc_list_t}, is_dynamic::Cint)::Csize_t
 end
 
 """
@@ -1956,7 +1962,7 @@ sc_list_t *sc_list_new (sc_mempool_t * allocator);
 ```
 """
 function sc_list_new(allocator)
-    @ccall libp4est.sc_list_new(allocator::Ptr{sc_mempool_t})::Ptr{sc_list_t}
+    @ccall libsc.sc_list_new(allocator::Ptr{sc_mempool_t})::Ptr{sc_list_t}
 end
 
 """
@@ -1976,7 +1982,7 @@ void sc_list_destroy (sc_list_t * list);
 ```
 """
 function sc_list_destroy(list)
-    @ccall libp4est.sc_list_destroy(list::Ptr{sc_list_t})::Cvoid
+    @ccall libsc.sc_list_destroy(list::Ptr{sc_list_t})::Cvoid
 end
 
 """
@@ -1993,7 +1999,7 @@ void sc_list_init (sc_list_t * list, sc_mempool_t * allocator);
 ```
 """
 function sc_list_init(list, allocator)
-    @ccall libp4est.sc_list_init(list::Ptr{sc_list_t}, allocator::Ptr{sc_mempool_t})::Cvoid
+    @ccall libsc.sc_list_init(list::Ptr{sc_list_t}, allocator::Ptr{sc_mempool_t})::Cvoid
 end
 
 """
@@ -2013,7 +2019,7 @@ void sc_list_reset (sc_list_t * list);
 ```
 """
 function sc_list_reset(list)
-    @ccall libp4est.sc_list_reset(list::Ptr{sc_list_t})::Cvoid
+    @ccall libsc.sc_list_reset(list::Ptr{sc_list_t})::Cvoid
 end
 
 """
@@ -2029,7 +2035,7 @@ void sc_list_unlink (sc_list_t * list);
 ```
 """
 function sc_list_unlink(list)
-    @ccall libp4est.sc_list_unlink(list::Ptr{sc_list_t})::Cvoid
+    @ccall libsc.sc_list_unlink(list::Ptr{sc_list_t})::Cvoid
 end
 
 """
@@ -2048,7 +2054,7 @@ sc_link_t *sc_list_prepend (sc_list_t * list, void *data);
 ```
 """
 function sc_list_prepend(list, data)
-    @ccall libp4est.sc_list_prepend(list::Ptr{sc_list_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
+    @ccall libsc.sc_list_prepend(list::Ptr{sc_list_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
 end
 
 """
@@ -2067,7 +2073,7 @@ sc_link_t *sc_list_append (sc_list_t * list, void *data);
 ```
 """
 function sc_list_append(list, data)
-    @ccall libp4est.sc_list_append(list::Ptr{sc_list_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
+    @ccall libsc.sc_list_append(list::Ptr{sc_list_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
 end
 
 """
@@ -2087,7 +2093,7 @@ sc_link_t *sc_list_insert (sc_list_t * list, sc_link_t * pred, void *data);
 ```
 """
 function sc_list_insert(list, pred, data)
-    @ccall libp4est.sc_list_insert(list::Ptr{sc_list_t}, pred::Ptr{sc_link_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
+    @ccall libsc.sc_list_insert(list::Ptr{sc_list_t}, pred::Ptr{sc_link_t}, data::Ptr{Cvoid})::Ptr{sc_link_t}
 end
 
 """
@@ -2106,7 +2112,7 @@ void *sc_list_remove (sc_list_t * list, sc_link_t * pred);
 ```
 """
 function sc_list_remove(list, pred)
-    @ccall libp4est.sc_list_remove(list::Ptr{sc_list_t}, pred::Ptr{sc_link_t})::Ptr{Cvoid}
+    @ccall libsc.sc_list_remove(list::Ptr{sc_list_t}, pred::Ptr{sc_link_t})::Ptr{Cvoid}
 end
 
 """
@@ -2124,7 +2130,7 @@ void *sc_list_pop (sc_list_t * list);
 ```
 """
 function sc_list_pop(list)
-    @ccall libp4est.sc_list_pop(list::Ptr{sc_list_t})::Ptr{Cvoid}
+    @ccall libsc.sc_list_pop(list::Ptr{sc_list_t})::Ptr{Cvoid}
 end
 
 """
@@ -2170,7 +2176,7 @@ unsigned int sc_hash_function_string (const void *s, const void *u);
 ```
 """
 function sc_hash_function_string(s, u)
-    @ccall libp4est.sc_hash_function_string(s::Ptr{Cvoid}, u::Ptr{Cvoid})::Cuint
+    @ccall libsc.sc_hash_function_string(s::Ptr{Cvoid}, u::Ptr{Cvoid})::Cuint
 end
 
 """
@@ -2188,7 +2194,7 @@ size_t sc_hash_memory_used (sc_hash_t * hash);
 ```
 """
 function sc_hash_memory_used(hash)
-    @ccall libp4est.sc_hash_memory_used(hash::Ptr{sc_hash_t})::Csize_t
+    @ccall libsc.sc_hash_memory_used(hash::Ptr{sc_hash_t})::Csize_t
 end
 
 """
@@ -2207,7 +2213,7 @@ sc_hash_t *sc_hash_new (sc_hash_function_t hash_fn, sc_equal_function_t equal_fn
 ```
 """
 function sc_hash_new(hash_fn, equal_fn, user_data, allocator)
-    @ccall libp4est.sc_hash_new(hash_fn::sc_hash_function_t, equal_fn::sc_equal_function_t, user_data::Ptr{Cvoid}, allocator::Ptr{sc_mempool_t})::Ptr{sc_hash_t}
+    @ccall libsc.sc_hash_new(hash_fn::sc_hash_function_t, equal_fn::sc_equal_function_t, user_data::Ptr{Cvoid}, allocator::Ptr{sc_mempool_t})::Ptr{sc_hash_t}
 end
 
 """
@@ -2227,7 +2233,7 @@ void sc_hash_destroy (sc_hash_t * hash);
 ```
 """
 function sc_hash_destroy(hash)
-    @ccall libp4est.sc_hash_destroy(hash::Ptr{sc_hash_t})::Cvoid
+    @ccall libsc.sc_hash_destroy(hash::Ptr{sc_hash_t})::Cvoid
 end
 
 """
@@ -2243,7 +2249,7 @@ void sc_hash_destroy_null (sc_hash_t ** phash);
 ```
 """
 function sc_hash_destroy_null(phash)
-    @ccall libp4est.sc_hash_destroy_null(phash::Ptr{Ptr{sc_hash_t}})::Cvoid
+    @ccall libsc.sc_hash_destroy_null(phash::Ptr{Ptr{sc_hash_t}})::Cvoid
 end
 
 """
@@ -2259,7 +2265,7 @@ void sc_hash_truncate (sc_hash_t * hash);
 ```
 """
 function sc_hash_truncate(hash)
-    @ccall libp4est.sc_hash_truncate(hash::Ptr{sc_hash_t})::Cvoid
+    @ccall libsc.sc_hash_truncate(hash::Ptr{sc_hash_t})::Cvoid
 end
 
 """
@@ -2277,7 +2283,7 @@ void sc_hash_unlink (sc_hash_t * hash);
 ```
 """
 function sc_hash_unlink(hash)
-    @ccall libp4est.sc_hash_unlink(hash::Ptr{sc_hash_t})::Cvoid
+    @ccall libsc.sc_hash_unlink(hash::Ptr{sc_hash_t})::Cvoid
 end
 
 """
@@ -2293,7 +2299,7 @@ void sc_hash_unlink_destroy (sc_hash_t * hash);
 ```
 """
 function sc_hash_unlink_destroy(hash)
-    @ccall libp4est.sc_hash_unlink_destroy(hash::Ptr{sc_hash_t})::Cvoid
+    @ccall libsc.sc_hash_unlink_destroy(hash::Ptr{sc_hash_t})::Cvoid
 end
 
 """
@@ -2312,7 +2318,7 @@ int sc_hash_lookup (sc_hash_t * hash, void *v, void ***found);
 ```
 """
 function sc_hash_lookup(hash, v, found)
-    @ccall libp4est.sc_hash_lookup(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Ptr{Cvoid}}})::Cint
+    @ccall libsc.sc_hash_lookup(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Ptr{Cvoid}}})::Cint
 end
 
 """
@@ -2331,7 +2337,7 @@ int sc_hash_insert_unique (sc_hash_t * hash, void *v, void ***found);
 ```
 """
 function sc_hash_insert_unique(hash, v, found)
-    @ccall libp4est.sc_hash_insert_unique(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Ptr{Cvoid}}})::Cint
+    @ccall libsc.sc_hash_insert_unique(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Ptr{Cvoid}}})::Cint
 end
 
 """
@@ -2350,7 +2356,7 @@ int sc_hash_remove (sc_hash_t * hash, void *v, void **found);
 ```
 """
 function sc_hash_remove(hash, v, found)
-    @ccall libp4est.sc_hash_remove(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Cvoid}})::Cint
+    @ccall libsc.sc_hash_remove(hash::Ptr{sc_hash_t}, v::Ptr{Cvoid}, found::Ptr{Ptr{Cvoid}})::Cint
 end
 
 """
@@ -2364,7 +2370,7 @@ void sc_hash_foreach (sc_hash_t * hash, sc_hash_foreach_t fn);
 ```
 """
 function sc_hash_foreach(hash, fn)
-    @ccall libp4est.sc_hash_foreach(hash::Ptr{sc_hash_t}, fn::sc_hash_foreach_t)::Cvoid
+    @ccall libsc.sc_hash_foreach(hash::Ptr{sc_hash_t}, fn::sc_hash_foreach_t)::Cvoid
 end
 
 """
@@ -2378,7 +2384,7 @@ void sc_hash_print_statistics (int package_id, int log_priority, sc_hash_t * has
 ```
 """
 function sc_hash_print_statistics(package_id, log_priority, hash)
-    @ccall libp4est.sc_hash_print_statistics(package_id::Cint, log_priority::Cint, hash::Ptr{sc_hash_t})::Cvoid
+    @ccall libsc.sc_hash_print_statistics(package_id::Cint, log_priority::Cint, hash::Ptr{sc_hash_t})::Cvoid
 end
 
 struct sc_hash_array_data
@@ -2420,7 +2426,7 @@ size_t sc_hash_array_memory_used (sc_hash_array_t * ha);
 ```
 """
 function sc_hash_array_memory_used(ha)
-    @ccall libp4est.sc_hash_array_memory_used(ha::Ptr{sc_hash_array_t})::Csize_t
+    @ccall libsc.sc_hash_array_memory_used(ha::Ptr{sc_hash_array_t})::Csize_t
 end
 
 """
@@ -2438,7 +2444,7 @@ sc_hash_array_t *sc_hash_array_new (size_t elem_size, sc_hash_function_t hash_fn
 ```
 """
 function sc_hash_array_new(elem_size, hash_fn, equal_fn, user_data)
-    @ccall libp4est.sc_hash_array_new(elem_size::Csize_t, hash_fn::sc_hash_function_t, equal_fn::sc_equal_function_t, user_data::Ptr{Cvoid})::Ptr{sc_hash_array_t}
+    @ccall libsc.sc_hash_array_new(elem_size::Csize_t, hash_fn::sc_hash_function_t, equal_fn::sc_equal_function_t, user_data::Ptr{Cvoid})::Ptr{sc_hash_array_t}
 end
 
 """
@@ -2452,7 +2458,7 @@ void sc_hash_array_destroy (sc_hash_array_t * hash_array);
 ```
 """
 function sc_hash_array_destroy(hash_array)
-    @ccall libp4est.sc_hash_array_destroy(hash_array::Ptr{sc_hash_array_t})::Cvoid
+    @ccall libsc.sc_hash_array_destroy(hash_array::Ptr{sc_hash_array_t})::Cvoid
 end
 
 """
@@ -2466,7 +2472,7 @@ int sc_hash_array_is_valid (sc_hash_array_t * hash_array);
 ```
 """
 function sc_hash_array_is_valid(hash_array)
-    @ccall libp4est.sc_hash_array_is_valid(hash_array::Ptr{sc_hash_array_t})::Cint
+    @ccall libsc.sc_hash_array_is_valid(hash_array::Ptr{sc_hash_array_t})::Cint
 end
 
 """
@@ -2482,7 +2488,7 @@ void sc_hash_array_truncate (sc_hash_array_t * hash_array);
 ```
 """
 function sc_hash_array_truncate(hash_array)
-    @ccall libp4est.sc_hash_array_truncate(hash_array::Ptr{sc_hash_array_t})::Cvoid
+    @ccall libsc.sc_hash_array_truncate(hash_array::Ptr{sc_hash_array_t})::Cvoid
 end
 
 """
@@ -2501,7 +2507,7 @@ int sc_hash_array_lookup (sc_hash_array_t * hash_array, void *v, size_t *positio
 ```
 """
 function sc_hash_array_lookup(hash_array, v, position)
-    @ccall libp4est.sc_hash_array_lookup(hash_array::Ptr{sc_hash_array_t}, v::Ptr{Cvoid}, position::Ptr{Csize_t})::Cint
+    @ccall libsc.sc_hash_array_lookup(hash_array::Ptr{sc_hash_array_t}, v::Ptr{Cvoid}, position::Ptr{Csize_t})::Cint
 end
 
 """
@@ -2520,7 +2526,7 @@ void *sc_hash_array_insert_unique (sc_hash_array_t * hash_array, void *v, size_t
 ```
 """
 function sc_hash_array_insert_unique(hash_array, v, position)
-    @ccall libp4est.sc_hash_array_insert_unique(hash_array::Ptr{sc_hash_array_t}, v::Ptr{Cvoid}, position::Ptr{Csize_t})::Ptr{Cvoid}
+    @ccall libsc.sc_hash_array_insert_unique(hash_array::Ptr{sc_hash_array_t}, v::Ptr{Cvoid}, position::Ptr{Csize_t})::Ptr{Cvoid}
 end
 
 """
@@ -2537,7 +2543,7 @@ void sc_hash_array_rip (sc_hash_array_t * hash_array, sc_array_t * rip);
 ```
 """
 function sc_hash_array_rip(hash_array, rip)
-    @ccall libp4est.sc_hash_array_rip(hash_array::Ptr{sc_hash_array_t}, rip::Ptr{sc_array_t})::Cvoid
+    @ccall libsc.sc_hash_array_rip(hash_array::Ptr{sc_hash_array_t}, rip::Ptr{sc_array_t})::Cvoid
 end
 
 """
@@ -2573,7 +2579,7 @@ void sc_recycle_array_init (sc_recycle_array_t * rec_array, size_t elem_size);
 ```
 """
 function sc_recycle_array_init(rec_array, elem_size)
-    @ccall libp4est.sc_recycle_array_init(rec_array::Ptr{sc_recycle_array_t}, elem_size::Csize_t)::Cvoid
+    @ccall libsc.sc_recycle_array_init(rec_array::Ptr{sc_recycle_array_t}, elem_size::Csize_t)::Cvoid
 end
 
 """
@@ -2589,7 +2595,7 @@ void sc_recycle_array_reset (sc_recycle_array_t * rec_array);
 ```
 """
 function sc_recycle_array_reset(rec_array)
-    @ccall libp4est.sc_recycle_array_reset(rec_array::Ptr{sc_recycle_array_t})::Cvoid
+    @ccall libsc.sc_recycle_array_reset(rec_array::Ptr{sc_recycle_array_t})::Cvoid
 end
 
 """
@@ -2607,7 +2613,7 @@ void *sc_recycle_array_insert (sc_recycle_array_t * rec_array, size_t *position)
 ```
 """
 function sc_recycle_array_insert(rec_array, position)
-    @ccall libp4est.sc_recycle_array_insert(rec_array::Ptr{sc_recycle_array_t}, position::Ptr{Csize_t})::Ptr{Cvoid}
+    @ccall libsc.sc_recycle_array_insert(rec_array::Ptr{sc_recycle_array_t}, position::Ptr{Csize_t})::Ptr{Cvoid}
 end
 
 """
@@ -2625,7 +2631,7 @@ void *sc_recycle_array_remove (sc_recycle_array_t * rec_array, size_t position);
 ```
 """
 function sc_recycle_array_remove(rec_array, position)
-    @ccall libp4est.sc_recycle_array_remove(rec_array::Ptr{sc_recycle_array_t}, position::Csize_t)::Ptr{Cvoid}
+    @ccall libsc.sc_recycle_array_remove(rec_array::Ptr{sc_recycle_array_t}, position::Csize_t)::Ptr{Cvoid}
 end
 
 """
@@ -2729,7 +2735,7 @@ const sc_io_source_t = sc_io_source
 
 # automatic type deduction for variadic arguments may not be what you want, please use with caution
 @generated function sc_io_sink_new(iotype, mode, encode, va_list...)
-        :(@ccall(libp4est.sc_io_sink_new(iotype::sc_io_type_t, mode::sc_io_mode_t, encode::sc_io_encode_t; $(to_c_type_pairs(va_list)...))::Ptr{sc_io_sink_t}))
+        :(@ccall(libsc.sc_io_sink_new(iotype::sc_io_type_t, mode::sc_io_mode_t, encode::sc_io_encode_t; $(to_c_type_pairs(va_list)...))::Ptr{sc_io_sink_t}))
     end
 
 """
@@ -2747,7 +2753,7 @@ int sc_io_sink_destroy (sc_io_sink_t * sink);
 ```
 """
 function sc_io_sink_destroy(sink)
-    @ccall libp4est.sc_io_sink_destroy(sink::Ptr{sc_io_sink_t})::Cint
+    @ccall libsc.sc_io_sink_destroy(sink::Ptr{sc_io_sink_t})::Cint
 end
 
 """
@@ -2767,7 +2773,7 @@ int sc_io_sink_write (sc_io_sink_t * sink, const void *data, size_t bytes_avail)
 ```
 """
 function sc_io_sink_write(sink, data, bytes_avail)
-    @ccall libp4est.sc_io_sink_write(sink::Ptr{sc_io_sink_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t)::Cint
+    @ccall libsc.sc_io_sink_write(sink::Ptr{sc_io_sink_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t)::Cint
 end
 
 """
@@ -2787,7 +2793,7 @@ int sc_io_sink_complete (sc_io_sink_t * sink, size_t * bytes_in, size_t * bytes_
 ```
 """
 function sc_io_sink_complete(sink, bytes_in, bytes_out)
-    @ccall libp4est.sc_io_sink_complete(sink::Ptr{sc_io_sink_t}, bytes_in::Ptr{Csize_t}, bytes_out::Ptr{Csize_t})::Cint
+    @ccall libsc.sc_io_sink_complete(sink::Ptr{sc_io_sink_t}, bytes_in::Ptr{Csize_t}, bytes_out::Ptr{Csize_t})::Cint
 end
 
 """
@@ -2806,12 +2812,12 @@ int sc_io_sink_align (sc_io_sink_t * sink, size_t bytes_align);
 ```
 """
 function sc_io_sink_align(sink, bytes_align)
-    @ccall libp4est.sc_io_sink_align(sink::Ptr{sc_io_sink_t}, bytes_align::Csize_t)::Cint
+    @ccall libsc.sc_io_sink_align(sink::Ptr{sc_io_sink_t}, bytes_align::Csize_t)::Cint
 end
 
 # automatic type deduction for variadic arguments may not be what you want, please use with caution
 @generated function sc_io_source_new(iotype, encode, va_list...)
-        :(@ccall(libp4est.sc_io_source_new(iotype::sc_io_type_t, encode::sc_io_encode_t; $(to_c_type_pairs(va_list)...))::Ptr{sc_io_source_t}))
+        :(@ccall(libsc.sc_io_source_new(iotype::sc_io_type_t, encode::sc_io_encode_t; $(to_c_type_pairs(va_list)...))::Ptr{sc_io_source_t}))
     end
 
 """
@@ -2829,7 +2835,7 @@ int sc_io_source_destroy (sc_io_source_t * source);
 ```
 """
 function sc_io_source_destroy(source)
-    @ccall libp4est.sc_io_source_destroy(source::Ptr{sc_io_source_t})::Cint
+    @ccall libsc.sc_io_source_destroy(source::Ptr{sc_io_source_t})::Cint
 end
 
 """
@@ -2850,7 +2856,7 @@ int sc_io_source_read (sc_io_source_t * source, void *data, size_t bytes_avail, 
 ```
 """
 function sc_io_source_read(source, data, bytes_avail, bytes_out)
-    @ccall libp4est.sc_io_source_read(source::Ptr{sc_io_source_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t, bytes_out::Ptr{Csize_t})::Cint
+    @ccall libsc.sc_io_source_read(source::Ptr{sc_io_source_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t, bytes_out::Ptr{Csize_t})::Cint
 end
 
 """
@@ -2870,7 +2876,7 @@ int sc_io_source_complete (sc_io_source_t * source, size_t * bytes_in, size_t * 
 ```
 """
 function sc_io_source_complete(source, bytes_in, bytes_out)
-    @ccall libp4est.sc_io_source_complete(source::Ptr{sc_io_source_t}, bytes_in::Ptr{Csize_t}, bytes_out::Ptr{Csize_t})::Cint
+    @ccall libsc.sc_io_source_complete(source::Ptr{sc_io_source_t}, bytes_in::Ptr{Csize_t}, bytes_out::Ptr{Csize_t})::Cint
 end
 
 """
@@ -2889,7 +2895,7 @@ int sc_io_source_align (sc_io_source_t * source, size_t bytes_align);
 ```
 """
 function sc_io_source_align(source, bytes_align)
-    @ccall libp4est.sc_io_source_align(source::Ptr{sc_io_source_t}, bytes_align::Csize_t)::Cint
+    @ccall libsc.sc_io_source_align(source::Ptr{sc_io_source_t}, bytes_align::Csize_t)::Cint
 end
 
 """
@@ -2907,7 +2913,7 @@ int sc_io_source_activate_mirror (sc_io_source_t * source);
 ```
 """
 function sc_io_source_activate_mirror(source)
-    @ccall libp4est.sc_io_source_activate_mirror(source::Ptr{sc_io_source_t})::Cint
+    @ccall libsc.sc_io_source_activate_mirror(source::Ptr{sc_io_source_t})::Cint
 end
 
 """
@@ -2925,7 +2931,7 @@ int sc_io_source_read_mirror (sc_io_source_t * source, void *data, size_t bytes_
 ```
 """
 function sc_io_source_read_mirror(source, data, bytes_avail, bytes_out)
-    @ccall libp4est.sc_io_source_read_mirror(source::Ptr{sc_io_source_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t, bytes_out::Ptr{Csize_t})::Cint
+    @ccall libsc.sc_io_source_read_mirror(source::Ptr{sc_io_source_t}, data::Ptr{Cvoid}, bytes_avail::Csize_t, bytes_out::Ptr{Csize_t})::Cint
 end
 
 """
@@ -2945,7 +2951,7 @@ int sc_vtk_write_binary (FILE * vtkfile, char *numeric_data, size_t byte_length)
 ```
 """
 function sc_vtk_write_binary(vtkfile, numeric_data, byte_length)
-    @ccall libp4est.sc_vtk_write_binary(vtkfile::Ptr{Libc.FILE}, numeric_data::Cstring, byte_length::Csize_t)::Cint
+    @ccall libsc.sc_vtk_write_binary(vtkfile::Ptr{Libc.FILE}, numeric_data::Cstring, byte_length::Csize_t)::Cint
 end
 
 """
@@ -2965,7 +2971,7 @@ int sc_vtk_write_compressed (FILE * vtkfile, char *numeric_data, size_t byte_len
 ```
 """
 function sc_vtk_write_compressed(vtkfile, numeric_data, byte_length)
-    @ccall libp4est.sc_vtk_write_compressed(vtkfile::Ptr{Libc.FILE}, numeric_data::Cstring, byte_length::Csize_t)::Cint
+    @ccall libsc.sc_vtk_write_compressed(vtkfile::Ptr{Libc.FILE}, numeric_data::Cstring, byte_length::Csize_t)::Cint
 end
 
 """
@@ -2989,7 +2995,7 @@ void sc_fwrite (const void *ptr, size_t size, size_t nmemb, FILE * file, const c
 ```
 """
 function sc_fwrite(ptr, size, nmemb, file, errmsg)
-    @ccall libp4est.sc_fwrite(ptr::Ptr{Cvoid}, size::Csize_t, nmemb::Csize_t, file::Ptr{Libc.FILE}, errmsg::Cstring)::Cvoid
+    @ccall libsc.sc_fwrite(ptr::Ptr{Cvoid}, size::Csize_t, nmemb::Csize_t, file::Ptr{Libc.FILE}, errmsg::Cstring)::Cvoid
 end
 
 """
@@ -3013,7 +3019,7 @@ void sc_fread (void *ptr, size_t size, size_t nmemb, FILE * file, const char *er
 ```
 """
 function sc_fread(ptr, size, nmemb, file, errmsg)
-    @ccall libp4est.sc_fread(ptr::Ptr{Cvoid}, size::Csize_t, nmemb::Csize_t, file::Ptr{Libc.FILE}, errmsg::Cstring)::Cvoid
+    @ccall libsc.sc_fread(ptr::Ptr{Cvoid}, size::Csize_t, nmemb::Csize_t, file::Ptr{Libc.FILE}, errmsg::Cstring)::Cvoid
 end
 
 """
@@ -3029,7 +3035,7 @@ void sc_fflush_fsync_fclose (FILE * file);
 ```
 """
 function sc_fflush_fsync_fclose(file)
-    @ccall libp4est.sc_fflush_fsync_fclose(file::Ptr{Libc.FILE})::Cvoid
+    @ccall libsc.sc_fflush_fsync_fclose(file::Ptr{Libc.FILE})::Cvoid
 end
 
 """
@@ -3041,7 +3047,7 @@ void sc_mpi_read (MPI_File mpifile, const void *ptr, size_t zcount, sc_MPI_Datat
 ```
 """
 function sc_mpi_read(mpifile, ptr, zcount, t, errmsg)
-    @ccall libp4est.sc_mpi_read(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
+    @ccall libsc.sc_mpi_read(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
 end
 
 """
@@ -3053,7 +3059,7 @@ void sc_mpi_write (MPI_File mpifile, const void *ptr, size_t zcount, sc_MPI_Data
 ```
 """
 function sc_mpi_write(mpifile, ptr, zcount, t, errmsg)
-    @ccall libp4est.sc_mpi_write(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
+    @ccall libsc.sc_mpi_write(mpifile::MPI_File, ptr::Ptr{Cvoid}, zcount::Csize_t, t::MPI_Datatype, errmsg::Cstring)::Cvoid
 end
 
 """
@@ -11151,7 +11157,7 @@ int sc_uint128_compare (const void *a, const void *b);
 ```
 """
 function sc_uint128_compare(a, b)
-    @ccall libp4est.sc_uint128_compare(a::Ptr{Cvoid}, b::Ptr{Cvoid})::Cint
+    @ccall libsc.sc_uint128_compare(a::Ptr{Cvoid}, b::Ptr{Cvoid})::Cint
 end
 
 """
@@ -11170,7 +11176,7 @@ int sc_uint128_is_equal (const sc_uint128_t * a, const sc_uint128_t * b);
 ```
 """
 function sc_uint128_is_equal(a, b)
-    @ccall libp4est.sc_uint128_is_equal(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cint
+    @ccall libsc.sc_uint128_is_equal(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cint
 end
 
 """
@@ -11188,7 +11194,7 @@ void sc_uint128_init (sc_uint128_t * a, uint64_t high, uint64_t low);
 ```
 """
 function sc_uint128_init(a, high, low)
-    @ccall libp4est.sc_uint128_init(a::Ptr{sc_uint128_t}, high::UInt64, low::UInt64)::Cvoid
+    @ccall libsc.sc_uint128_init(a::Ptr{sc_uint128_t}, high::UInt64, low::UInt64)::Cvoid
 end
 
 """
@@ -11207,7 +11213,7 @@ int sc_uint128_chk_bit (const sc_uint128_t * input, int exponent);
 ```
 """
 function sc_uint128_chk_bit(input, exponent)
-    @ccall libp4est.sc_uint128_chk_bit(input::Ptr{sc_uint128_t}, exponent::Cint)::Cint
+    @ccall libsc.sc_uint128_chk_bit(input::Ptr{sc_uint128_t}, exponent::Cint)::Cint
 end
 
 """
@@ -11224,7 +11230,7 @@ void sc_uint128_set_bit (sc_uint128_t * a, int exponent);
 ```
 """
 function sc_uint128_set_bit(a, exponent)
-    @ccall libp4est.sc_uint128_set_bit(a::Ptr{sc_uint128_t}, exponent::Cint)::Cvoid
+    @ccall libsc.sc_uint128_set_bit(a::Ptr{sc_uint128_t}, exponent::Cint)::Cvoid
 end
 
 """
@@ -11241,7 +11247,7 @@ void sc_uint128_copy (const sc_uint128_t * input, sc_uint128_t * output);
 ```
 """
 function sc_uint128_copy(input, output)
-    @ccall libp4est.sc_uint128_copy(input::Ptr{sc_uint128_t}, output::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_copy(input::Ptr{sc_uint128_t}, output::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11259,7 +11265,7 @@ void sc_uint128_add (const sc_uint128_t * a, const sc_uint128_t * b, sc_uint128_
 ```
 """
 function sc_uint128_add(a, b, result)
-    @ccall libp4est.sc_uint128_add(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_add(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11277,7 +11283,7 @@ void sc_uint128_sub (const sc_uint128_t * a, const sc_uint128_t * b, sc_uint128_
 ```
 """
 function sc_uint128_sub(a, b, result)
-    @ccall libp4est.sc_uint128_sub(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_sub(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11294,7 +11300,7 @@ void sc_uint128_bitwise_neg (const sc_uint128_t * a, sc_uint128_t * result);
 ```
 """
 function sc_uint128_bitwise_neg(a, result)
-    @ccall libp4est.sc_uint128_bitwise_neg(a::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_bitwise_neg(a::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11312,7 +11318,7 @@ void sc_uint128_bitwise_or (const sc_uint128_t * a, const sc_uint128_t * b, sc_u
 ```
 """
 function sc_uint128_bitwise_or(a, b, result)
-    @ccall libp4est.sc_uint128_bitwise_or(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_bitwise_or(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11330,7 +11336,7 @@ void sc_uint128_bitwise_and (const sc_uint128_t * a, const sc_uint128_t * b, sc_
 ```
 """
 function sc_uint128_bitwise_and(a, b, result)
-    @ccall libp4est.sc_uint128_bitwise_and(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_bitwise_and(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t}, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11348,7 +11354,7 @@ void sc_uint128_shift_right (const sc_uint128_t * input, int shift_count, sc_uin
 ```
 """
 function sc_uint128_shift_right(input, shift_count, result)
-    @ccall libp4est.sc_uint128_shift_right(input::Ptr{sc_uint128_t}, shift_count::Cint, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_shift_right(input::Ptr{sc_uint128_t}, shift_count::Cint, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11366,7 +11372,7 @@ void sc_uint128_shift_left (const sc_uint128_t * input, int shift_count, sc_uint
 ```
 """
 function sc_uint128_shift_left(input, shift_count, result)
-    @ccall libp4est.sc_uint128_shift_left(input::Ptr{sc_uint128_t}, shift_count::Cint, result::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_shift_left(input::Ptr{sc_uint128_t}, shift_count::Cint, result::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11383,7 +11389,7 @@ void sc_uint128_add_inplace (sc_uint128_t * a, const sc_uint128_t * b);
 ```
 """
 function sc_uint128_add_inplace(a, b)
-    @ccall libp4est.sc_uint128_add_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_add_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11400,7 +11406,7 @@ void sc_uint128_sub_inplace (sc_uint128_t * a, const sc_uint128_t * b);
 ```
 """
 function sc_uint128_sub_inplace(a, b)
-    @ccall libp4est.sc_uint128_sub_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_sub_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11417,7 +11423,7 @@ void sc_uint128_bitwise_or_inplace (sc_uint128_t * a, const sc_uint128_t * b);
 ```
 """
 function sc_uint128_bitwise_or_inplace(a, b)
-    @ccall libp4est.sc_uint128_bitwise_or_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_bitwise_or_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
 end
 
 """
@@ -11434,7 +11440,7 @@ void sc_uint128_bitwise_and_inplace (sc_uint128_t * a, const sc_uint128_t * b);
 ```
 """
 function sc_uint128_bitwise_and_inplace(a, b)
-    @ccall libp4est.sc_uint128_bitwise_and_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
+    @ccall libsc.sc_uint128_bitwise_and_inplace(a::Ptr{sc_uint128_t}, b::Ptr{sc_uint128_t})::Cvoid
 end
 
 """A datatype to handle the linear id in 3D. We use the implementation of unsigned 128 bit integer in libsc, i.e., a struct with the members high\\_bits and low\\_bits (both uint64\\_t)."""
