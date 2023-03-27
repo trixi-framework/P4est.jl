@@ -8,7 +8,7 @@ using Reexport: @reexport
 # load all preferences here and access them from the `module LibP4est`.
 using Preferences: @load_preference
 const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
-const _PREFERENCE_LIBSC = @load_preference("libsc", "P4est_jll")
+const _PREFERENCE_LIBSC = @load_preference("libsc", _PREFERENCE_LIBP4EST)
 
 
 # Include p4est bindings

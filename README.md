@@ -92,7 +92,12 @@ julia> using Preferences, UUIDs
 julia> set_preferences!(
            UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
            "libp4est" => "/path/to/your/libp4est.so", force = true)
-
+```
+On Windows you also need to set the path to the local build of the shared library
+of [`libsc`](https://github.com/cburstedde/libsc/tree/master), which is a subpackage
+of `p4est`. On other systems, this is not necessary as the library is already linked
+by `libp4est.so`, but it can be used to employ also a custom build of `libsc`.
+```julia
 julia> set_preferences!(
            UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
            "libsc" => "/path/to/your/libsc.so", force = true)
