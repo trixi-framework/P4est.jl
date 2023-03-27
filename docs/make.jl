@@ -99,6 +99,7 @@ makedocs(
   pages = [
     "Home" => "index.md",
     "Introduction" => "introduction.md",
+    "Troubleshooting and FAQ" => "troubleshooting.md",
     "API reference" => "reference.md",
     "Authors" => "authors.md",
     "Contributing" => "contributing.md",
