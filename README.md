@@ -92,6 +92,10 @@ julia> using Preferences, UUIDs
 julia> set_preferences!(
            UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
            "libp4est" => "/path/to/your/libp4est.so", force = true)
+
+julia> set_preferences!(
+           UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
+           "libsc" => "/path/to/your/libsc.so", force = true)
 ```
 
 Note that you should restart your Julia session after changing the preferences.
@@ -121,6 +125,10 @@ installation of the underlying C libraries.
   julia> set_preferences!(
              UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
              "libp4est" => "/path/to/your/libp4est.so", force = true)
+
+  julia> set_preferences!(
+             UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
+             "libsc" => "/path/to/your/libsc.so", force = true)
   ```
 - Restart the Julia REPL and load the packages.
   ```julia

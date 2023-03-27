@@ -1,12 +1,18 @@
 using P4est_jll: P4est_jll
 export P4est_jll
 
-using ..P4est: _PREFERENCE_LIBP4EST
+using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 
 @static if _PREFERENCE_LIBP4EST == "P4est_jll"
     const libp4est = P4est_jll.libp4est
 else
     const libp4est = _PREFERENCE_LIBP4EST
+end
+
+@static if _PREFERENCE_LIBSC == "P4est_jll"
+    const libsc = P4est_jll.libsc
+else
+    const libsc = _PREFERENCE_LIBSC
 end
 
 

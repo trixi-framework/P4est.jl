@@ -17,6 +17,13 @@ using P4est
     @test_nowarn P4est.init(C_NULL, SC_LP_ERROR)
     @test_nowarn P4est.init(C_NULL, SC_LP_DEFAULT)
   end
+
+  @testset "sc_ functions" begin
+    @test_nowarn sc_version()
+    @test_nowarn sc_version_major()
+    @test_nowarn sc_version_minor()
+    @test unsafe_load(cglobal((:sc_package_id, P4est.LibP4est.libsc), Cint)) == -1
+  end
 end
 
 @testset "PointerWrapper" begin
