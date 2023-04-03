@@ -64,6 +64,16 @@ function Base.getproperty(pw::PointerWrapper{T}, name::Symbol) where T
   PointerWrapper(fieldtype(T, i), pointer(pw) + fieldoffset(T, i))
 end
 
+# Syntactic sugar: allows one to use `pw.fieldname` to set `fieldname`
+function Base.setproperty!(pw::PointerWrapper{T}, name::Symbol, v) where T
+  i = findfirst(isequal(name), fieldnames(T))
+  if isnothing(i)
+    error("type $(string(T)) has no field $name")
+  end
+
+  unsafe_store!(reinterpret(Ptr{fieldtype(T, i)}, pointer(pw) + fieldoffset(T, i)), v)
+end
+
 # `[]` allows one to access the actual underlying data and
 # `[i]` allows one to access the actual underlying data of an array
 Base.getindex(pw::PointerWrapper, i::Integer=1) = unsafe_load(pw, i)
