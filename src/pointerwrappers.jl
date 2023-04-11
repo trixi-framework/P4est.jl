@@ -70,10 +70,12 @@ end
 function Base.setproperty!(pw::PointerWrapper{T}, name::Symbol, v) where T
   i = findfirst(isequal(name), fieldnames(T))
   if isnothing(i)
-    error("type $(string(T)) has no field $name")
+    # For some `struct`s, `fieldnames` gives `data` and not the actual field names, but we can use `Base.setproperty!` for pointers,
+    # see https://github.com/trixi-framework/P4est.jl/issues/72 and https://github.com/trixi-framework/P4est.jl/issues/79
+    Base.setproperty!(pointer(pw), name, v)
+  else
+    unsafe_store!(reinterpret(Ptr{fieldtype(T, i)}, pointer(pw) + fieldoffset(T, i)), v)
   end
-
-  unsafe_store!(reinterpret(Ptr{fieldtype(T, i)}, pointer(pw) + fieldoffset(T, i)), v)
 end
 
 # `[]` allows one to access the actual underlying data and
