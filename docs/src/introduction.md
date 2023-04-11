@@ -87,6 +87,25 @@ p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
 ```
 
+You may also use the `PonterWrapper` to set variables in `struct`s.  Here we
+set the user data pointer in the `p4est_t` `struct` to point to some data:
+```@repl
+using P4est, MPI; MPI.Init()
+connectivity = p4est_connectivity_new_periodic()
+p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
+p4est_pw = PointerWrapper(p4est)
+data = Ref((rand(4), rand(5)))
+GC.@preserve data begin
+    p4est_pw.user_pointer = pointer_from_objref(data)
+
+    # Call p4est function with callback that uses p4est_pw.user_pointer here.
+    # You may retrieve the data `Ref` in the callback with
+    # data = unsafe_pointer_to_objref(pointer(p4est_pw.user_pointer))
+end
+p4est_connectivity_destroy(connectivity)
+p4est_destroy(p4est)
+```
+
 In addition, you can use a `PointerWrapper` as an array if the underlying datastructure is an array, i.e.
 you can access the `i`-th element of the underlying array by `pw[i]` for a `PointerWrapper` `pw`. See the
 following code for a full example:

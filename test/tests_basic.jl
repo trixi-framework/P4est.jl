@@ -51,6 +51,16 @@ end
   @test pw.value[1] == 2.0
   @test pw.value[] == 2.0
 
+  # test if we can set the user_pointer
+  p4est_pw.user_pointer = Ptr{Cvoid}(3)
+  @test p4est_pw.user_pointer == PointerWrapper(Ptr{Cvoid}(3))
+  data = Ref((2,3))
+  GC.@preserve data begin
+    p4est_pw.user_pointer = pointer_from_objref(data)
+    @test unsafe_pointer_to_objref(pointer(p4est_pw.user_pointer))[] == data[]
+    p4est_pw.user_pointer = C_NULL
+  end
+
   # test if accessing an underlying array works properly
   @test p4est_pw.global_first_quadrant[1] isa Integer
   @test p4est_pw.global_first_quadrant[2] == unsafe_load(unsafe_load(p4est).global_first_quadrant, 2)
