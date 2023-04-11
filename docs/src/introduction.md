@@ -89,7 +89,7 @@ p4est_destroy(p4est)
 
 You may also use the `PonterWrapper` to set variables in `struct`s.  Here we
 set the user data pointer in the `p4est_t` `struct` to point to some data:
-```
+```@repl
 using P4est, MPI; MPI.Init()
 connectivity = p4est_connectivity_new_periodic()
 p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
