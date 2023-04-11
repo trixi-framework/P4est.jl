@@ -58,6 +58,7 @@ end
   # test if nested accesses work properly
   @test p4est_pw.connectivity isa PointerWrapper{p4est_connectivity}
   @test p4est_pw.connectivity.num_trees[] isa Integer
+  @test p4est_pw.global_first_position.level[] isa Integer
   @test p4est_pw.connectivity.num_trees isa PointerWrapper{Int32}
 
   @test pointer(p4est_pw) isa Ptr{P4est.LibP4est.p4est}
