@@ -10,6 +10,12 @@
 that wraps [`p4est`](https://github.com/cburstedde/p4est), a C library to manage
 multiple connected adaptive quadtrees or octrees in parallel.
 
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) mainly provides low-level
+wrappers of functionality from [`p4est`](https://github.com/cburstedde/p4est).
+The Julia package [P4estTypes.jl](https://github.com/lcw/P4estTypes.jl) builds
+on top of [P4est.jl](https://github.com/trixi-framework/P4est.jl) and provides a
+high-level interface.
+
 
 ## Installation
 
