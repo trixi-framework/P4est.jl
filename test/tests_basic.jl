@@ -44,12 +44,22 @@ end
   ptr = Base.unsafe_convert(Ptr{MyStruct}, Ref(obj))
   pw = PointerWrapper(ptr)
   @test pw.value[] == 0.0
-  pw.value[] = 1.0
+  @test_nowarn pw.value[] = 1.0
   @test pw.value[] == 1.0
   @test pw.value[1] == 1.0
-  pw.value[1] = 2.0
+  @test_nowarn pw.value[1] = 2.0
   @test pw.value[1] == 2.0
   @test pw.value[] == 2.0
+  # using `setproperty!`
+  @test_nowarn pw.value = 3.0
+  @test pw.value[1] == 3.0
+  @test pw.value[] == 3.0
+  # using `setproperty!` for special `struct`s
+  # see https://github.com/trixi-framework/P4est.jl/issues/72 and https://github.com/trixi-framework/P4est.jl/issues/79
+  @test p4est_pw.global_first_position.level[] == 29
+  @test_nowarn p4est_pw.global_first_position.level = 30
+  @test p4est_pw.global_first_position.level[] == 30
+  @test_nowarn p4est_pw.global_first_position.level = 29
 
   # test if we can set the user_pointer
   p4est_pw.user_pointer = Ptr{Cvoid}(3)
