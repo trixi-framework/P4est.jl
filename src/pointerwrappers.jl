@@ -87,7 +87,7 @@ Base.unsafe_load(pw::PointerWrapper, i::Integer=1) = unsafe_load(pointer(pw), i)
 
 # When `unsafe_wrap`ping a PointerWrapper object, we really want to wrap the underlying array
 Base.unsafe_wrap(AType::Union{Type{Array},Type{Array{T}},Type{Array{T,N}}},
-                 pw::PointerWrapper, dims::NTuple{N,Int}; own::Bool = false) where {T,N} = unsafe_wrap(AType, pointer(pw), dims; own)
+                 pw::PointerWrapper, dims::Union{NTuple{N,Int}, Integer}; own::Bool = false) where {T,N} = unsafe_wrap(AType, pointer(pw), dims; own)
 
 # If value is of the wrong type, try to convert it
 Base.unsafe_store!(pw::PointerWrapper{T}, value, i::Integer=1) where T = unsafe_store!(pw, convert(T, value), i)
