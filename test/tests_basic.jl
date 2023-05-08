@@ -86,20 +86,20 @@ end
   # `unsafe_wrap`ping a `PointerWrapper`
   n_vertices::Int = connectivity_pw.num_vertices[]
   # wrapping matrices
-  vertices = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
-  @test vertices isa Array{Float64, 2}
+  vertices_matrix = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
+  @test vertices_matrix isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
 
-  @test size(vertices) == (3, n_vertices)
-  @test vertices[1, 1] == connectivity_pw.vertices[1] == 0.0
-  @test_nowarn vertices[1, 1] = 1.0
-  @test vertices[1, 1] == connectivity_pw.vertices[1] == 1.0
+  @test size(vertices_matrix) == (3, n_vertices)
+  @test vertices_matrix[1, 1] == connectivity_pw.vertices[1] == 0.0
+  @test_nowarn vertices_matrix[1, 1] = 1.0
+  @test vertices_matrix[1, 1] == connectivity_pw.vertices[1] == 1.0
   @test_nowarn connectivity_pw.vertices[1] = 2.0
-  @test vertices[1, 1] == connectivity_pw.vertices[1] == 2.0
+  @test vertices_matrix[1, 1] == connectivity_pw.vertices[1] == 2.0
   # wrapping vectors
-  vertices = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, 3 * n_vertices)
-  @test vertices isa Array{Float64, 1}
+  vertices_vector = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, 3 * n_vertices)
+  @test vertices_vector isa Array{Float64, 1}
   @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
   @test unsafe_wrap(Array{Float64, 1}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
 
