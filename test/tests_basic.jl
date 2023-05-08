@@ -90,11 +90,6 @@ end
   @test vertices isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
   @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa Array{Float64, 2}
-  # wrapping vectors
-  vertices = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, 3 * n_vertices)
-  @test vertices isa Array{Float64, 1}
-  @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
-  @test unsafe_wrap(Array{Float64, 1}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
 
   @test size(vertices) == (3, n_vertices)
   @test vertices[1, 1] == connectivity_pw.vertices[1] == 0.0
@@ -102,6 +97,11 @@ end
   @test vertices[1, 1] == connectivity_pw.vertices[1] == 1.0
   @test_nowarn connectivity_pw.vertices[1] = 2.0
   @test vertices[1, 1] == connectivity_pw.vertices[1] == 2.0
+  # wrapping vectors
+  vertices = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, 3 * n_vertices)
+  @test vertices isa Array{Float64, 1}
+  @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
+  @test unsafe_wrap(Array{Float64, 1}, connectivity_pw.vertices, 3 * n_vertices) isa Array{Float64, 1}
 
   @test_nowarn p4est_destroy(p4est_pw)
   @test_nowarn p4est_connectivity_destroy(connectivity_pw)
