@@ -44,16 +44,20 @@ end
   ptr = Base.unsafe_convert(Ptr{MyStruct}, Ref(obj))
   pw = PointerWrapper(ptr)
   @test pw.value[] == 0.0
+  @test unsafe_load(ptr).value == 0.0
   @test_nowarn pw.value[] = 1.0
   @test pw.value[] == 1.0
   @test pw.value[1] == 1.0
+  @test unsafe_load(ptr).value == 1.0
   @test_nowarn pw.value[1] = 2.0
   @test pw.value[1] == 2.0
   @test pw.value[] == 2.0
+  @test unsafe_load(ptr).value == 2.0
   # using `setproperty!`
   @test_nowarn pw.value = 3.0
   @test pw.value[1] == 3.0
   @test pw.value[] == 3.0
+  @test unsafe_load(ptr).value == 3.0
   # using `setproperty!` for special `struct`s
   # see https://github.com/trixi-framework/P4est.jl/issues/72 and https://github.com/trixi-framework/P4est.jl/issues/79
   @test p4est_pw.global_first_position.level[] == 29
@@ -70,6 +74,20 @@ end
     @test unsafe_pointer_to_objref(pointer(p4est_pw.user_pointer))[] == data[]
     p4est_pw.user_pointer = C_NULL
   end
+
+  data_ref = Ref((4,5))
+  data_ptr = pointer_from_objref(data_ref)
+  # test if wrapping a Ptr{Nothing} as PointerWrapper{Int} works
+  data_pw = PointerWrapper(Int, data_ptr)
+  @test data_pw[1] == 4
+  @test data_pw[2] == 5
+  # test if converting a PointerWrapper{Nothing} to PointerWrapper{Int64} works
+  data_pw_nothing = PointerWrapper(data_ptr)
+  @test data_pw_nothing isa PointerWrapper{Nothing}
+  data_pw_int = PointerWrapper(Int, data_pw_nothing)
+  @test data_pw_int isa PointerWrapper{Int}
+  @test data_pw_int[1] == 4
+  @test data_pw_int[2] == 5
 
   # test if accessing an underlying array works properly
   @test p4est_pw.global_first_quadrant[1] isa Integer
