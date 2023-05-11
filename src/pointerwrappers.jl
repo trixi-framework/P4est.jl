@@ -43,8 +43,12 @@ end
 # Non-pointer-type fields get wrapped as a normal PointerWrapper
 PointerWrapper(::Type{T}, pointer) where T = PointerWrapper{T}(pointer)
 
-# Allows to convert a PointerWrapper into type `T`, e.g. convert PointerWrapper{Ptr{Nothing}} in PointerWrapper{Int64}
-PointerWrapper(::Type{T}, pw::PointerWrapper) where T = PointerWrapper{T}(pointer(pw))
+# Allows to convert a PointerWrapper pointing to `Cvoid` into type `T`, e.g. convert PointerWrapper{Ptr{Nothing}} in PointerWrapper{Int64}
+PointerWrapper(::Type{T}, pw::PointerWrapper{Nothing}) where T = PointerWrapper{T}(pointer(pw))
+PointerWrapper(::Type{T}, pw::PointerWrapper{Ptr{Nothing}}) where T = PointerWrapper{T}(pointer(pw))
+# Allows to convert a PointerWrapper into a PointerWrapper pointing to `Cvoid`
+PointerWrapper(::Type{Nothing}, pw::PointerWrapper) = PointerWrapper{Nothing}(pointer(pw))
+PointerWrapper(::Type{Ptr{Nothing}}, pw::PointerWrapper) = PointerWrapper{Ptr{Nothing}}(pointer(pw))
 
 # Pointer-type fields get dereferenced such that PointerWrapper wraps the pointer to the field type
 PointerWrapper(::Type{Ptr{T}}, pointer) where T = PointerWrapper{T}(unsafe_load(Ptr{Ptr{T}}(pointer)))

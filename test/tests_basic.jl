@@ -81,13 +81,20 @@ end
   data_pw = PointerWrapper(Int, data_ptr)
   @test data_pw[1] == 4
   @test data_pw[2] == 5
-  # test if converting a PointerWrapper{Nothing} to PointerWrapper{Int64} works
+  # test if converting a PointerWrappers works
   data_pw_nothing = PointerWrapper(data_ptr)
   @test data_pw_nothing isa PointerWrapper{Nothing}
   data_pw_int = PointerWrapper(Int, data_pw_nothing)
   @test data_pw_int isa PointerWrapper{Int}
   @test data_pw_int[1] == 4
   @test data_pw_int[2] == 5
+  @test PointerWrapper(Nothing, data_pw_int) isa PointerWrapper{Nothing}
+  data_pw_ptr_nothing = PointerWrapper(Ptr{Nothing}, data_pw_int)
+  @test data_pw_ptr_nothing isa PointerWrapper{Ptr{Nothing}}
+  data_pw_int_2 = PointerWrapper(Int, data_pw_ptr_nothing)
+  @test data_pw_int_2 isa PointerWrapper{Int}
+  @test data_pw_int_2[1] == 4
+  @test data_pw_int_2[2] == 5
 
   # test if accessing an underlying array works properly
   @test p4est_pw.global_first_quadrant[1] isa Integer
