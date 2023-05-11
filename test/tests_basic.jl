@@ -81,7 +81,7 @@ end
   data_pw = PointerWrapper(Int, data_ptr)
   @test data_pw[1] == 4
   @test data_pw[2] == 5
-  # test if converting a PointerWrappers works
+  # test if converting PointerWrappers works
   data_pw_nothing = PointerWrapper(data_ptr)
   @test data_pw_nothing isa PointerWrapper{Nothing}
   data_pw_int = PointerWrapper(Int, data_pw_nothing)
