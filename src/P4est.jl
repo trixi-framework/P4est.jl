@@ -6,7 +6,8 @@ using Reexport: @reexport
 # We need to load the preference setting from here and not from `LibP4est.jl`
 # since `@load_preference` looks into the module it is running from. Thus, we
 # load all preferences here and access them from the `module LibP4est`.
-using Preferences: @load_preference
+using Preferences: @load_preference, set_preferences!, delete_preferences!
+using UUIDs: UUID
 const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
 const _PREFERENCE_LIBSC = @load_preference("libsc", _PREFERENCE_LIBP4EST)
 
@@ -44,6 +45,45 @@ Returns the value of the global variable `p4est_package_id` which can be used
 to check whether `p4est` has been initialized.
 """
 package_id() = unsafe_load(cglobal((:p4est_package_id, LibP4est.libp4est), Cint))
+
+const P4EST_UUID = UUID("7d669430-f675-4ae7-b43e-fab78ec5a902")
+
+"""
+    P4est.set_library_p4est!(path; force = true)
+
+Set the `path` to a system-provided `p4est` installation. Restart the Julia session
+after executing this function so that the changes take effect. Calling this
+function is necesarry, when you want to use a system-provided `p4est`
+installation.
+"""
+function set_library_p4est!(path = nothing; force = true)
+    if isnothing(path)
+        delete_preferences!(P4EST_UUID, "libp4est"; force = force)
+    else
+        isfile(path) || throw(ArgumentError("$path is not a file that exists."))
+        set_preferences!(P4EST_UUID, "libp4est" => path, force = force)
+    end
+    @info "Please restart Julia and reload P4est.jl for the library changes to take effect"
+end
+
+"""
+    P4est.set_library_sc!(path; force = true)
+
+Set the `path` to a system-provided `sc` installation. Restart the Julia session
+after executing this function so that the changes take effect. Calling this
+function is necesarry, when you want to use a system-provided `p4est`
+installation on Windows or when you want to use a another `sc`
+installation than the one that `libp4est.so` already links to.
+"""
+function set_library_sc!(path = nothing; force = true)
+    if isnothing(path)
+        delete_preferences!(P4EST_UUID, "libsc"; force = force)
+    else
+        isfile(path) || throw(ArgumentError("$path is not a file that exists."))
+        set_preferences!(P4EST_UUID, "libsc" => path, force = force)
+    end
+    @info "Please restart Julia and reload P4est.jl for the library changes to take effect"
+end
 
 """
     P4est.init(log_handler, log_threshold)
