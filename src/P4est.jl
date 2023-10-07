@@ -53,7 +53,7 @@ const P4EST_UUID = UUID("7d669430-f675-4ae7-b43e-fab78ec5a902")
 
 Set the `path` to a system-provided `p4est` installation. Restart the Julia session
 after executing this function so that the changes take effect. Calling this
-function is necesarry, when you want to use a system-provided `p4est`
+function is necessary when you want to use a system-provided `p4est`
 installation.
 """
 function set_library_p4est!(path = nothing; force = true)
@@ -71,8 +71,8 @@ end
 
 Set the `path` to a system-provided `sc` installation. Restart the Julia session
 after executing this function so that the changes take effect. Calling this
-function is necesarry, when you want to use a system-provided `p4est`
-installation on Windows or when you want to use a another `sc`
+function is necessary, when you want to use a system-provided `p4est`
+installation on Windows or when you want to use another `sc`
 installation than the one that `libp4est.so` already links to.
 """
 function set_library_sc!(path = nothing; force = true)
