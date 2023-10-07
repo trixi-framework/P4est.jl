@@ -87,7 +87,7 @@ p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
 ```
 
-You may also use the `PonterWrapper` to set variables in `struct`s.  Here we
+You may also use the `PointerWrapper` to set variables in `struct`s.  Here we
 set the user data pointer in the `p4est_t` `struct` to point to some data:
 ```@repl
 using P4est, MPI; MPI.Init()
