@@ -99,6 +99,15 @@ julia> set_preferences!(
            UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
            "libp4est" => "/path/to/your/libp4est.so", force = true)
 ```
+Alternatively, you can use the convenience function `set_library_p4est!` to set
+the path:
+
+```julia
+julia> using P4est
+
+julia> P4est.set_library_p4est!("/path/to/your/libp4est.so")
+[ Info: Please restart Julia and reload P4est.jl for the library changes to take effect
+```
 On Windows you also need to set the path to the local build of the shared library
 of [`libsc`](https://github.com/cburstedde/libsc/tree/master), which is a subpackage
 of `p4est`. On other systems, this is not necessary as the library is already linked
@@ -108,6 +117,13 @@ julia> set_preferences!(
            UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
            "libsc" => "/path/to/your/libsc.so", force = true)
 ```
+Again, for convenience you can also use
+```julia
+julia> P4est.set_library_sc!("/path/to/your/libsc.so")
+[ Info: Please restart Julia and reload P4est.jl for the library changes to take effect
+```
+To delete the preferences again, you can call `P4est.set_library_p4est!()` and
+`P4est.set_library_sc!()`, respectively.
 
 Note that you should restart your Julia session after changing the preferences.
 To sum up, follow these steps to use
@@ -131,15 +147,13 @@ installation of the underlying C libraries.
   ```
 - Set [P4est.jl](https://github.com/trixi-framework/P4est.jl) preferences.
   ```julia
-  julia> using Preferences, UUIDs
+  julia> using P4est
 
-  julia> set_preferences!(
-             UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
-             "libp4est" => "/path/to/your/libp4est.so", force = true)
+  julia> P4est.set_library_p4est!("/path/to/your/libp4est.so")
+  [ Info: Please restart Julia and reload P4est.jl for the library changes to take effect
 
-  julia> set_preferences!(
-             UUID("7d669430-f675-4ae7-b43e-fab78ec5a902"), # UUID of P4est.jl
-             "libsc" => "/path/to/your/libsc.so", force = true)
+  julia> P4est.set_library_sc!("/path/to/your/libsc.so")
+  [ Info: Please restart Julia and reload P4est.jl for the library changes to take effect
   ```
 - Restart the Julia REPL and load the packages.
   ```julia
