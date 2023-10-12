@@ -1,0 +1,4 @@
+
+[files]
+# ignore possible typos in the wrappers generated automatically
+extend-exclude = ["src/LibP4est.jl"]
