@@ -76,18 +76,7 @@ To enable this, you first need to obtain a local binary installation of
 implementation used to build your local installation of
 [`p4est`](https://github.com/cburstedde/p4est), see
 [the documentation of MPI.jl](https://juliaparallel.org/MPI.jl/stable/configuration/).
-At the time of writing, this can be done via
-
-```julia
-julia> using MPIPreferences
-
-julia> MPIPreferences.use_system_binary()
-```
-
-if you use the default system MPI binary installation to build
-[`p4est`](https://github.com/cburstedde/p4est).
-
-Next, you need to set up the
+At the time of writing, this can be done by first setting up the
 [Preferences.jl](https://github.com/JuliaPackaging/Preferences.jl)
 setting containing the path to your local build of the shared library of
 [`p4est`](https://github.com/cburstedde/p4est).
@@ -126,6 +115,17 @@ To delete the preferences again, you can call `P4est.set_library_p4est!()` and
 `P4est.set_library_sc!()`, respectively.
 
 Note that you should restart your Julia session after changing the preferences.
+
+Next, you need to set up the preferences for MPI, which can be done by
+```julia
+julia> using MPIPreferences
+
+julia> MPIPreferences.use_system_binary()
+```
+
+if you use the default system MPI binary installation to build
+[`p4est`](https://github.com/cburstedde/p4est).
+
 To sum up, follow these steps to use
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) with a custom
 installation of the underlying C libraries.
@@ -137,13 +137,7 @@ installation of the underlying C libraries.
   new one if there is none.
 - Install the required packages.
   ```julia
-  julia> Pkg.add(["MPIPreferences", "MPI", "UUIDs", "Preferences", "P4est"])
-  ```
-- Set [MPI.jl](https://github.com/JuliaParallel/MPI.jl) preferences.
-  ```julia
-  julia> using MPIPreferences
-
-  julia> MPIPreferences.use_system_binary()
+  julia> Pkg.add(["MPIPreferences", "MPI", "P4est"])
   ```
 - Set [P4est.jl](https://github.com/trixi-framework/P4est.jl) preferences.
   ```julia
@@ -154,6 +148,12 @@ installation of the underlying C libraries.
 
   julia> P4est.set_library_sc!("/path/to/your/libsc.so")
   [ Info: Please restart Julia and reload P4est.jl for the library changes to take effect
+  ```
+- Set [MPI.jl](https://github.com/JuliaParallel/MPI.jl) preferences.
+  ```julia
+  julia> using MPIPreferences
+
+  julia> MPIPreferences.use_system_binary()
   ```
 - Restart the Julia REPL and load the packages.
   ```julia
