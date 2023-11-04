@@ -2,7 +2,7 @@ module P4est
 
 using Reexport: @reexport
 
-
+using MPIPreferences: MPIPreferences
 # We need to load the preference setting from here and not from `LibP4est.jl`
 # since `@load_preference` looks into the module it is running from. Thus, we
 # load all preferences here and access them from the `module LibP4est`.
@@ -67,6 +67,15 @@ function set_library_p4est!(path = nothing; force = true)
 end
 
 """
+    P4est.path_p4est_library()
+
+Return the path of the `p4est` library that is used, when a system-provided library
+is configured via the preferences. Otherwise `P4est_jll` is returned, which means
+that the default p4est version from P4est_jll.jl is used.
+"""
+path_p4est_library() = _PREFERENCE_LIBP4EST
+
+"""
     P4est.set_library_sc!(path; force = true)
 
 Set the `path` to a system-provided `sc` installation. Restart the Julia session
@@ -84,6 +93,23 @@ function set_library_sc!(path = nothing; force = true)
     end
     @info "Please restart Julia and reload P4est.jl for the library changes to take effect"
 end
+
+"""
+    P4est.path_sc_library()
+
+Return the path of the `sc` library that is used, when a system-provided library
+is configured via the preferences. Otherwise `P4est_jll` is returned, which means
+that the default sc version from P4est_jll.jl is used.
+"""
+path_sc_library() = _PREFERENCE_LIBSC
+
+"""
+    P4est.preferences_set_correctly()
+
+Returns `false` if a system-provided MPI installation is set via the MPIPreferences, but
+not a system-provided `p4est` installation. In this case, P4est.jl is not usable.
+"""
+preferences_set_correctly() = !(_PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system")
 
 """
     P4est.init(log_handler, log_threshold)
@@ -110,10 +136,14 @@ end
 
 
 function __init__()
-    version = P4est.version()
+    # If a system-provided MPI installation with default p4est version is used, we cannot execute `P4est.version()`
+    # because the p4est functions are not available
+    if preferences_set_correctly()
+        version = P4est.version()
 
-    if !(v"2.3" <= version < v"3-")
-        @warn "Detected version $(version) of `p4est`. Currently, we only support versions v2.x.y from v2.3.0 on. Not everything may work correctly."
+        if !(v"2.3" <= version < v"3-")
+            @warn "Detected version $(version) of `p4est`. Currently, we only support versions v2.x.y from v2.3.0 on. Not everything may work correctly."
+        end
     end
 
     return nothing

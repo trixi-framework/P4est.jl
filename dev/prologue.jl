@@ -2,14 +2,19 @@ using P4est_jll: P4est_jll
 export P4est_jll
 
 using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
+using MPIPreferences: MPIPreferences
 
-@static if _PREFERENCE_LIBP4EST == "P4est_jll"
+@static if _PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system"
+    @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences."
+elseif _PREFERENCE_LIBP4EST == "P4est_jll"
     const libp4est = P4est_jll.libp4est
 else
     const libp4est = _PREFERENCE_LIBP4EST
 end
 
-@static if _PREFERENCE_LIBSC == "P4est_jll"
+@static if _PREFERENCE_LIBSC == "P4est_jll" && MPIPreferences.binary == "system"
+    @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences."
+elseif _PREFERENCE_LIBSC == "P4est_jll"
     const libsc = P4est_jll.libsc
 else
     const libsc = _PREFERENCE_LIBSC
