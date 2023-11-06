@@ -145,7 +145,7 @@ function __init__()
             @warn "Detected version $(version) of `p4est`. Currently, we only support versions v2.x.y from v2.3.0 on. Not everything may work correctly."
         end
     else
-        @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences."
+        @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
     end
 
     return nothing
