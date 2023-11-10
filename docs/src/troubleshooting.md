@@ -18,3 +18,14 @@ Internally, the Julia garbage collector uses `SIGSEGV` for threads synchronizati
 described in the
 [Julia dev docs](https://docs.julialang.org/en/v1/devdocs/debuggingtips/#Dealing-with-signals-1).
 Thus, [`libsc`](https://github.com/cburstedde/libsc) must not catch this signal and abort execution.
+
+For example, to disable catching signals, backtraces, and non-error log messages, you can use the following code at the beginning of your P4est.jl session:
+```julia
+using MPI, P4est
+
+MPI.Init()
+
+let catch_signals = 0, print_backtrace = 0, log_handler = C_NULL
+    sc_init(MPI.COMM_WORLD, catch_signals, print_backtrace, log_handler, SC_LP_ERROR)
+end
+```
