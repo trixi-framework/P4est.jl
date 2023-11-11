@@ -93,7 +93,8 @@ makedocs(
     # Explicitly add favicon as asset
     # assets = ["assets/favicon.ico"],
     # Set canonical URL to GitHub pages URL
-    canonical = "https://trixi-framework.github.io/P4est.jl/stable"
+    canonical = "https://trixi-framework.github.io/P4est.jl/stable",
+    size_threshold_ignore = ["reference.md"]
   ),
   # Explicitly specify documentation structure
   pages = [
@@ -105,7 +106,6 @@ makedocs(
     "Contributing" => "contributing.md",
     "License" => "license.md"
   ],
-  strict = true, # `true` lets Documenter CI fail when doctests fail
   checkdocs = :exports, # complain only about non-included docstrings for exported names
 )
 
