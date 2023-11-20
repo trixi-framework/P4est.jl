@@ -216,7 +216,7 @@ end
 
   @testset "local_num_quadrants" begin
     connectivity = @test_nowarn p8est_connectivity_new_periodic()
-    p4est = @test_nowarn p4est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
+    p4est = @test_nowarn p8est_new(MPI.COMM_WORLD, connectivity, 0, C_NULL, C_NULL)
     @test_nowarn Int(unsafe_load(p4est).local_num_quadrants)
   end
 

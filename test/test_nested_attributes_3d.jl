@@ -17,7 +17,7 @@ end
 
 function refine_fn(p4est, which_tree, quadrant)
   quadrant_obj = unsafe_load(quadrant)
-  if quadrant_obj.x == 0 && quadrant_obj.y == 0 && quadrant_obj.level < 4
+  if quadrant_obj.x == 0 && quadrant_obj.y == 0 && quadrant_obj.level < 2
     return Cint(1)
   else
     return Cint(0)
