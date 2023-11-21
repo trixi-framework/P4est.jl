@@ -17,7 +17,7 @@ end
 
 function refine_fn(p4est, which_tree, quadrant)
   quadrant_obj = unsafe_load(quadrant)
-  if quadrant_obj.x == 0 && quadrant_obj.y == 0 && quadrant_obj.level < 2
+  if quadrant_obj.x == 0 && quadrant_obj.y == 0 && quadrant_obj.level < 4
     return Cint(1)
   else
     return Cint(0)
@@ -80,6 +80,7 @@ end
   refine_fn_c = @cfunction(refine_fn, Cint,
                            (Ptr{p8est_t}, Ptr{p4est_topidx_t}, Ptr{p8est_quadrant_t}))
   p8est_refine(p4est, true, refine_fn_c, C_NULL)
+  p8est_balance(p4est, P8EST_CONNECT_FACE, C_NULL)
 
   iter_face_nested_attributes_c = @cfunction(iter_face, Cvoid,
                                              (Ptr{p8est_iter_face_info_t}, Ptr{Cvoid}))
