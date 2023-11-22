@@ -80,6 +80,7 @@ end
   refine_fn_c = @cfunction(refine_fn, Cint,
                            (Ptr{p4est_t}, Ptr{p4est_topidx_t}, Ptr{p4est_quadrant_t}))
   p4est_refine(p4est, true, refine_fn_c, C_NULL)
+  p4est_balance(p4est, P4EST_CONNECT_FACE, C_NULL)
 
   iter_face_c = @cfunction(iter_face, Cvoid,
                            (Ptr{p4est_iter_face_info_t}, Ptr{Cvoid}))
