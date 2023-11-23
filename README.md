@@ -333,8 +333,9 @@ For more information on how to use the Julia wrapper
 ## Authors
 
 P4est.jl is mainly maintained by
+[Joshua Lampert](https://github.com/JoshuaLampert) (University of Hamburg, Germany),
 [Michael Schlottke-Lakemper](https://lakemper.eu)
-(RWTH Aachen University/High-Performance Computing Center Stuttgart (HLRS), Germany)
+(RWTH Aachen University/High-Performance Computing Center Stuttgart (HLRS), Germany),
 and [Hendrik Ranocha](https://ranocha.de) (Johannes Gutenberg University Mainz, Germany).
 The full list of contributors can be found in [AUTHORS.md](AUTHORS.md).
 The [`p4est`](https://github.com/cburstedde/p4est) library itself is written by

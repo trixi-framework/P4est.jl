@@ -10,13 +10,16 @@ provided substantial additions or modifications. Together, these two groups form
 
 - [Michael Schlottke-Lakemper](https://lakemper.eu)
 - [Hendrik Ranocha](https://ranocha.de)
+- [Joshua Lampert](https://github.com/JoshuaLampert)
 
 ## Contributors
 
-The following people contributed major additions or modifications to Trixi and
+The following people contributed major additions or modifications to P4est.jl and
 are listed in alphabetical order:
 
 - Alexander Astanin
 - Lars Christmann
 - Joshua Lampert
+- Hendrik Ranocha
+- Michael Schlottke-Lakemper
 - Lucas C Wilcox
