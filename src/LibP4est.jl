@@ -1497,126 +1497,6 @@ function sc_array_pqueue_pop(array, result, compar)
 end
 
 """
-    sc_array_index(array, iz)
-
-### Prototype
-```c
-static inline void * sc_array_index (sc_array_t * array, size_t iz);
-```
-"""
-function sc_array_index(array, iz)
-    @ccall libsc.sc_array_index(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_index_null(array, iz)
-
-### Prototype
-```c
-static inline void * sc_array_index_null (sc_array_t * array, size_t iz);
-```
-"""
-function sc_array_index_null(array, iz)
-    @ccall libsc.sc_array_index_null(array::Ptr{sc_array_t}, iz::Csize_t)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_index_int(array, i)
-
-### Prototype
-```c
-static inline void * sc_array_index_int (sc_array_t * array, int i);
-```
-"""
-function sc_array_index_int(array, i)
-    @ccall libsc.sc_array_index_int(array::Ptr{sc_array_t}, i::Cint)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_index_long(array, l)
-
-### Prototype
-```c
-static inline void * sc_array_index_long (sc_array_t * array, long l);
-```
-"""
-function sc_array_index_long(array, l)
-    @ccall libsc.sc_array_index_long(array::Ptr{sc_array_t}, l::Clong)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_index_ssize_t(array, is)
-
-### Prototype
-```c
-static inline void * sc_array_index_ssize_t (sc_array_t * array, ssize_t is);
-```
-"""
-function sc_array_index_ssize_t(array, is)
-    @ccall libsc.sc_array_index_ssize_t(array::Ptr{sc_array_t}, is::Cssize_t)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_index_int16(array, i16)
-
-### Prototype
-```c
-static inline void * sc_array_index_int16 (sc_array_t * array, int16_t i16);
-```
-"""
-function sc_array_index_int16(array, i16)
-    @ccall libsc.sc_array_index_int16(array::Ptr{sc_array_t}, i16::Int16)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_position(array, element)
-
-### Prototype
-```c
-static inline size_t sc_array_position (sc_array_t * array, void *element);
-```
-"""
-function sc_array_position(array, element)
-    @ccall libsc.sc_array_position(array::Ptr{sc_array_t}, element::Ptr{Cvoid})::Csize_t
-end
-
-"""
-    sc_array_pop(array)
-
-### Prototype
-```c
-static inline void * sc_array_pop (sc_array_t * array);
-```
-"""
-function sc_array_pop(array)
-    @ccall libsc.sc_array_pop(array::Ptr{sc_array_t})::Ptr{Cvoid}
-end
-
-"""
-    sc_array_push_count(array, add_count)
-
-### Prototype
-```c
-static inline void * sc_array_push_count (sc_array_t * array, size_t add_count);
-```
-"""
-function sc_array_push_count(array, add_count)
-    @ccall libsc.sc_array_push_count(array::Ptr{sc_array_t}, add_count::Csize_t)::Ptr{Cvoid}
-end
-
-"""
-    sc_array_push(array)
-
-### Prototype
-```c
-static inline void * sc_array_push (sc_array_t * array);
-```
-"""
-function sc_array_push(array)
-    @ccall libsc.sc_array_push(array::Ptr{sc_array_t})::Ptr{Cvoid}
-end
-
-"""
     sc_mstamp
 
 A data container to create memory items of the same size. Allocations are bundled so it's fast for small memory sizes. The items created will remain valid until the container is destroyed. There is no option to return an item to the container. See sc_mempool_t for that purpose.
@@ -1773,7 +1653,7 @@ end
 """
     sc_mempool_new(elem_size)
 
-Creates a new mempool structure with the zero\\_and\\_persist option off. The contents of any elements returned by [`sc_mempool_alloc`](@ref) are undefined.
+Creates a new mempool structure with the zero\\_and\\_persist option off. The contents of any elements returned by sc\\_mempool\\_alloc are undefined.
 
 ### Parameters
 * `elem_size`:\\[in\\] Size of one element in bytes.
@@ -1878,30 +1758,6 @@ void sc_mempool_truncate (sc_mempool_t * mempool);
 """
 function sc_mempool_truncate(mempool)
     @ccall libsc.sc_mempool_truncate(mempool::Ptr{sc_mempool_t})::Cvoid
-end
-
-"""
-    sc_mempool_alloc(mempool)
-
-### Prototype
-```c
-static inline void * sc_mempool_alloc (sc_mempool_t * mempool);
-```
-"""
-function sc_mempool_alloc(mempool)
-    @ccall libsc.sc_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{Cvoid}
-end
-
-"""
-    sc_mempool_free(mempool, elem)
-
-### Prototype
-```c
-static inline void sc_mempool_free (sc_mempool_t * mempool, void *elem);
-```
-"""
-function sc_mempool_free(mempool, elem)
-    @ccall libsc.sc_mempool_free(mempool::Ptr{sc_mempool_t}, elem::Ptr{Cvoid})::Cvoid
 end
 
 """
@@ -3104,32 +2960,6 @@ end
 """Tags for MPI messages"""
 const p4est_comm_tag_t = p4est_comm_tag
 
-# no prototype is found for this function at p4est_base.h:325:1, please use with caution
-"""
-    p4est_log_indent_push()
-
-### Prototype
-```c
-static inline void p4est_log_indent_push ();
-```
-"""
-function p4est_log_indent_push()
-    @ccall libp4est.p4est_log_indent_push()::Cvoid
-end
-
-# no prototype is found for this function at p4est_base.h:331:1, please use with caution
-"""
-    p4est_log_indent_pop()
-
-### Prototype
-```c
-static inline void p4est_log_indent_pop ();
-```
-"""
-function p4est_log_indent_pop()
-    @ccall libp4est.p4est_log_indent_pop()::Cvoid
-end
-
 """
     p4est_init(log_handler, log_threshold)
 
@@ -3142,90 +2972,6 @@ void p4est_init (sc_log_handler_t log_handler, int log_threshold);
 """
 function p4est_init(log_handler, log_threshold)
     @ccall libp4est.p4est_init(log_handler::sc_log_handler_t, log_threshold::Cint)::Cvoid
-end
-
-"""
-    p4est_topidx_hash2(tt)
-
-### Prototype
-```c
-static inline unsigned p4est_topidx_hash2 (const p4est_topidx_t * tt);
-```
-"""
-function p4est_topidx_hash2(tt)
-    @ccall libp4est.p4est_topidx_hash2(tt::Ptr{p4est_topidx_t})::Cuint
-end
-
-"""
-    p4est_topidx_hash3(tt)
-
-### Prototype
-```c
-static inline unsigned p4est_topidx_hash3 (const p4est_topidx_t * tt);
-```
-"""
-function p4est_topidx_hash3(tt)
-    @ccall libp4est.p4est_topidx_hash3(tt::Ptr{p4est_topidx_t})::Cuint
-end
-
-"""
-    p4est_topidx_hash4(tt)
-
-### Prototype
-```c
-static inline unsigned p4est_topidx_hash4 (const p4est_topidx_t * tt);
-```
-"""
-function p4est_topidx_hash4(tt)
-    @ccall libp4est.p4est_topidx_hash4(tt::Ptr{p4est_topidx_t})::Cuint
-end
-
-"""
-    p4est_topidx_is_sorted(t, length)
-
-### Prototype
-```c
-static inline int p4est_topidx_is_sorted (p4est_topidx_t * t, int length);
-```
-"""
-function p4est_topidx_is_sorted(t, length)
-    @ccall libp4est.p4est_topidx_is_sorted(t::Ptr{p4est_topidx_t}, length::Cint)::Cint
-end
-
-"""
-    p4est_topidx_bsort(t, length)
-
-### Prototype
-```c
-static inline void p4est_topidx_bsort (p4est_topidx_t * t, int length);
-```
-"""
-function p4est_topidx_bsort(t, length)
-    @ccall libp4est.p4est_topidx_bsort(t::Ptr{p4est_topidx_t}, length::Cint)::Cvoid
-end
-
-"""
-    p4est_partition_cut_uint64(global_num, p, num_procs)
-
-### Prototype
-```c
-static inline uint64_t p4est_partition_cut_uint64 (uint64_t global_num, int p, int num_procs);
-```
-"""
-function p4est_partition_cut_uint64(global_num, p, num_procs)
-    @ccall libp4est.p4est_partition_cut_uint64(global_num::UInt64, p::Cint, num_procs::Cint)::UInt64
-end
-
-"""
-    p4est_partition_cut_gloidx(global_num, p, num_procs)
-
-### Prototype
-```c
-static inline p4est_gloidx_t p4est_partition_cut_gloidx (p4est_gloidx_t global_num, int p, int num_procs);
-```
-"""
-function p4est_partition_cut_gloidx(global_num, p, num_procs)
-    @ccall libp4est.p4est_partition_cut_gloidx(global_num::p4est_gloidx_t, p::Cint, num_procs::Cint)::p4est_gloidx_t
 end
 
 """
@@ -3438,11 +3184,13 @@ end
 
 Transform a face corner across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `fc`:\\[in\\] A face corner number in 0..1.
 * `f`:\\[in\\] A face that the face corner number *fc* is relative to.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The face corner number relative to the neighbor's face.
 ### Prototype
@@ -3459,11 +3207,13 @@ end
 
 Transform a corner across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `c`:\\[in\\] A corner number in 0..3.
 * `f`:\\[in\\] A face number that touches the corner *c*.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The number of the corner seen from the neighbor tree.
 ### Prototype
@@ -4134,18 +3884,6 @@ function p4est_connectivity_is_equivalent(conn1, conn2)
 end
 
 """
-    p4est_corner_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_corner_transform_t * p4est_corner_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p4est_corner_array_index(array, it)
-    @ccall libp4est.p4est_corner_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p4est_corner_transform_t}
-end
-
-"""
     p4est_connectivity_read_inp_stream(stream, num_vertices, num_trees, vertices, tree_to_vertex)
 
 Read an ABAQUS input file from a file stream.
@@ -4697,66 +4435,6 @@ p4est_t *p4est_load (const char *filename, sc_MPI_Comm mpicomm, size_t data_size
 """
 function p4est_load(filename, mpicomm, data_size, load_data, user_pointer, connectivity)
     @ccall libp4est.p4est_load(filename::Cstring, mpicomm::MPI_Comm, data_size::Csize_t, load_data::Cint, user_pointer::Ptr{Cvoid}, connectivity::Ptr{Ptr{p4est_connectivity_t}})::Ptr{p4est_t}
-end
-
-"""
-    p4est_tree_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_tree_t * p4est_tree_array_index (sc_array_t * array, p4est_topidx_t it);
-```
-"""
-function p4est_tree_array_index(array, it)
-    @ccall libp4est.p4est_tree_array_index(array::Ptr{sc_array_t}, it::p4est_topidx_t)::Ptr{p4est_tree_t}
-end
-
-"""
-    p4est_quadrant_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_quadrant_t * p4est_quadrant_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p4est_quadrant_array_index(array, it)
-    @ccall libp4est.p4est_quadrant_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p4est_quadrant_t}
-end
-
-"""
-    p4est_quadrant_array_push(array)
-
-### Prototype
-```c
-static inline p4est_quadrant_t * p4est_quadrant_array_push (sc_array_t * array);
-```
-"""
-function p4est_quadrant_array_push(array)
-    @ccall libp4est.p4est_quadrant_array_push(array::Ptr{sc_array_t})::Ptr{p4est_quadrant_t}
-end
-
-"""
-    p4est_quadrant_mempool_alloc(mempool)
-
-### Prototype
-```c
-static inline p4est_quadrant_t * p4est_quadrant_mempool_alloc (sc_mempool_t * mempool);
-```
-"""
-function p4est_quadrant_mempool_alloc(mempool)
-    @ccall libp4est.p4est_quadrant_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{p4est_quadrant_t}
-end
-
-"""
-    p4est_quadrant_list_pop(list)
-
-### Prototype
-```c
-static inline p4est_quadrant_t * p4est_quadrant_list_pop (sc_list_t * list);
-```
-"""
-function p4est_quadrant_list_pop(list)
-    @ccall libp4est.p4est_quadrant_list_pop(list::Ptr{sc_list_t})::Ptr{p4est_quadrant_t}
 end
 
 """
@@ -5738,54 +5416,6 @@ function p4est_iterate(p4est_, ghost_layer, user_data, iter_volume, iter_face, i
     @ccall libp4est.p4est_iterate(p4est_::Ptr{p4est_t}, ghost_layer::Ptr{p4est_ghost_t}, user_data::Ptr{Cvoid}, iter_volume::p4est_iter_volume_t, iter_face::p4est_iter_face_t, iter_corner::p4est_iter_corner_t)::Cvoid
 end
 
-"""
-    p4est_iter_cside_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p4est_iter_corner_side_t * p4est_iter_cside_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p4est_iter_cside_array_index_int(array, it)
-    @ccall libp4est.p4est_iter_cside_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p4est_iter_corner_side_t}
-end
-
-"""
-    p4est_iter_cside_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_iter_corner_side_t * p4est_iter_cside_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p4est_iter_cside_array_index(array, it)
-    @ccall libp4est.p4est_iter_cside_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p4est_iter_corner_side_t}
-end
-
-"""
-    p4est_iter_fside_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p4est_iter_face_side_t * p4est_iter_fside_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p4est_iter_fside_array_index_int(array, it)
-    @ccall libp4est.p4est_iter_fside_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p4est_iter_face_side_t}
-end
-
-"""
-    p4est_iter_fside_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_iter_face_side_t * p4est_iter_fside_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p4est_iter_fside_array_index(array, it)
-    @ccall libp4est.p4est_iter_fside_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p4est_iter_face_side_t}
-end
-
 const p4est_lnodes_code_t = Int8
 
 struct p4est_lnodes
@@ -5812,7 +5442,7 @@ f\\_3 c\\_2 c\\_3 6---7---8 | | f\\_0 3 4 5 f\\_1 | | 0---1---2 c\\_0 c\\_1 f\\_
 
 element\\_nodes indexes into the set of local nodes, layed out as follows: local nodes = [<-----owned\\_count----->|<-----nonlocal\\_nodes----->] = [<----------------num\\_local\\_nodes----------------->] nonlocal\\_nodes contains the globally unique numbers for independent nodes that are owned by other processes; for local nodes, the globally unique numbers are given by i + global\\_offset, where i is the local number. Hanging nodes are always local and don't have a global number. They index the geometrically corresponding independent nodes of a neighbor.
 
-Whether nodes are hanging or not is decided based on the element faces. This information is encoded in face\\_code with one int8\\_t per element. If no faces are hanging, the value is zero, otherwise the face\\_code is interpreted by [`p4est_lnodes_decode`](@ref).
+Whether nodes are hanging or not is decided based on the element faces. This information is encoded in face\\_code with one int8\\_t per element. If no faces are hanging, the value is zero, otherwise the face\\_code is interpreted by p4est\\_lnodes\\_decode.
 
 Independent nodes can be shared by multiple MPI ranks. The owner rank of a node is the one from the lowest numbered element on the lowest numbered octree *touching* the node.
 
@@ -5860,18 +5490,6 @@ The structure stored in the sharers array.
 shared\\_nodes is a sorted array of [`p4est_locidx_t`](@ref) that indexes into local nodes. The shared\\_nodes array has a contiguous (or empty) section of nodes owned by the current rank. shared\\_mine\\_offset and shared\\_mine\\_count identify this section by indexing the shared\\_nodes array, not the local nodes array. owned\\_offset and owned\\_count define the section of local nodes that is owned by the listed rank (the section may be empty). For the current process these coincide with those in [`p4est_lnodes_t`](@ref).
 """
 const p4est_lnodes_rank_t = p4est_lnodes_rank
-
-"""
-    p4est_lnodes_decode(face_code, hanging_face)
-
-### Prototype
-```c
-static inline int p4est_lnodes_decode (p4est_lnodes_code_t face_code, int hanging_face[4]);
-```
-"""
-function p4est_lnodes_decode(face_code, hanging_face)
-    @ccall libp4est.p4est_lnodes_decode(face_code::p4est_lnodes_code_t, hanging_face::Ptr{Cint})::Cint
-end
 
 """
     p4est_lnodes_new(p4est_, ghost_layer, degree)
@@ -6090,42 +5708,6 @@ void p4est_lnodes_buffer_destroy (p4est_lnodes_buffer_t * buffer);
 """
 function p4est_lnodes_buffer_destroy(buffer)
     @ccall libp4est.p4est_lnodes_buffer_destroy(buffer::Ptr{p4est_lnodes_buffer_t})::Cvoid
-end
-
-"""
-    p4est_lnodes_rank_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p4est_lnodes_rank_t * p4est_lnodes_rank_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p4est_lnodes_rank_array_index_int(array, it)
-    @ccall libp4est.p4est_lnodes_rank_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p4est_lnodes_rank_t}
-end
-
-"""
-    p4est_lnodes_rank_array_index(array, it)
-
-### Prototype
-```c
-static inline p4est_lnodes_rank_t * p4est_lnodes_rank_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p4est_lnodes_rank_array_index(array, it)
-    @ccall libp4est.p4est_lnodes_rank_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p4est_lnodes_rank_t}
-end
-
-"""
-    p4est_lnodes_global_index(lnodes, lidx)
-
-### Prototype
-```c
-static inline p4est_gloidx_t p4est_lnodes_global_index (p4est_lnodes_t * lnodes, p4est_locidx_t lidx);
-```
-"""
-function p4est_lnodes_global_index(lnodes, lidx)
-    @ccall libp4est.p4est_lnodes_global_index(lnodes::Ptr{p4est_lnodes_t}, lidx::p4est_locidx_t)::p4est_gloidx_t
 end
 
 """A datatype to handle the linear id in 2D."""
@@ -7363,11 +6945,13 @@ end
 
 Transform a face corner across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `fc`:\\[in\\] A face corner number in 0..3.
 * `f`:\\[in\\] A face that the face corner *fc* is relative to.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The face corner number relative to the neighbor's face.
 ### Prototype
@@ -7384,11 +6968,13 @@ end
 
 Transform a corner across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `c`:\\[in\\] A corner number in 0..7.
 * `f`:\\[in\\] A face number that touches the corner *c*.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The number of the corner seen from the neighbor tree.
 ### Prototype
@@ -7405,11 +6991,13 @@ end
 
 Transform a face-edge across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `fe`:\\[in\\] A face edge number in 0..3.
 * `f`:\\[in\\] A face number that touches the edge *e*.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The face edge number seen from the neighbor tree.
 ### Prototype
@@ -7426,11 +7014,13 @@ end
 
 Transform an edge across one of the adjacent faces into a neighbor tree. This version expects the neighbor face and orientation separately.
 
+`.`
+
 ### Parameters
 * `e`:\\[in\\] A edge number in 0..11.
 * `f`:\\[in\\] A face 0..5 that touches the edge *e*.
 * `nf`:\\[in\\] A neighbor face that is on the other side of .
-* `o`:\\[in\\] The orientation between tree boundary faces *f* and .
+* `o`:\\[in\\] The orientation between tree boundary faces *f* and
 ### Returns
 The edge's number seen from the neighbor.
 ### Prototype
@@ -8078,30 +7668,6 @@ int p8est_connectivity_is_equivalent (p8est_connectivity_t * conn1, p8est_connec
 """
 function p8est_connectivity_is_equivalent(conn1, conn2)
     @ccall libp4est.p8est_connectivity_is_equivalent(conn1::Ptr{p8est_connectivity_t}, conn2::Ptr{p8est_connectivity_t})::Cint
-end
-
-"""
-    p8est_edge_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_edge_transform_t * p8est_edge_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_edge_array_index(array, it)
-    @ccall libp4est.p8est_edge_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_edge_transform_t}
-end
-
-"""
-    p8est_corner_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_corner_transform_t * p8est_corner_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_corner_array_index(array, it)
-    @ccall libp4est.p8est_corner_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_corner_transform_t}
 end
 
 """
@@ -8784,78 +8350,6 @@ p6est_t *p6est_load (const char *filename, sc_MPI_Comm mpicomm, size_t data_size
 """
 function p6est_load(filename, mpicomm, data_size, load_data, user_pointer, connectivity)
     @ccall libp4est.p6est_load(filename::Cstring, mpicomm::MPI_Comm, data_size::Csize_t, load_data::Cint, user_pointer::Ptr{Cvoid}, connectivity::Ptr{Ptr{p6est_connectivity_t}})::Ptr{p6est_t}
-end
-
-"""
-    p2est_quadrant_array_index(array, it)
-
-### Prototype
-```c
-static inline p2est_quadrant_t * p2est_quadrant_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p2est_quadrant_array_index(array, it)
-    @ccall libp4est.p2est_quadrant_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p2est_quadrant_t}
-end
-
-"""
-    p2est_quadrant_array_push(array)
-
-### Prototype
-```c
-static inline p2est_quadrant_t * p2est_quadrant_array_push (sc_array_t * array);
-```
-"""
-function p2est_quadrant_array_push(array)
-    @ccall libp4est.p2est_quadrant_array_push(array::Ptr{sc_array_t})::Ptr{p2est_quadrant_t}
-end
-
-"""
-    p2est_quadrant_mempool_alloc(mempool)
-
-### Prototype
-```c
-static inline p2est_quadrant_t * p2est_quadrant_mempool_alloc (sc_mempool_t * mempool);
-```
-"""
-function p2est_quadrant_mempool_alloc(mempool)
-    @ccall libp4est.p2est_quadrant_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{p2est_quadrant_t}
-end
-
-"""
-    p2est_quadrant_list_pop(list)
-
-### Prototype
-```c
-static inline p2est_quadrant_t * p2est_quadrant_list_pop (sc_list_t * list);
-```
-"""
-function p2est_quadrant_list_pop(list)
-    @ccall libp4est.p2est_quadrant_list_pop(list::Ptr{sc_list_t})::Ptr{p2est_quadrant_t}
-end
-
-"""
-    p6est_layer_init_data(p6est_, which_tree, column, layer, init_fn)
-
-### Prototype
-```c
-static inline void p6est_layer_init_data (p6est_t * p6est, p4est_topidx_t which_tree, p4est_quadrant_t * column, p2est_quadrant_t * layer, p6est_init_t init_fn);
-```
-"""
-function p6est_layer_init_data(p6est_, which_tree, column, layer, init_fn)
-    @ccall libp4est.p6est_layer_init_data(p6est_::Ptr{p6est_t}, which_tree::p4est_topidx_t, column::Ptr{p4est_quadrant_t}, layer::Ptr{p2est_quadrant_t}, init_fn::p6est_init_t)::Cvoid
-end
-
-"""
-    p6est_layer_free_data(p6est_, layer)
-
-### Prototype
-```c
-static inline void p6est_layer_free_data (p6est_t * p6est, p2est_quadrant_t * layer);
-```
-"""
-function p6est_layer_free_data(p6est_, layer)
-    @ccall libp4est.p6est_layer_free_data(p6est_::Ptr{p6est_t}, layer::Ptr{p2est_quadrant_t})::Cvoid
 end
 
 """
@@ -9583,66 +9077,6 @@ p8est_t *p8est_load (const char *filename, sc_MPI_Comm mpicomm, size_t data_size
 """
 function p8est_load(filename, mpicomm, data_size, load_data, user_pointer, connectivity)
     @ccall libp4est.p8est_load(filename::Cstring, mpicomm::MPI_Comm, data_size::Csize_t, load_data::Cint, user_pointer::Ptr{Cvoid}, connectivity::Ptr{Ptr{p8est_connectivity_t}})::Ptr{p8est_t}
-end
-
-"""
-    p8est_tree_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_tree_t * p8est_tree_array_index (sc_array_t * array, p4est_topidx_t it);
-```
-"""
-function p8est_tree_array_index(array, it)
-    @ccall libp4est.p8est_tree_array_index(array::Ptr{sc_array_t}, it::p4est_topidx_t)::Ptr{p8est_tree_t}
-end
-
-"""
-    p8est_quadrant_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_quadrant_t * p8est_quadrant_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_quadrant_array_index(array, it)
-    @ccall libp4est.p8est_quadrant_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_quadrant_t}
-end
-
-"""
-    p8est_quadrant_array_push(array)
-
-### Prototype
-```c
-static inline p8est_quadrant_t * p8est_quadrant_array_push (sc_array_t * array);
-```
-"""
-function p8est_quadrant_array_push(array)
-    @ccall libp4est.p8est_quadrant_array_push(array::Ptr{sc_array_t})::Ptr{p8est_quadrant_t}
-end
-
-"""
-    p8est_quadrant_mempool_alloc(mempool)
-
-### Prototype
-```c
-static inline p8est_quadrant_t * p8est_quadrant_mempool_alloc (sc_mempool_t * mempool);
-```
-"""
-function p8est_quadrant_mempool_alloc(mempool)
-    @ccall libp4est.p8est_quadrant_mempool_alloc(mempool::Ptr{sc_mempool_t})::Ptr{p8est_quadrant_t}
-end
-
-"""
-    p8est_quadrant_list_pop(list)
-
-### Prototype
-```c
-static inline p8est_quadrant_t * p8est_quadrant_list_pop (sc_list_t * list);
-```
-"""
-function p8est_quadrant_list_pop(list)
-    @ccall libp4est.p8est_quadrant_list_pop(list::Ptr{sc_list_t})::Ptr{p8est_quadrant_t}
 end
 
 """
@@ -10720,78 +10154,6 @@ function p8est_iterate(p4est_, ghost_layer, user_data, iter_volume, iter_face, i
     @ccall libp4est.p8est_iterate(p4est_::Ptr{p8est_t}, ghost_layer::Ptr{p8est_ghost_t}, user_data::Ptr{Cvoid}, iter_volume::p8est_iter_volume_t, iter_face::p8est_iter_face_t, iter_edge::p8est_iter_edge_t, iter_corner::p8est_iter_corner_t)::Cvoid
 end
 
-"""
-    p8est_iter_cside_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_corner_side_t * p8est_iter_cside_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p8est_iter_cside_array_index_int(array, it)
-    @ccall libp4est.p8est_iter_cside_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p8est_iter_corner_side_t}
-end
-
-"""
-    p8est_iter_cside_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_corner_side_t * p8est_iter_cside_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_iter_cside_array_index(array, it)
-    @ccall libp4est.p8est_iter_cside_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_iter_corner_side_t}
-end
-
-"""
-    p8est_iter_eside_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_edge_side_t * p8est_iter_eside_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p8est_iter_eside_array_index_int(array, it)
-    @ccall libp4est.p8est_iter_eside_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p8est_iter_edge_side_t}
-end
-
-"""
-    p8est_iter_eside_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_edge_side_t * p8est_iter_eside_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_iter_eside_array_index(array, it)
-    @ccall libp4est.p8est_iter_eside_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_iter_edge_side_t}
-end
-
-"""
-    p8est_iter_fside_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_face_side_t * p8est_iter_fside_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p8est_iter_fside_array_index_int(array, it)
-    @ccall libp4est.p8est_iter_fside_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p8est_iter_face_side_t}
-end
-
-"""
-    p8est_iter_fside_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_iter_face_side_t * p8est_iter_fside_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_iter_fside_array_index(array, it)
-    @ccall libp4est.p8est_iter_fside_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_iter_face_side_t}
-end
-
 const p8est_lnodes_code_t = Int16
 
 struct p8est_lnodes
@@ -10814,7 +10176,7 @@ Store a parallel numbering of Lobatto points of a given degree > 0.
 
 Each element has degree+1 nodes per edge and vnodes = (degree+1)^3 nodes per volume. element\\_nodes is of dimension vnodes * num\\_local\\_elements and lists the nodes of each element in lexicographic yx-order (x varies fastest); element\\_nodes indexes into the set of local nodes, layed out as follows: local nodes = [<-----owned\\_count----->|<-----nonlocal\\_nodes----->] = [<----------------num\\_local\\_nodes----------------->] nonlocal\\_nodes contains the globally unique numbers for independent nodes that are owned by other processes; for local nodes, the globally unique numbers are given by i + global\\_offset, where i is the local number. Hanging nodes are always local and don't have a global number. They index the geometrically corresponding independent nodes of a neighbor.
 
-Whether nodes are hanging or not is decided based on the element faces and edges. This information is encoded in face\\_code with one int16\\_t per element. If no faces or edges are hanging, the value is zero, otherwise the face\\_code is interpreted by [`p8est_lnodes_decode`](@ref).
+Whether nodes are hanging or not is decided based on the element faces and edges. This information is encoded in face\\_code with one int16\\_t per element. If no faces or edges are hanging, the value is zero, otherwise the face\\_code is interpreted by p8est\\_lnodes\\_decode.
 
 Independent nodes can be shared by multiple MPI ranks. The owner rank of a node is the one from the lowest numbered element on the lowest numbered octree *touching* the node.
 
@@ -10860,18 +10222,6 @@ The structure stored in the sharers array.
 shared\\_nodes is a sorted array of [`p4est_locidx_t`](@ref) that indexes into local nodes. The shared\\_nodes array has a contiguous (or empty) section of nodes owned by the current rank. shared\\_mine\\_offset and shared\\_mine\\_count identify this section by indexing the shared\\_nodes array, not the local nodes array. owned\\_offset and owned\\_count define the section of local nodes that is owned by the listed rank (the section may be empty). For the current process these coincide with those in [`p8est_lnodes_t`](@ref).
 """
 const p8est_lnodes_rank_t = p8est_lnodes_rank
-
-"""
-    p8est_lnodes_decode(face_code, hanging_face, hanging_edge)
-
-### Prototype
-```c
-static inline int p8est_lnodes_decode (p8est_lnodes_code_t face_code, int hanging_face[6], int hanging_edge[12]);
-```
-"""
-function p8est_lnodes_decode(face_code, hanging_face, hanging_edge)
-    @ccall libp4est.p8est_lnodes_decode(face_code::p8est_lnodes_code_t, hanging_face::Ptr{Cint}, hanging_edge::Ptr{Cint})::Cint
-end
 
 """
     p8est_lnodes_new(p8est_, ghost_layer, degree)
@@ -11090,42 +10440,6 @@ void p8est_lnodes_buffer_destroy (p8est_lnodes_buffer_t * buffer);
 """
 function p8est_lnodes_buffer_destroy(buffer)
     @ccall libp4est.p8est_lnodes_buffer_destroy(buffer::Ptr{p8est_lnodes_buffer_t})::Cvoid
-end
-
-"""
-    p8est_lnodes_rank_array_index_int(array, it)
-
-### Prototype
-```c
-static inline p8est_lnodes_rank_t * p8est_lnodes_rank_array_index_int (sc_array_t * array, int it);
-```
-"""
-function p8est_lnodes_rank_array_index_int(array, it)
-    @ccall libp4est.p8est_lnodes_rank_array_index_int(array::Ptr{sc_array_t}, it::Cint)::Ptr{p8est_lnodes_rank_t}
-end
-
-"""
-    p8est_lnodes_rank_array_index(array, it)
-
-### Prototype
-```c
-static inline p8est_lnodes_rank_t * p8est_lnodes_rank_array_index (sc_array_t * array, size_t it);
-```
-"""
-function p8est_lnodes_rank_array_index(array, it)
-    @ccall libp4est.p8est_lnodes_rank_array_index(array::Ptr{sc_array_t}, it::Csize_t)::Ptr{p8est_lnodes_rank_t}
-end
-
-"""
-    p8est_lnodes_global_index(lnodes, lidx)
-
-### Prototype
-```c
-static inline p4est_gloidx_t p8est_lnodes_global_index (p8est_lnodes_t * lnodes, p4est_locidx_t lidx);
-```
-"""
-function p8est_lnodes_global_index(lnodes, lidx)
-    @ccall libp4est.p8est_lnodes_global_index(lnodes::Ptr{p8est_lnodes_t}, lidx::p4est_locidx_t)::p4est_gloidx_t
 end
 
 """
