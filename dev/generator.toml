@@ -215,6 +215,10 @@ is_local_header_only = true
 # ```
 smart_de_anonymize = true
 
+# if set to true, static functions will be ignored
+# see https://github.com/trixi-framework/P4est.jl/issues/99
+skip_static_functions = true
+
 # EXPERIMENTAL
 # if this option is set to true, those structs that are not necessary to be an
 # immutable struct will be generated as a mutable struct.

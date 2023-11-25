@@ -14,9 +14,8 @@ The general process for creating bindings with Clang.jl is as follows:
 9. Despair.
 
 If you want to try this yourself, proceed as follows. The current version of
-the bindings has been generated using Julia v1.7.3; the corresponding
-`Manifest.toml` file is included for reproducibility. Updating everything
-to Julia v1.8.3 was also successful.
+the bindings has been generated using Julia v1.9.3; the corresponding
+`Manifest.toml` file is included for reproducibility.
 
 To generate new bindings, run
 ```shell
