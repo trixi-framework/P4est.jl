@@ -1,7 +1,7 @@
 name = "P4est"
 uuid = "7d669430-f675-4ae7-b43e-fab78ec5a902"
 authors = ["Michael Schlottke-Lakemper <michael@sloede.com>", "Hendrik Ranocha <mail@ranocha.de>", "Joshua Lampert <joshua.lampert@uni-hamburg.de>"]
-version = "0.4.11-pre"
+version = "0.4.11"
 
 [deps]
 CEnum = "fa961155-64e5-5f13-b03f-caf6b980ea82"
