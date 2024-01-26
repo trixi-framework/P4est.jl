@@ -87,13 +87,13 @@ end
     # `unsafe_wrap`ping a `PointerWrapper`
     n_vertices::Int = connectivity_pw.num_vertices[]
     # wrapping matrices
-    vertices_matrix =
-        @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, (3, n_vertices))
-    @test vertices_matrix isa Array{Float64,2}
+    vertices_matrix = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices,
+                                               (3, n_vertices))
+    @test vertices_matrix isa Array{Float64, 2}
     @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, (3, n_vertices)) isa
-          Array{Float64,2}
-    @test unsafe_wrap(Array{Float64,2}, connectivity_pw.vertices, (3, n_vertices)) isa
-          Array{Float64,2}
+          Array{Float64, 2}
+    @test unsafe_wrap(Array{Float64, 2}, connectivity_pw.vertices, (3, n_vertices)) isa
+          Array{Float64, 2}
 
     @test size(vertices_matrix) == (3, n_vertices)
     @test vertices_matrix[1, 1] == connectivity_pw.vertices[1] == 0.0
@@ -102,13 +102,13 @@ end
     @test_nowarn connectivity_pw.vertices[1] = 2.0
     @test vertices_matrix[1, 1] == connectivity_pw.vertices[1] == 2.0
     # wrapping vectors
-    vertices_vector =
-        @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices, 3 * n_vertices)
-    @test vertices_vector isa Array{Float64,1}
+    vertices_vector = @test_nowarn unsafe_wrap(Array, connectivity_pw.vertices,
+                                               3 * n_vertices)
+    @test vertices_vector isa Array{Float64, 1}
     @test unsafe_wrap(Array{Float64}, connectivity_pw.vertices, 3 * n_vertices) isa
-          Array{Float64,1}
-    @test unsafe_wrap(Array{Float64,1}, connectivity_pw.vertices, 3 * n_vertices) isa
-          Array{Float64,1}
+          Array{Float64, 1}
+    @test unsafe_wrap(Array{Float64, 1}, connectivity_pw.vertices, 3 * n_vertices) isa
+          Array{Float64, 1}
 
     @test_nowarn p4est_destroy(p4est_pw)
     @test_nowarn p4est_connectivity_destroy(connectivity_pw)
@@ -142,27 +142,23 @@ end
 
     @testset "smoke test" begin
         connectivity = @test_nowarn p4est_connectivity_new_periodic()
-        p4est = @test_nowarn p4est_new_ext(
-            MPI.COMM_WORLD,
-            connectivity,
-            0,
-            2,
-            0,
-            0,
-            C_NULL,
-            C_NULL,
-        )
+        p4est = @test_nowarn p4est_new_ext(MPI.COMM_WORLD,
+                                           connectivity,
+                                           0,
+                                           2,
+                                           0,
+                                           0,
+                                           C_NULL,
+                                           C_NULL)
         p4est_obj = @test_nowarn unsafe_load(p4est)
         @test connectivity == p4est_obj.connectivity
 
         @test_nowarn MPI.Barrier(MPI.COMM_WORLD)
         rank = @test_nowarn MPI.Comm_rank(MPI.COMM_WORLD)
-        println(
-            "rank $rank: local/global num quadrants = ",
-            p4est_obj.local_num_quadrants,
-            "/",
-            p4est_obj.global_num_quadrants,
-        )
+        println("rank $rank: local/global num quadrants = ",
+                p4est_obj.local_num_quadrants,
+                "/",
+                p4est_obj.global_num_quadrants)
     end
 
     @testset "p4est_save and p4est_load" begin
@@ -242,27 +238,23 @@ end
 
     @testset "smoke test" begin
         connectivity = @test_nowarn p8est_connectivity_new_periodic()
-        p8est = @test_nowarn p8est_new_ext(
-            MPI.COMM_WORLD,
-            connectivity,
-            0,
-            2,
-            0,
-            0,
-            C_NULL,
-            C_NULL,
-        )
+        p8est = @test_nowarn p8est_new_ext(MPI.COMM_WORLD,
+                                           connectivity,
+                                           0,
+                                           2,
+                                           0,
+                                           0,
+                                           C_NULL,
+                                           C_NULL)
         p8est_obj = @test_nowarn unsafe_load(p8est)
         @test connectivity == p8est_obj.connectivity
 
         @test_nowarn MPI.Barrier(MPI.COMM_WORLD)
         rank = @test_nowarn MPI.Comm_rank(MPI.COMM_WORLD)
-        println(
-            "rank $rank: local/global num quadrants = ",
-            p8est_obj.local_num_quadrants,
-            "/",
-            p8est_obj.global_num_quadrants,
-        )
+        println("rank $rank: local/global num quadrants = ",
+                p8est_obj.local_num_quadrants,
+                "/",
+                p8est_obj.global_num_quadrants)
     end
 
     @testset "p8est_save and p8est_load" begin
@@ -313,6 +305,5 @@ end
     include("test_p8est_balance.jl")
     include("test_nested_attributes_3d.jl")
 end
-
 
 end # module

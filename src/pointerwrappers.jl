@@ -44,14 +44,16 @@ end
 PointerWrapper(::Type{T}, pointer) where {T} = PointerWrapper{T}(pointer)
 
 # Pointer-type fields get dereferenced such that PointerWrapper wraps the pointer to the field type
-PointerWrapper(::Type{Ptr{T}}, pointer) where {T} =
+function PointerWrapper(::Type{Ptr{T}}, pointer) where {T}
     PointerWrapper{T}(unsafe_load(Ptr{Ptr{T}}(pointer)))
+end
 
 # Cannot use `pw.pointer` since we implement `getproperty` to return the fields of `T` itself
 Base.pointer(pw::PointerWrapper{T}) where {T} = getfield(pw, :pointer)
 # Allow passing a `PointerWrapper` to wrapped C functions
-Base.unsafe_convert(::Type{Ptr{T}}, pw::PointerWrapper{T}) where {T} =
+function Base.unsafe_convert(::Type{Ptr{T}}, pw::PointerWrapper{T}) where {T}
     Base.unsafe_convert(Ptr{T}, pointer(pw))
+end
 
 # Syntactic sugar
 Base.propertynames(::PointerWrapper{T}) where {T} = fieldnames(T)
@@ -76,10 +78,8 @@ function Base.setproperty!(pw::PointerWrapper{T}, name::Symbol, v) where {T}
         # see https://github.com/trixi-framework/P4est.jl/issues/72 and https://github.com/trixi-framework/P4est.jl/issues/79
         return Base.setproperty!(pointer(pw), name, v)
     end
-    return unsafe_store!(
-        reinterpret(Ptr{fieldtype(T, i)}, pointer(pw) + fieldoffset(T, i)),
-        v,
-    )
+    return unsafe_store!(reinterpret(Ptr{fieldtype(T, i)}, pointer(pw) + fieldoffset(T, i)),
+                         v)
 end
 
 # `[]` allows one to access the actual underlying data and
@@ -91,19 +91,21 @@ Base.setindex!(pw::PointerWrapper, value, i::Integer = 1) = unsafe_store!(pw, va
 Base.unsafe_load(pw::PointerWrapper, i::Integer = 1) = unsafe_load(pointer(pw), i)
 
 # When `unsafe_wrap`ping a PointerWrapper object, we really want to wrap the underlying array
-Base.unsafe_wrap(
-    AType::Union{Type{Array},Type{Array{T}},Type{Array{T,N}}},
-    pw::PointerWrapper,
-    dims::Union{NTuple{N,Int},Integer};
-    own::Bool = false,
-) where {T,N} = unsafe_wrap(AType, pointer(pw), dims; own)
+function Base.unsafe_wrap(AType::Union{Type{Array}, Type{Array{T}}, Type{Array{T, N}}},
+                          pw::PointerWrapper,
+                          dims::Union{NTuple{N, Int}, Integer};
+                          own::Bool = false,) where {T, N}
+    unsafe_wrap(AType, pointer(pw), dims; own)
+end
 
 # If value is of the wrong type, try to convert it
-Base.unsafe_store!(pw::PointerWrapper{T}, value, i::Integer = 1) where {T} =
+function Base.unsafe_store!(pw::PointerWrapper{T}, value, i::Integer = 1) where {T}
     unsafe_store!(pw, convert(T, value), i)
+end
 
 # Store value to wrapped location
-Base.unsafe_store!(pw::PointerWrapper{T}, value::T, i::Integer = 1) where {T} =
+function Base.unsafe_store!(pw::PointerWrapper{T}, value::T, i::Integer = 1) where {T}
     unsafe_store!(pointer(pw), value, i)
+end
 
 end

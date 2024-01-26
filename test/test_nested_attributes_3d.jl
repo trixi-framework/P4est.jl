@@ -45,11 +45,9 @@ function iter_face(info::Ptr{p8est_iter_face_info_t}, user_data)
             # test nested attributes
             @test sides[local_side].treeid isa Integer
             @test sides[local_side].is.full.quadid isa Integer
-            @test unsafe_wrap(
-                Array,
-                unsafe_load(unsafe_load(info).ghost_layer).proc_offsets,
-                MPI.Comm_size(MPI.COMM_WORLD) + 1,
-            ) isa Vector{Int32}
+            @test unsafe_wrap(Array,
+                              unsafe_load(unsafe_load(info).ghost_layer).proc_offsets,
+                              MPI.Comm_size(MPI.COMM_WORLD) + 1) isa Vector{Int32}
             @test sides[remote_side].is.full.quadid isa Integer
             if local_side == 2
                 @test unsafe_load(sides[2].is.full.quad.p.piggy3.local_num) isa Integer
@@ -65,7 +63,7 @@ function iter_face(info::Ptr{p8est_iter_face_info_t}, user_data)
             @test sides[hanging_side].is_hanging == true &&
                   sides[full_side].is_hanging == false
             @test sides[full_side].is.full.is_ghost isa Integer
-            @test sides[hanging_side].is.hanging.is_ghost isa NTuple{4,Int8}
+            @test sides[hanging_side].is.hanging.is_ghost isa NTuple{4, Int8}
             if sides[full_side].is.full.is_ghost == false &&
                all(sides[hanging_side].is.hanging.is_ghost .== false)
                 return nothing
@@ -79,36 +77,30 @@ end
 # See https://github.com/trixi-framework/Trixi.jl/blob/main/src/solvers/dgsem_p4est/dg_parallel.jl
 @testset "nested attributes" begin
     connectivity = @test_nowarn p8est_connectivity_new_brick(2, 2, 2, 0, 0, 0)
-    p4est = @test_nowarn p8est_new_ext(
-        MPI.COMM_WORLD,
-        connectivity,
-        0,
-        0,
-        true,
-        0,
-        C_NULL,
-        C_NULL,
-    )
+    p4est = @test_nowarn p8est_new_ext(MPI.COMM_WORLD,
+                                       connectivity,
+                                       0,
+                                       0,
+                                       true,
+                                       0,
+                                       C_NULL,
+                                       C_NULL)
 
-    refine_fn_c = @cfunction(
-        refine_fn,
-        Cint,
-        (Ptr{p8est_t}, Ptr{p4est_topidx_t}, Ptr{p8est_quadrant_t})
-    )
+    refine_fn_c = @cfunction(refine_fn,
+                             Cint,
+                             (Ptr{p8est_t}, Ptr{p4est_topidx_t}, Ptr{p8est_quadrant_t}))
     p8est_refine(p4est, true, refine_fn_c, C_NULL)
     p8est_balance(p4est, P8EST_CONNECT_FACE, C_NULL)
 
-    iter_face_nested_attributes_c =
-        @cfunction(iter_face, Cvoid, (Ptr{p8est_iter_face_info_t}, Ptr{Cvoid}))
-    p8est_iterate(
-        p4est,
-        C_NULL,
-        C_NULL,
-        C_NULL,
-        iter_face_nested_attributes_c,
-        C_NULL,
-        C_NULL,
-    )
+    iter_face_nested_attributes_c = @cfunction(iter_face, Cvoid,
+                                               (Ptr{p8est_iter_face_info_t}, Ptr{Cvoid}))
+    p8est_iterate(p4est,
+                  C_NULL,
+                  C_NULL,
+                  C_NULL,
+                  iter_face_nested_attributes_c,
+                  C_NULL,
+                  C_NULL)
     @test_nowarn p8est_destroy(p4est)
     @test_nowarn p8est_connectivity_destroy(connectivity)
 end

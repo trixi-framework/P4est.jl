@@ -10,7 +10,6 @@ using P4est
 import MPIPreferences
 @info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
 
-
 @time @testset "P4est.jl tests" begin
     # For some weird reason, the MPI tests must come first since they fail
     # otherwise with a custom MPI installation.
@@ -23,9 +22,7 @@ import MPIPreferences
         @info "Starting parallel tests"
 
         mpiexec() do cmd
-            run(
-                `$cmd -n 2 $(Base.julia_cmd()) --threads=1 --check-bounds=yes --project=$(dirname(@__DIR__)) $(abspath("tests_basic.jl"))`,
-            )
+            run(`$cmd -n 2 $(Base.julia_cmd()) --threads=1 --check-bounds=yes --project=$(dirname(@__DIR__)) $(abspath("tests_basic.jl"))`)
         end
 
         @info "Finished parallel tests"
