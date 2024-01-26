@@ -52,7 +52,7 @@ jobs:
       - uses: julia-actions/cache@v1
       - uses: cjdoris/julia-downgrade-compat-action@v1.0.7
         with:
-          skip: LinearAlgebra,UUIDs
+          skip: UUIDs
       - uses: julia-actions/julia-buildpkg@v1
         env:
           PYTHON: ""
