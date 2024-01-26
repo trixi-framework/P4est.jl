@@ -109,7 +109,8 @@ path_sc_library() = _PREFERENCE_LIBSC
 Returns `false` if a system-provided MPI installation is set via the MPIPreferences, but
 not a system-provided `p4est` installation. In this case, P4est.jl is not usable.
 """
-preferences_set_correctly() = !(_PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system")
+preferences_set_correctly() =
+    !(_PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system")
 
 """
     P4est.init(log_handler, log_threshold)
