@@ -11,7 +11,6 @@ using UUIDs: UUID
 const _PREFERENCE_LIBP4EST = @load_preference("libp4est", "P4est_jll")
 const _PREFERENCE_LIBSC = @load_preference("libsc", _PREFERENCE_LIBP4EST)
 
-
 # Include p4est bindings
 include("LibP4est.jl")
 @reexport using .LibP4est
@@ -19,7 +18,6 @@ include("LibP4est.jl")
 # Include pointer wrapper
 include("pointerwrappers.jl")
 @reexport using .PointerWrappers: PointerWrapper
-
 
 # Higher-level API defined in P4est.jl
 """
@@ -109,7 +107,8 @@ path_sc_library() = _PREFERENCE_LIBSC
 Returns `false` if a system-provided MPI installation is set via the MPIPreferences, but
 not a system-provided `p4est` installation. In this case, P4est.jl is not usable.
 """
-preferences_set_correctly() = !(_PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system")
+preferences_set_correctly() = !(_PREFERENCE_LIBP4EST == "P4est_jll" &&
+                                MPIPreferences.binary == "system")
 
 """
     P4est.init(log_handler, log_threshold)
@@ -134,7 +133,6 @@ function init(log_handler, log_threshold)
     return nothing
 end
 
-
 function __init__()
     # If a system-provided MPI installation with default p4est version is used, we cannot execute `P4est.version()`
     # because the p4est functions are not available
@@ -150,6 +148,5 @@ function __init__()
 
     return nothing
 end
-
 
 end
