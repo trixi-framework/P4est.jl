@@ -131,8 +131,8 @@ jobs:
           name: codecov-umbrella # optional
           fail_ci_if_error: true # optional (default = false)
           # verbose: true # optional (default = false)
-          env:
-            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} # now required for public repos
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} # now required for public repos
       # The standard setup of Coveralls is just annoying for parallel builds, see, e.g.,
       # https://github.com/trixi-framework/Trixi.jl/issues/691
       # https://github.com/coverallsapp/github-action/issues/47
