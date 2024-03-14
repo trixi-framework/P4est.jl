@@ -6,11 +6,13 @@ using Test
 # everything and perform the tests.
 using MPI: MPI, mpiexec
 using P4est
+using ExplicitImports
 
 import MPIPreferences
 @info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
 
 @time @testset "P4est.jl tests" begin
+    include("test_aqua.jl")
     # For some weird reason, the MPI tests must come first since they fail
     # otherwise with a custom MPI installation.
     @time @testset "MPI" begin
