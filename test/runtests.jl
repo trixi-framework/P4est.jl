@@ -6,7 +6,6 @@ using Test
 # everything and perform the tests.
 using MPI: MPI, mpiexec
 using P4est
-using ExplicitImports
 
 import MPIPreferences
 @info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
