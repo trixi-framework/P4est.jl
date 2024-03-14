@@ -8,7 +8,7 @@ using P4est
 @testset "Aqua.jl" begin
     Aqua.test_all(P4est; unbound_args = false)
     @test isnothing(check_no_implicit_imports(P4est))
-    @test isnothing(check_no_stale_explicit_imports(P4est; ignore=(:PointerWrapper,)))
+    @test isnothing(check_no_stale_explicit_imports(P4est; ignore = (:PointerWrapper,)))
 end
 
 end #module
