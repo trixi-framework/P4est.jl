@@ -83,8 +83,8 @@ connectivity_pw.num_trees[]
 p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
 p4est_pw = PointerWrapper(p4est)
 p4est_pw.connectivity.num_trees[]
-p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
+p4est_connectivity_destroy(connectivity)
 ```
 
 You may also use the `PointerWrapper` to set variables in `struct`s.  Here we
@@ -102,8 +102,8 @@ GC.@preserve data begin
     # You may retrieve the data `Ref` in the callback with
     # data = unsafe_pointer_to_objref(pointer(p4est_pw.user_pointer))
 end
-p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
+p4est_connectivity_destroy(connectivity)
 ```
 
 In addition, you can use a `PointerWrapper` as an array if the underlying datastructure is an array, i.e.
@@ -116,8 +116,8 @@ connectivity = p4est_connectivity_new_periodic()
 p4est = p4est_new_ext(MPI.COMM_WORLD, connectivity, 0, 0, true, 0, C_NULL, C_NULL)
 p4est_pw = PointerWrapper(p4est)
 p4est_pw.global_first_quadrant[2]
-p4est_connectivity_destroy(connectivity)
 p4est_destroy(p4est)
+p4est_connectivity_destroy(connectivity)
 ```
 
 ### Note on MPI datatypes
