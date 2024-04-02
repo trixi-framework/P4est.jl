@@ -94,7 +94,7 @@ jobs:
           fi
           echo "Done."
         shell: bash
-      - uses: julia-actions/setup-julia@v1
+      - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
