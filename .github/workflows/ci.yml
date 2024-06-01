@@ -99,7 +99,7 @@ jobs:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
           show-versioninfo: true
-      - uses: julia-actions/cache@v1
+      - uses: julia-actions/cache@v2
       - name: Install custom MPI library for testing
         run: |
           if [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
