@@ -8,7 +8,7 @@ provided substantial additions or modifications. Together, these two groups form
 
 ## Principal Developers
 
-- [Michael Schlottke-Lakemper](https://lakemper.eu)
+- [Michael Schlottke-Lakemper](https://www.uni-augsburg.de/fakultaet/mntf/math/prof/hpsc)
 - [Hendrik Ranocha](https://ranocha.de)
 - [Joshua Lampert](https://github.com/JoshuaLampert)
 
