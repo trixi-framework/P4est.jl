@@ -57,6 +57,13 @@ jobs:
             JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
           - os: windows-latest
             JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
+          # macos-14 doesn't support Julia v1.6,
+          # cf. https://discourse.julialang.org/t/how-to-fix-github-actions-ci-failures-with-julia-1-6-or-1-7-on-macos-latest-and-macos-14/117019
+          - os: macos-latest
+            version: '1.6'
+        include:
+          - os: macos-13 # Intel
+            version: '1.6'
     steps:
       - uses: actions/checkout@v4
       - name: Set p4est release to run tests against
