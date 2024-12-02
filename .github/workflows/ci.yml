@@ -40,8 +40,6 @@ jobs:
           - ubuntu-latest
           - macos-latest
           - windows-latest
-        arch:
-          - x64
         JULIA_P4EST_TEST:
           - P4EST_JLL_MPI_DEFAULT
           - P4EST_CUSTOM_MPI_CUSTOM
@@ -97,7 +95,6 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
-          arch: ${{ matrix.arch }}
           show-versioninfo: true
       - uses: julia-actions/cache@v2
       - name: Install custom MPI library for testing
@@ -139,7 +136,7 @@ jobs:
       # - uses: coverallsapp/github-action@master
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     flag-name: run-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}-${{ github.run_id }}
+      #     flag-name: run-${{ join(matrix.*, '-') }}
       #     parallel: true
       #     path-to-lcov: ./lcov.info
       # Instead, we use a more tedious approach:
@@ -148,11 +145,11 @@ jobs:
       # - Upload only the merged coverage report to Coveralls
       - shell: bash
         run: |
-          cp ./lcov.info ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
+          cp ./lcov.info ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}.info
       - uses: actions/upload-artifact@v4
         with:
-          name: lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}
-          path: ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}-${{ matrix.arch }}.info
+          name: lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}
+          path: ./lcov-${{ matrix.JULIA_P4EST_TEST }}-${{ matrix.os }}-${{ matrix.version }}.info
 
   finish:
     needs: test
