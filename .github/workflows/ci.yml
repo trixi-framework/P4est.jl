@@ -64,6 +64,9 @@ jobs:
         include:
           - os: macos-13 # Intel
             version: '1.6'
+            JULIA_P4EST_TEST:
+              - P4EST_JLL_MPI_DEFAULT
+              - P4EST_CUSTOM_MPI_CUSTOM
     steps:
       - uses: actions/checkout@v4
       - name: Set p4est release to run tests against
