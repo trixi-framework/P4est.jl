@@ -76,6 +76,7 @@ should be changed to
 ```
 Otherwise, the `make` and `make install` calls do not build the desired shared object file `libp4est.so` 
 but only the static library files `libp4est.a` and `libp4est.la`.
+Same holds for the `libsc` files.
 
 If you
 are just using a single workstation, the default installation instructions
