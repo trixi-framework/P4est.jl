@@ -21,6 +21,7 @@ if [ "${JULIA_P4EST_TEST}" = "P4EST_CUSTOM_MPI_CUSTOM" ]; then
   export CXX=mpicxx
   export FC=mpif90
   export F77=mpif77
+  sudo apt-get install -y libblas-dev liblapack-dev
   $P4EST_TMP/p4est-${P4EST_RELEASE}/configure --prefix=$P4EST_TMP/prefix --enable-mpi --enable-debug
   make -j 2
   make install
