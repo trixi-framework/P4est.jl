@@ -1,4 +1,4 @@
-name: Format suggestions
+name: format-check
 
 on:
   push:
@@ -8,10 +8,31 @@ on:
   pull_request:
 
 jobs:
-  format-suggestions:
-    runs-on: ubuntu-latest
+  check-format:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        julia-version: [1]
+        julia-arch: [x86]
+        os: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v4
-      - uses: julia-actions/julia-format@v4
+      - uses: julia-actions/setup-julia@latest
         with:
-          version: "1.0.60"
+          version: ${{ matrix.julia-version }}
+      - uses: actions/checkout@v4
+      - uses: julia-actions/cache@v2
+      - name: Install JuliaFormatter and format
+        run: |
+          julia  -e 'using Pkg; Pkg.add(PackageSpec(name = "JuliaFormatter", version="1.0.60"))'
+          julia  -e 'using JuliaFormatter; format(["src/P4est.jl", "src/pointerwrappers.jl", "test"])'
+      - name: Format check
+        run: |
+          julia -e '
+          out = Cmd(`git diff --name-only`) |> read |> String
+          if out == ""
+              exit(0)
+          else
+              @error "Some files have not been formatted !!!"
+              write(stdout, out)
+              exit(1)
+          end'
