@@ -66,7 +66,19 @@ compiled against the same MPI implementation used by
 configure [MPI.jl](https://github.com/JuliaParallel/MPI.jl) to not use the
 default MPI binary provided by JLL wrappers, you also need to build the C
 library [`p4est`](https://github.com/cburstedde/p4est) locally using the same
-MPI implementation. This is typically the situation on HPC clusters. If you
+MPI implementation. This is typically the situation on HPC clusters. 
+Note that in this case you need to set the configure option `--enable-shared`, 
+i.e., the [recommended production-run configuration](https://github.com/cburstedde/p4est/blob/2296a990d8b6b54731a63be0ba5bc17b08cd1f3d/README#L139-L140)
+should be changed to
+
+```bash
+/path/to/configure CFLAGS="-O2 -Wall -Wno-unused-parameter" --enable-mpi --enable-shared
+```
+Otherwise, the `make` and `make install` calls do not build the desired shared object file `libp4est.so` 
+but only the static library files `libp4est.a` and `libp4est.la`.
+Same holds for the `libsc` files.
+
+If you
 are just using a single workstation, the default installation instructions
 should be sufficient.
 

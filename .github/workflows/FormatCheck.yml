@@ -23,7 +23,7 @@ jobs:
       - uses: julia-actions/cache@v2
       - name: Install JuliaFormatter and format
         run: |
-          julia  -e 'using Pkg; Pkg.add(PackageSpec(name = "JuliaFormatter"))'
+          julia  -e 'using Pkg; Pkg.add(PackageSpec(name = "JuliaFormatter", version="1.0.60"))'
           julia  -e 'using JuliaFormatter; format(["src/P4est.jl", "src/pointerwrappers.jl", "test"])'
       - name: Format check
         run: |
