@@ -47,7 +47,7 @@ jobs:
           version: ${{ matrix.version }}
       - run: julia -e 'using InteractiveUtils; versioninfo(verbose=true)'
       - uses: julia-actions/cache@v2
-      - uses: julia-actions/julia-downgrade-compat@v1
+      - uses: julia-actions/julia-downgrade-compat@v2
         with:
           skip: UUIDs
           projects: ., test
@@ -58,5 +58,6 @@ jobs:
         uses: julia-actions/julia-runtest@v1
         with:
           coverage: false
+          allow_reresolve: false
         env:
           PYTHON: ""
