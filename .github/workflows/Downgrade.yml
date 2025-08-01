@@ -58,5 +58,6 @@ jobs:
         uses: julia-actions/julia-runtest@v1
         with:
           coverage: false
+          allow_reresolve: false
         env:
           PYTHON: ""
