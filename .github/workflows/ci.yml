@@ -66,7 +66,7 @@ jobs:
             version: '1.6'
             JULIA_P4EST_TEST: P4EST_JLL_MPI_DEFAULT
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Set p4est release to run tests against
         # We use an older release of `p4est` on purpose than the version
         # provided by P4est_jll.jl to check whether everything still works
@@ -176,7 +176,7 @@ jobs:
       # Instead, we use the more tedious approach described above.
       # At first, we check out the repository and download all artifacts
       # (and list files for debugging).
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/download-artifact@v4
       - run: ls -R
       # Next, we merge the individual coverage files and upload
