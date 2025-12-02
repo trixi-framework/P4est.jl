@@ -49,7 +49,6 @@ jobs:
       - uses: julia-actions/cache@v2
       - uses: julia-actions/julia-downgrade-compat@v2
         with:
-          skip: UUIDs
           projects: ., test
       - uses: julia-actions/julia-buildpkg@v1
         env:
