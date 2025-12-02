@@ -49,7 +49,6 @@ jobs:
       - uses: julia-actions/cache@v2
       - uses: julia-actions/julia-downgrade-compat@v2
         with:
-          skip: UUIDs
           projects: ., test
       - uses: julia-actions/julia-buildpkg@v1
         env:
@@ -59,5 +58,6 @@ jobs:
         with:
           coverage: false
           allow_reresolve: false
+          force_latest_compatible_version: false
         env:
           PYTHON: ""
