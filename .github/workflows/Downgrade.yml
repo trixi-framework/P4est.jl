@@ -49,6 +49,7 @@ jobs:
       - uses: julia-actions/cache@v2
       - uses: julia-actions/julia-downgrade-compat@v2
         with:
+          skip: Test,UUIDs
           projects: ., test
           mode: forcedeps
       - name: Run tests
