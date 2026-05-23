@@ -19,7 +19,13 @@ updates:
     schedule:
       interval: "daily"
     groups:
-      # Group all Julia package updates into a single PR:
-      all-julia-dependencies:
+      # Group updates for P4est_jll.jl and all other julia packages into separate PRs
+      # because we usually want to update P4est_jll.jl separately.
+      p4est-jll:
+        patterns:
+          - "P4est_jll"
+      all-julia-packages-except-p4est-jll:
         patterns:
           - "*"
+        exclude-patterns:
+          - "P4est_jll"
