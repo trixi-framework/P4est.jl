@@ -13,7 +13,6 @@ updates:
   - package-ecosystem: "julia"
     directories: # Location of Julia projects
       - "/"
-      - "/dev"
       - "/docs"
       - "/test"
     schedule:
