@@ -66,7 +66,7 @@ jobs:
             version: '1.6'
             JULIA_P4EST_TEST: P4EST_JLL_MPI_DEFAULT
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set p4est release to run tests against
         # We use an older release of `p4est` on purpose than the version
         # provided by P4est_jll.jl to check whether everything still works
@@ -128,7 +128,7 @@ jobs:
         env:
           PYTHON: ""
       - uses: julia-actions/julia-processcoverage@v1
-      - uses: codecov/codecov-action@v6
+      - uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./lcov.info # optional
@@ -176,7 +176,7 @@ jobs:
       # Instead, we use the more tedious approach described above.
       # At first, we check out the repository and download all artifacts
       # (and list files for debugging).
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/download-artifact@v8
       - run: ls -R
       # Next, we merge the individual coverage files and upload
