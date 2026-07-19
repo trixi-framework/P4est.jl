@@ -13,6 +13,7 @@ export P4est_jll
 using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 using MPIPreferences: MPIPreferences
 
+# Load libp4est and libsc paths at runtime for PackageCompiler.jl-generated executables
 libp4est::String = ""
 libsc::String = ""
 
@@ -29,9 +30,9 @@ function __init__()
     @static if _PREFERENCE_LIBSC == "P4est_jll" && MPIPreferences.binary == "system"
         @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
     elseif _PREFERENCE_LIBSC == "P4est_jll"
-        const libsc = P4est_jll.libsc
+        libsc = P4est_jll.libsc
     else
-        const libsc = _PREFERENCE_LIBSC
+        libsc = _PREFERENCE_LIBSC
     end
 end
 
