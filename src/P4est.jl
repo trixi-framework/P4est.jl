@@ -148,5 +148,9 @@ function __init__()
 
     return nothing
 end
+function julia_main()
+    println("libp4est: ", P4est.LibP4est.libp4est)
+    println("libsc: ", P4est.LibP4est.libsc)
+end
 
 end
