@@ -19,6 +19,7 @@ libsc::String = ""
 
 function __init__()
     global libp4est
+    global libsc
     @static if _PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system"
         @warn "System MPI version detected, but not a system p4est version. ..."
     elseif _PREFERENCE_LIBP4EST == "P4est_jll"
