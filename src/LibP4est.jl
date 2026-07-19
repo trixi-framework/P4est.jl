@@ -13,20 +13,28 @@ export P4est_jll
 using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 using MPIPreferences: MPIPreferences
 
-@static if _PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system"
-    @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
-elseif _PREFERENCE_LIBP4EST == "P4est_jll"
-    const libp4est = P4est_jll.libp4est
-else
-    const libp4est = _PREFERENCE_LIBP4EST
-end
+# Load libp4est and libsc paths at runtime for PackageCompiler.jl-generated executables
+libp4est = ""
+libsc = ""
 
-@static if _PREFERENCE_LIBSC == "P4est_jll" && MPIPreferences.binary == "system"
-    @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
-elseif _PREFERENCE_LIBSC == "P4est_jll"
-    const libsc = P4est_jll.libsc
-else
-    const libsc = _PREFERENCE_LIBSC
+function __init__()
+    global libp4est
+    global libsc
+    @static if _PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system"
+        @warn "System MPI version detected, but not a system p4est version. ..."
+    elseif _PREFERENCE_LIBP4EST == "P4est_jll"
+        libp4est = P4est_jll.libp4est
+    else
+        libp4est = _PREFERENCE_LIBP4EST
+    end
+
+    @static if _PREFERENCE_LIBSC == "P4est_jll" && MPIPreferences.binary == "system"
+        @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
+    elseif _PREFERENCE_LIBSC == "P4est_jll"
+        libsc = P4est_jll.libsc
+    else
+        libsc = _PREFERENCE_LIBSC
+    end
 end
 
 
