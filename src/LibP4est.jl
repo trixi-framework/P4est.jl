@@ -14,8 +14,8 @@ using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 using MPIPreferences: MPIPreferences
 
 # Load libp4est and libsc paths at runtime for PackageCompiler.jl-generated executables
-libp4est::String = ""
-libsc::String = ""
+libp4est = ""
+libsc = ""
 
 function __init__()
     global libp4est
