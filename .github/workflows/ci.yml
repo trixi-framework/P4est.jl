@@ -33,7 +33,7 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.6'
+          - '1.10'
           - '1'
           # - 'nightly'
         os:
@@ -48,7 +48,7 @@ jobs:
           # of Julia, see
           # https://github.com/JuliaPackaging/Preferences.jl/issues/40
           # Thus, we need to disable this setup in CI.
-          - version: '1.6'
+          - version: '1.10'
             JULIA_P4EST_TEST: P4EST_CUSTOM_MPI_CUSTOM
           # Run only selected tests on macOS and Windows, since not everything
           # works everywhere yet and we are most familiar with setting up custom
@@ -60,10 +60,10 @@ jobs:
           # macos-14 doesn't support Julia v1.6,
           # cf. https://discourse.julialang.org/t/how-to-fix-github-actions-ci-failures-with-julia-1-6-or-1-7-on-macos-latest-and-macos-14/117019
           - os: macos-latest
-            version: '1.6'
+            version: '1.10'
         include:
           - os: macos-15-intel
-            version: '1.6'
+            version: '1.10'
             JULIA_P4EST_TEST: P4EST_JLL_MPI_DEFAULT
     steps:
       - uses: actions/checkout@v7
