@@ -10,7 +10,13 @@ using P4est
 end
 
 @testset "ExplicitImports.jl" begin
-    test_explicit_imports(P4est)
+    test_explicit_imports(P4est;
+                          # We use `MPI_Comm`, `MPI_Datatype`, `MPI_File`, and `MPI_Group`, which are non-public
+                          all_explicit_imports_are_public = false,
+                          # We use `MPIPreferences.binary`, which is non-public
+                          all_qualified_accesses_are_public = false,
+                          # We use `P4est.version()`
+                          no_self_qualified_accesses = false)
 end
 
 end #module
