@@ -10,7 +10,7 @@ using P4est
 end
 
 @testset "ExplicitImports.jl" begin
-   test_explicit_imports(P4est)
+    test_explicit_imports(P4est)
 end
 
 end #module
