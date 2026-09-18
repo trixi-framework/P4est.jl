@@ -14,22 +14,20 @@ The general process for creating bindings with Clang.jl is as follows:
 9. Despair.
 
 If you want to try this yourself, proceed as follows. The current version of
-the bindings has been generated using Julia v1.9.3; the corresponding
+the bindings has been generated using Julia v1.13.0; the corresponding
 `Manifest.toml` file is included for reproducibility.
 
 To generate new bindings, run
 ```shell
 julia --project generator.jl && ./fixes.sh
 ```
-to create a new `LibP4est.jl` file. If you did not get an error yet - 🥳🕺
+from the `dev/` directory to create a new `LibP4est.jl` file. If you did not
+get an error yet - 🥳🕺
 
-Next, try if it actually works by running the following smoke test after
-starting the REPL with `julia --project`:
+Next, copy `LibP4est.jl` to `src` and try if it actually works by running the following
+smoke test after starting the REPL in the root directory with `julia --project`:
 ```julia
-julia> include("LibP4est.jl")
-Main.LibP4est
-
-julia> using .LibP4est
+julia> using P4est
 
 julia> (p4est_version_major(), p4est_version_minor()) == (2, 8)
 true
@@ -39,16 +37,13 @@ Finally, try to repeat the example from
 [P4est.jl](https://github.com/trixi-framework/P4est.jl/blob/e9979cd48c9c6211a084fb2cf7ef99e4f21301cb/README.md#usage),
 albeit with a slightly modified syntax:
 ```julia
-julia> include("LibP4est.jl")
-Main.LibP4est
-
-julia> using .LibP4est, MPI
+julia> using P4est, MPI
 
 julia> MPI.Init()
-THREAD_SERIALIZED::ThreadLevel = 2
+MPI.ThreadLevel(2)
 
 julia> connectivity = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x0000000002412d20
+Ptr{p4est_connectivity}(0x0000000025993400)
 
 julia> p4est_connectivity_is_valid(connectivity)
 1
@@ -58,16 +53,16 @@ Into p4est_new with min quadrants 0 level 2 uniform 0
 New p4est with 1 trees on 1 processors
 Initial level 2 potential global quadrants 16 per tree 16
 Done p4est_new with 10 total quadrants
-Ptr{p4est} @0x0000000002dd1fd0
+Ptr{P4est.LibP4est.p4est}(0x0000000025597160)
 
 julia> _p4est = unsafe_load(p4est)
-P4est.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing} @0x0000000000000000, 0, 0, 0, 10, 10, Ptr{Int64} @0x00000000021a5f70, Ptr{p4est_quadrant} @0x0000000002274330, Ptr{p4est_connectivity} @0x000000000255cdf0, Ptr{sc_array} @0x00000000023b64a0, Ptr{sc_mempool} @0x0000000000000000, Ptr{sc_mempool} @0x00000000023b1620, Ptr{p4est_inspect} @0x0000000000000000)
+P4est.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing}(0x0000000000000000), 0, 0, 0, 10, 10, Ptr{Int64}(0x0000000025812f20), Ptr{p4est_quadrant}(0x00000000258fbfa0), Ptr{p4est_connectivity}(0x0000000025993400), Ptr{sc_array}(0x00000000267d7730), Ptr{sc_mempool}(0x0000000000000000), Ptr{sc_mempool}(0x0000000024f0f660), Ptr{p4est_inspect}(0x0000000000000000))
 
 julia> _p4est.connectivity == connectivity
 true
 
 julia> _connectivity = unsafe_load(_p4est.connectivity)
-p4est_connectivity(4, 1, 1, Ptr{Float64} @0x00000000021e8170, Ptr{Int32} @0x00000000020d2450, 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32} @0x0000000002468e10, Ptr{Int8} @0x00000000022035e0, Ptr{Int32} @0x0000000002667230, Ptr{Int32} @0x000000000219eea0, Ptr{Int32} @0x000000000279ae00, Ptr{Int8} @0x00000000021ff910)
+p4est_connectivity(4, 1, 1, Ptr{Float64}(0x00000000262686a0), Ptr{Int32}(0x000000002569ae50), 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32}(0x000000002565bc20), Ptr{Int8}(0x0000000024f95e60), Ptr{Int32}(0x00000000260cb0a0), Ptr{Int32}(0x00000000254887e0), Ptr{Int32}(0x000000002612bb60), Ptr{Int8}(0x000000002631a9a0))
 
 julia> _connectivity.num_trees
 1
