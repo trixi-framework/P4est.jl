@@ -29,8 +29,8 @@ push!(args, "-I$include_dir")
 # push!(args, "-I$include_dir", "-I/usr/lib/x86_64-linux-gnu/openmpi/include")
 
 headers_rel = ["p4est.h", "p4est_extended.h", "p4est_search.h",
-               "p6est.h", "p6est_extended.h",
-               "p8est.h", "p8est_extended.h", "p8est_search.h"]
+    "p6est.h", "p6est_extended.h",
+    "p8est.h", "p8est_extended.h", "p8est_search.h"]
 headers = [joinpath(include_dir, header) for header in headers_rel]
 # headers = [joinpath(clang_dir, header) for header in readdir(clang_dir) if endswith(header, ".h")]
 # there is also an experimental `detect_headers` function for auto-detecting top-level headers in the directory
