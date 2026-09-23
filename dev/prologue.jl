@@ -20,7 +20,6 @@ else
     const libsc = _PREFERENCE_LIBSC
 end
 
-
 # Define missing types
 const ptrdiff_t = Cptrdiff_t
 

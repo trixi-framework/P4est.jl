@@ -24,7 +24,7 @@ high-level interface.
 
 If you have not yet installed Julia, please [follow the instructions for your
 operating system](https://julialang.org/downloads/platform/).
-[P4est.jl](https://github.com/trixi-framework/P4est.jl) works with Julia v1.6
+[P4est.jl](https://github.com/trixi-framework/P4est.jl) works with Julia v1.10
 and later.
 
 [P4est.jl](https://github.com/trixi-framework/P4est.jl) is a registered Julia
@@ -66,15 +66,15 @@ compiled against the same MPI implementation used by
 configure [MPI.jl](https://github.com/JuliaParallel/MPI.jl) to not use the
 default MPI binary provided by JLL wrappers, you also need to build the C
 library [`p4est`](https://github.com/cburstedde/p4est) locally using the same
-MPI implementation. This is typically the situation on HPC clusters. 
-Note that in this case you need to set the configure option `--enable-shared`, 
+MPI implementation. This is typically the situation on HPC clusters.
+Note that in this case you need to set the configure option `--enable-shared`,
 i.e., the [recommended production-run configuration](https://github.com/cburstedde/p4est/blob/2296a990d8b6b54731a63be0ba5bc17b08cd1f3d/README#L139-L140)
 should be changed to
 
 ```bash
 /path/to/configure CFLAGS="-O2 -Wall -Wno-unused-parameter" --enable-mpi --enable-shared
 ```
-Otherwise, the `make` and `make install` calls do not build the desired shared object file `libp4est.so` 
+Otherwise, the `make` and `make install` calls do not build the desired shared object file `libp4est.so`
 but only the static library files `libp4est.a` and `libp4est.la`.
 Same holds for the `libsc` files.
 
@@ -205,9 +205,10 @@ and check its validity, execute the following lines:
 
 ```julia
 julia> using P4est, MPI; MPI.Init()
+MPI.ThreadLevel(2)
 
 julia> connectivity = p4est_connectivity_new_periodic()
-Ptr{p4est_connectivity} @0x0000000002412d20
+Ptr{p4est_connectivity}(0x000000001062e980)
 
 julia> p4est_connectivity_is_valid(connectivity)
 1
@@ -217,16 +218,16 @@ Into p4est_new with min quadrants 0 level 2 uniform 0
 New p4est with 1 trees on 1 processors
 Initial level 2 potential global quadrants 16 per tree 16
 Done p4est_new with 10 total quadrants
-Ptr{p4est} @0x0000000002dd1fd0
+Ptr{P4est.LibP4est.p4est}(0x000000000fa52da0)
 
 julia> p4est_obj = unsafe_load(p4est)
-P4est.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing} @0x0000000000000000, 0, 0, 0, 10, 10, Ptr{Int64} @0x00000000021a5f70, Ptr{p4est_quadrant} @0x0000000002274330, Ptr{p4est_connectivity} @0x000000000255cdf0, Ptr{sc_array} @0x00000000023b64a0, Ptr{sc_mempool} @0x0000000000000000, Ptr{sc_mempool} @0x00000000023b1620, Ptr{p4est_inspect} @0x0000000000000000)
+P4est.LibP4est.p4est(1140850688, 1, 0, 0, 0x0000000000000000, Ptr{Nothing}(0x0000000000000000), 0, 0, 0, 10, 10, Ptr{Int64}(0x0000000010322620), Ptr{p4est_quadrant}(0x000000000fe32610), Ptr{p4est_connectivity}(0x000000001062e980), Ptr{sc_array}(0x000000000fa30df0), Ptr{sc_mempool}(0x0000000000000000), Ptr{sc_mempool}(0x000000000fa52e40), Ptr{p4est_inspect}(0x0000000000000000))
 
 julia> p4est_obj.connectivity == connectivity
 true
 
 julia> connectivity_obj = unsafe_load(p4est_obj.connectivity)
-p4est_connectivity(4, 1, 1, Ptr{Float64} @0x00000000021e8170, Ptr{Int32} @0x00000000020d2450, 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32} @0x0000000002468e10, Ptr{Int8} @0x00000000022035e0, Ptr{Int32} @0x0000000002667230, Ptr{Int32} @0x000000000219eea0, Ptr{Int32} @0x000000000279ae00, Ptr{Int8} @0x00000000021ff910)
+p4est_connectivity(4, 1, 1, Ptr{Float64}(0x000000000fe5dec0), Ptr{Int32}(0x000000000fc38720), 0x0000000000000000, Cstring(0x0000000000000000), Ptr{Int32}(0x00000000102de920), Ptr{Int8}(0x000000000ffe1060), Ptr{Int32}(0x0000000010628c80), Ptr{Int32}(0x0000000010324110), Ptr{Int32}(0x000000001062aa20), Ptr{Int8}(0x000000000fffafe0))
 
 julia> connectivity_obj.num_trees
 1
@@ -292,26 +293,26 @@ entity through `?`:
 
 ```
 help?> p4est_memory_used
-search: p4est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used p4est_connectivity_memory_used
+search: p4est_memory_used p8est_memory_used p4est_mesh_memory_used p4est_ghost_memory_used sc_list_memory_used
 
   p4est_memory_used(p4est_)
 
   Calculate local memory usage of a forest structure. Not collective. The memory used on the current rank is
-  returned. The connectivity structure is not counted since it is not owned; use
-  p4est_connectivity_memory_usage (p4est->connectivity).
+  returned. The connectivity structure is not counted since it is not owned; use p4est_connectivity_memory_usage
+  (p4est->connectivity).
 
-  Parameters
-  ––––––––––––
+  Arguments
+  ≡≡≡≡≡≡≡≡≡
 
     •  p4est:[in] Valid forest structure.
 
   Returns
-  –––––––––
+  ≡≡≡≡≡≡≡
 
   Memory used in bytes.
 
   Prototype
-  –––––––––––
+  –––––––––
 
   size_t p4est_memory_used (p4est_t * p4est);
 ```
@@ -321,10 +322,16 @@ by [P4est.jl](https://github.com/trixi-framework/P4est.jl), e.g.,
 
 ```
 help?> P4est.init
+  │ Warning
+  │
+  │  The following bindings may be internal; they may change or be removed in future versions:
+  │
+  │    •  P4est.init
+
   P4est.init(log_handler, log_threshold)
 
-  Calls p4est_init if it has not already been called, otherwise do nothing. Thus, P4est.init can safely be
-  called multiple times.
+  Calls p4est_init if it has not already been called, otherwise do nothing. Thus, P4est.init can safely be called
+  multiple times.
 
   To use the default log handler and suppress most output created by default by p4est, call this function as
 

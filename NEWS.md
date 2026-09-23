@@ -14,6 +14,7 @@ for human readability.
 
 #### Changed
 
+- The minimal compatible Julia version is bumped to v1.10.
 
 #### Deprecated
 
