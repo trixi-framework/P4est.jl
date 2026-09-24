@@ -10,9 +10,6 @@ using P4est
 import MPIPreferences
 @info "Testing P4est.jl with" MPIPreferences.binary MPIPreferences.abi
 
-# When run in CI, check if we are running with system MPI or Julia artifacts
-JULIA_MPI_PROVIDER = get(ENV, "JULIA_P4EST_TEST", "P4EST_JLL_MPI_DEFAULT")
-
 @time @testset "P4est.jl tests" begin
     include("test_aqua.jl")
     # For some weird reason, the MPI tests must come first since they fail
