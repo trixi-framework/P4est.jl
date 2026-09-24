@@ -6,7 +6,14 @@ using Test
 using P4est
 
 @testset "Aqua.jl" begin
-    Aqua.test_all(P4est; unbound_args = false)
+    # in case we are running with system MPI P4est_jll will not be loaded
+    if _PREFERENCE_LIBP4EST == "P4est_jll" || _PREFERENCE_LIBSC == "P4est_jll"
+        stale_deps_ignore = (ignore = [:P4est_jll],)
+    else
+        stale_deps_ignore = ()
+    end
+    Aqua.test_all(P4est; unbound_args = false,
+                  stale_deps = stale_deps_ignore)
 end
 
 @testset "ExplicitImports.jl" begin
