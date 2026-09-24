@@ -7,11 +7,12 @@ to_c_type_pairs(va_list) = map(enumerate(to_c_type.(va_list))) do (ind, type)
     :(va_list[$ind]::$type)
 end
 
-using P4est_jll: P4est_jll
-export P4est_jll
-
 using ..P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 using MPIPreferences: MPIPreferences
+
+@static if _PREFERENCE_LIBP4EST == "P4est_jll" || _PREFERENCE_LIBSC == "P4est_jll"
+    using P4est_jll: P4est_jll
+end
 
 @static if _PREFERENCE_LIBP4EST == "P4est_jll" && MPIPreferences.binary == "system"
     @warn "System MPI version detected, but not a system p4est version. To make P4est.jl work, you need to set the preferences, see https://trixi-framework.github.io/P4est.jl/stable/#Using-a-custom-version-of-MPI-and/or-p4est."
