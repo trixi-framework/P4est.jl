@@ -5,6 +5,7 @@ using ExplicitImports: test_explicit_imports
 using Test
 using P4est
 
+# When run in CI, check if we are running with system MPI or Julia artifacts
 JULIA_MPI_PROVIDER = get(ENV, "JULIA_P4EST_TEST", "P4EST_JLL_MPI_DEFAULT")
 
 @testset "Aqua.jl" begin
