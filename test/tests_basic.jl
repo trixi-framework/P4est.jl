@@ -7,6 +7,14 @@ using P4est
 @testset "basic tests" begin
     @test_nowarn MPI.Init()
 
+    # When using a system MPI, P4est_jll.jl should not be loaded to not end up with
+    # two separate MPI libraries to be present in the same process, see
+    # https://github.com/trixi-framework/P4est.jl/issues/166
+    @testset "Conditional loading of P4est_jll" begin
+        P4est_jll_loaded = any(m -> nameof(m) === :P4est_jll, values(Base.loaded_modules))
+        @test (JULIA_MPI_PROVIDER == "P4EST_CUSTOM_MPI_CUSTOM") != P4est_jll_loaded
+    end
+
     @testset "P4est.uses_mpi" begin
         @test P4est.uses_mpi() == true
     end
