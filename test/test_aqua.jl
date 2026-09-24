@@ -4,13 +4,14 @@ using Aqua: Aqua
 using ExplicitImports: test_explicit_imports
 using Test
 using P4est
+using P4est: _PREFERENCE_LIBP4EST, _PREFERENCE_LIBSC
 
 @testset "Aqua.jl" begin
     # in case we are running with system MPI P4est_jll will not be loaded
     if _PREFERENCE_LIBP4EST == "P4est_jll" || _PREFERENCE_LIBSC == "P4est_jll"
-        stale_deps_ignore = (ignore = [:P4est_jll],)
-    else
         stale_deps_ignore = ()
+    else
+        stale_deps_ignore = (ignore = [:P4est_jll],)
     end
     Aqua.test_all(P4est; unbound_args = false,
                   stale_deps = stale_deps_ignore)
