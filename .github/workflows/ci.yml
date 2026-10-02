@@ -99,6 +99,7 @@ jobs:
         run: |
           if [[ ${{ matrix.JULIA_P4EST_TEST }} == "P4EST_CUSTOM_MPI_CUSTOM" ]]
           then
+            sudo apt-get update
             sudo apt-get install -y openmpi-bin libopenmpi-dev
           fi
         shell: bash
